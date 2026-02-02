@@ -1,0 +1,66 @@
+class URLs:
+     #test data 
+    specialties = {
+            "Allergy & Immunology": "https://www.physiciansweekly.com/page/allergy-immunology",
+            "Cardiology": "https://www.physiciansweekly.com/page/cardiology",
+            "Critical Care": "https://www.physiciansweekly.com/page/critical-care",
+            "Dermatology": "https://www.physiciansweekly.com/page/dermatology",
+            "Endocrinology": "https://www.physiciansweekly.com/page/endocrinology",
+            "Gastroenterology": "https://www.physiciansweekly.com/page/gastroenterology",
+            "Infectious Disease": "https://www.physiciansweekly.com/page/infectious-disease",
+            "Nephrology": "https://www.physiciansweekly.com/page/nephrology",
+            "Neurology": "https://www.physiciansweekly.com/page/neurology",
+            "OB/GYN":"https://www.physiciansweekly.com/page/obgyn",
+            "Oncology / Hematology":"https://www.physiciansweekly.com/page/oncology-hematology",
+            "Ophthalmology":"https://www.physiciansweekly.com/page/ophthalmology",
+            "Pain":"https://www.physiciansweekly.com/page/pain",
+            "Pediatrics":"https://www.physiciansweekly.com/page/pediatrics",        
+            "Primary Care":"https://www.physiciansweekly.com/page/primary-care",
+            "Psychiatry":"https://www.physiciansweekly.com/page/psychiatry",
+            "Pulmonology":"https://www.physiciansweekly.com/page/pulmonology",
+             "Rheumatology":"https://www.physiciansweekly.com/page/rheumatology",
+             "Surgery":"https://www.physiciansweekly.com/page/surgery",
+             "Urology":"https://www.physiciansweekly.com/page/urology"
+        }
+    
+    Commentary = {
+            "Cartoons": "https://www.physiciansweekly.com/page/cartoons",
+            "Doctor’s Voice": "https://www.physiciansweekly.com/page/doctors-voice",
+            "Peer-to-Peer": "https://www.physiciansweekly.com/page/peer-to-peer",
+            "Podcast": "https://www.physiciansweekly.com/page/podcast"
+                }  
+    
+    expected_list = [
+            "Contribute to PW",
+            "Subscribe",
+            "Specialties",
+            "Allergy & Immunology",
+            "Cardiology",
+            "Critical Care",
+            "Dermatology",
+            "Gastroenterology",
+            "Endocrinology",
+            "Infectious Disease",
+            "Nephrology",
+            "Neurology",
+            "OB/GYN",
+            "Oncology / Hematology",
+            "Ophthalmology",
+            "Pain",
+            "Pediatrics",
+            "Primary Care",
+            "Psychiatry",
+            "Pulmonology",
+            "Rheumatology",
+            "Surgery",
+            "Urology",
+            "Conference Coverage",
+            "Knowledge Hub",
+            "Cases and Quizzes",
+            "Commentary",
+            "Podcast",
+            "Doctor’s Voice",
+            "Peer-to-Peer",
+            "Cartoons",
+            "Business of Medicine",
+        ]
