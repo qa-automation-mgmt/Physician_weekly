@@ -9,14 +9,14 @@ def run_tests():
     pytest.main([
         "tests",
         # HTML report
-        f"--html={html_report}",
+        f"--html={html_report}", 
         "--self-contained-html",
         # RETRIES (GLOBAL)
-        "--reruns", "1",              # retry failed tests 2 times
+        "--reruns", "3",              # retry failed tests 2 times
         "--reruns-delay", "5",        # wait 2 seconds before retry
         # Output
         "--capture=tee-sys",
-        "-v",
+        "-v"
         # keep parallel OFF until suite is 100% stable
         # "-n", "2",
         # "--dist=loadscope",

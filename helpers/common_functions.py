@@ -115,7 +115,6 @@ class CommonHelper(Home_page_Locators):
         first_result.scroll_into_view_if_needed()
         first_result.click()
         page.wait_for_timeout(2000)
-
         # Validate title on opened article page
         article_header = page.locator(self.Aruticul_header)
         expect(article_header).to_be_visible()

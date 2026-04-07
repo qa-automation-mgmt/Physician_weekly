@@ -65,6 +65,7 @@ def pytest_html_results_summary(prefix, summary, postfix):
     prefix.extend([
         ("Project Name", "Physician weekly"),
         ("Tester", "Ashok Kumar"),
+        ("URL", "https://www.physiciansweekly.com/"),        
     ])
 
 

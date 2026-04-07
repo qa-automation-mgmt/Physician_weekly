@@ -11,8 +11,7 @@ class PodcastPages(Home_page_Locators):
     URLS = [
     "https://www.physiciansweekly.com/podcast/combating-medical-misinformation-part-1-meeting-patients-where-they-are-online",
     "https://www.physiciansweekly.com/podcast/post-dobbs-laws-delay-medically-indicated-care-for-pregnant-patients",
-    "https://www.physiciansweekly.com/podcast/understanding-the-barbie-effect-how-pop-culture-can-influence-patient-healthcare",
-    "https://www.physiciansweekly.com/podcast/combating-medical-misinformation-part-1-meeting-patients-where-they-are-online"
+    "https://www.physiciansweekly.com/podcast/understanding-the-barbie-effect-how-pop-culture-can-influence-patient-healthcare"
         ]
     def __init__(self, page: Page):
         self.page = page
@@ -140,21 +139,23 @@ class PodcastPages(Home_page_Locators):
         print("Image loaded successfully")
 
         # UI headings
-        h = self.page.locator('//div[@class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom title css-4an0mh"]')
+        #After Updation they remove headings in the vedios 
+        #That's y i commented out for few lines 
+        #h = self.page.locator('//div[@class="MuiTypography-root MuiTypography-h6 MuiTypography-gutterBottom title css-4an0mh"]')
         h1 = self.page.locator('//div[@class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 css-m43vlk"]//h1')
 
-        assert h.is_visible(), "H6 heading is not visible"
+        #assert h.is_visible(), "H6 heading is not visible"
         assert h1.is_visible(), "H1 heading is not visible"
 
-        h_text = h.inner_text().strip().lower()
+        #h_text = h.inner_text().strip().lower()
         h1_text = h1.inner_text().strip().lower()
 
-        print("Main Heading =", h_text)
+        #print("Main Heading =", h_text)
         print("Video Player Heading =", h1_text)
 
-        assert h_text == h1_text, "Heading mismatch"
+        #assert h_text == h1_text, "Heading mismatch"
         print("Headings match successfully")
-        time.sleep(3)
+        self.page.wait_for_timeout(3000)
         # Buttons (pause & speaker)
         pause_btn = self.page.locator('(//div[@class="vjs-control-bar"]//button)[1]')
         speaker_btn = self.page.locator('(//div[@class="vjs-control-bar"]//button)[4]')

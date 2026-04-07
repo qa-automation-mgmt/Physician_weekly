@@ -258,11 +258,20 @@ class HeaderPage(Home_page_Locators):
     def validate_contribute_and_subscription_tabs(self):
         """Validate Contribute PV and Subscription menu items open in new tab and check titles"""
 
-        self.page.goto(self.base_url)
-        time.sleep(3)
+        self.page.goto(self.base_url)        
         context = self.page.context
 
         # Get both menu items
+        items = self.page.locator(self.Contribute_and_sunscribe)
+        count = items.count()
+        print("Total items:", count)
+
+        # Expected URLs
+        expected_urls = {
+            "Contribute to PW": "https://app.smartsheet.com/b/form/8f2ab169168247d7aadc46f1367e61ed",
+            "Subscribe": "https://hosted.pushplanet.com/fm/subscriptions_physw"
+        }
+
         items = self.page.locator(self.Contribute_and_sunscribe)
         count = items.count()
         print("Total items:", count)
@@ -272,34 +281,48 @@ class HeaderPage(Home_page_Locators):
             name = item.inner_text().strip()
             print(f"\nChecking: {name}")
 
-            # 1. Assert visible
-            assert item.is_visible(), f"Menu item not visible: {name}"
+            assert item.is_visible(), f"{name} not visible"
 
-            # 2. Current tab count
+            # Capture tab count BEFORE click
             old_tab_count = len(context.pages)
             print("Old tab count:", old_tab_count)
 
-            # 3. Expect new tab
+            # Open in new tab
             with context.expect_page() as new_page_event:
                 item.click()
-                time.sleep(3)
+
             new_tab = new_page_event.value
 
-            # 4. Verify tab count
+            # Capture tab count AFTER click
             new_tab_count = len(context.pages)
-            assert new_tab_count == old_tab_count + 1, f"{name} did NOT open in a new tab!"
-            print(f"{name} opened in a new tab successfully.")
+            print("New tab count:", new_tab_count)
 
-            # 5. Verify title
-            new_tab_title = new_tab.title()
-            print("New Tab Title:", new_tab_title)
-            assert ("Subscribe to Physician's Weekly" in new_tab_title) or ("Smartsheet Forms" in new_tab_title), \
-                "Title validation failed"
-            print("Title validation passed")
+            #  Validate new tab opened
+            assert new_tab_count == old_tab_count + 1, f"{name} did NOT open in new tab"
+            print(f"{name} opened in new tab successfully ")
 
-            # 6. Close new tab
+            new_tab.wait_for_load_state("domcontentloaded")
+
+            #  Wait if Cloudflare ("Just a moment")
+            for _ in range(5):
+                url = new_tab.url
+                print("Current URL:", url)
+
+                if "just" not in url.lower():
+                    break
+
+                new_tab.wait_for_timeout(2000)
+
+            final_url = new_tab.url
+            print("Final URL:", final_url)
+
+            # Validate correct redirection
+            expected_url = expected_urls.get(name)
+            assert expected_url in final_url, f"{name} not redirected correctly"
+
+            print(f"{name} redirected correctly ")
+
             new_tab.close()
-
     def validate_header_search_functionality(self, keyword="psycology"):
         """Validate search functionality in header with valid data"""
 
