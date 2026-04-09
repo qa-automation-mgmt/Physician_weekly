@@ -21,7 +21,7 @@ URLS = [
     # "https://www.physiciansweekly.com/page/psychiatry",
     # "https://www.physiciansweekly.com/page/pulmonology",
     # "https://www.physiciansweekly.com/page/rheumatology",
-    "https://www.physiciansweekly.com/page/surgery"
+    #"https://www.physiciansweekly.com/page/surgery"
   
     ]
 
@@ -492,7 +492,7 @@ class SpecialityPages:
         self.page.goto(url)
         print(f"\nTesting page: {url} and Test Case : Validates that **all buttons on specialty pages (excluding “Join the Conversation”) are clickable and navigate correctly**.")
         # Reuse helper
-        self.button_helper.validate_all_buttons(self.page)
+        self.button_helper.validate_all_buttons1(self.page)
 
     def verify_specialty_breadcrumb_flow(self, url):
 

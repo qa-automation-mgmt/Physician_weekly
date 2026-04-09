@@ -149,7 +149,7 @@ class HeaderPage(Home_page_Locators):
             self.page.go_back()
             expect(self.page).to_have_url(self.base_url)
 
-        print("\n✅ ALL SPECIALTIES VALIDATED SUCCESSFULLY!")
+        print("\nALL SPECIALTIES VALIDATED SUCCESSFULLY!")
 
 #above 4 converted to flacky dector but 
 #Validates that **each Commentary menu link redirects to the correct URL** and **page header matches the expected heading**.

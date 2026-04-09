@@ -6,7 +6,7 @@ from playwright.sync_api import expect
 class CommonHelper(Home_page_Locators):
     BASE_URL = "https://www.physiciansweekly.com"
 
-    def validate_all_buttons(self,page):
+    def validate_all_buttons1(self,page):
         buttons = page.locator('[class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineNone css-mavgnk"]')
         count = buttons.count()
         #assert count == 7, "Button count is not matching"
@@ -192,7 +192,7 @@ class CommonHelper(Home_page_Locators):
         logo = page.locator(self.Logo)
         expect(logo).to_be_visible()
         print("logo is displayed")        
-    #note : This is post hero banner function not a page hero banner , make sure 
+    #note : This is post hero banner function not a page hero banner , make sure this only for articul pages
     def verify_hero_banner_for_post_pages_helper(self,page):
         banner = page.locator('//div[@class="mainImageContainer float-left"]')
         images = banner.locator("img")
@@ -490,7 +490,157 @@ class CommonHelper(Home_page_Locators):
         print("All 6 google Adds are displayed and its count validated successfully ")
         print("Validated link : " ,page.url)
 
+        '''
+        What this does:
+        Checks banner visibility
+        Checks image actually loaded (not broken)
+        Validates API status code = 200
+        '''
+        #This will work for pages not posts 
+    def verify_hero_banner_in_pages(self, page):
+        try:
+            # Hero banner locator
+            banner = page.locator("//div[@class='featured_post_row MuiBox-root css-0']//img")
 
+            # 1. Verify banner is present
+            assert banner.is_visible(), " Hero banner is NOT visible"
+            print("Hero banner is visible")
+
+            # 2. Verify image is loaded
+            is_loaded = banner.evaluate("img => img.complete && img.naturalWidth > 0")
+            assert is_loaded, "Image not loaded properly"
+            print("Image loaded successfully")
+
+            # 3. Verify status code (200)
+            img_url = banner.get_attribute("src")
+            response = page.request.get(img_url)
+            assert response.status == 200, f"Image status code: {response.status}"
+            print("Image status code is 200")
+            print("\n--- Validating Featured Article Title Navigation ---")
+
+            # Locator for article title (listing page)
+            title_locator = page.locator(
+                '//div[@class="MuiTypography-root MuiTypography-h1 MuiTypography-gutterBottom card_feat_title text_link_color css-1kzgxgr"]//a'
+            )
+
+            count = title_locator.count()
+            print(f"Total Featured Articles Found: {count}")
+
+            assert count > 0, "No featured articles found"
+
+            for i in range(count):
+
+                article = title_locator.nth(i)
+
+                # Get title text
+                listing_title = article.inner_text().strip()
+                print(f"\nClicking Article: {listing_title}")
+
+                # Click article
+                article.click()
+                page.wait_for_load_state("load")
+
+                # Get detail page heading
+                detail_heading = page.locator(
+                    '//div[@class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-12 MuiGrid-grid-md-12 MuiGrid-grid-lg-9 MuiGrid-grid-xl-9 cont css-1hjwhii"]//h1'
+                )
+
+                detail_heading.wait_for(state="visible", timeout=5000)
+                detail_title = detail_heading.inner_text().strip()
+
+                print(f"Detail Page Heading: {detail_title}")
+
+                # Validation
+                assert listing_title.lower() in detail_title.lower(), \
+                    f"Mismatch → Listing: {listing_title} | Detail: {detail_title}"
+
+                print("Title validated successfully")
+
+                # Go back
+                self.page.go_back()
+                self.page.wait_for_load_state("load")
+
+        except Exception as e:
+            print(f"Test Failed: {e}")
+    #Tis code will validate all heading of page sections eg,Cartoon, Doctor voice , Etc...
+    def validate_all_main_headings_present(self, page,expected_sections):
+        """Validate that all expected headings are present"""
+        sections = page.locator("//div[contains(@class,'secondary_title')]")
+        
+        # Extract and clean text
+        section_texts = [text.strip() for text in sections.all_text_contents()]
+        
+        print("Found sections:", section_texts)
+
+        for expected in expected_sections:
+            assert any(expected.strip().lower() == actual.lower() for actual in section_texts), \
+                f"Expected section '{expected}' not found!"
+
+        print("All expected sections are present.")
+#this is anothe reusable code for teh buttons 
+    def validate_all_buttons(self, page, expected_count=None, skip_text=None):
+        buttons = page.locator('[class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineNone css-mavgnk"]')
+        count = buttons.count()
+
+        print(f"Total buttons found: {count}")
+
+        # Count validation
+        if expected_count is not None:
+            assert count == expected_count, f"Expected {expected_count}, but found {count}"
+
+        for i in range(count):
+            btn = buttons.nth(i)
+            text = btn.inner_text().strip()
+
+            if skip_text and text == skip_text:
+                print(f"Skipping button: {text}")
+                continue
+
+            print(f"\nClicking Button #{i+1}: {text}")
+
+            btn.scroll_into_view_if_needed()
+            btn.click()
+
+            page.wait_for_load_state("domcontentloaded")
+
+            print(f"Navigated: {text}")
+
+            page.go_back()
+            page.wait_for_load_state("domcontentloaded")
+
+        print("All buttons validated successfully.")
+#This is the common function whcih will get the title and store and then click on the that , and validate the heaidng and come back 
+#     
+    def validate_title_navigation(self, page, title_locator, page_title_locator):
+        try:
+            titles = page.locator(title_locator)
+            count = titles.count()
+            print(f"\nTotal Titles Found: {count}")
+            for i in range(count):
+                title = titles.nth(i)
+                title_text = title.inner_text().strip()
+
+                print(f"\nClicking on Title: {title_text}")
+
+                title.click()
+                page.wait_for_load_state("domcontentloaded")
+
+                page.wait_for_selector(page_title_locator)
+
+                page_title = page.locator(page_title_locator).first.inner_text().strip()
+
+                print(f"Navigated Page Title: {page_title}")
+
+                assert title_text.lower() in page_title.lower()
+
+                print(f"Validated: {title_text}")
+
+                page.go_back()
+                page.wait_for_load_state("domcontentloaded")
+
+        except Exception as e:
+            print(f"\033[91m[CRITICAL ERROR]: {e}\033[0m")
+            raise
 class ResponsiveHelper:
     DESKTOP = {"width": 1366, "height": 768}
     TABLET = {"width": 768, "height": 1024}

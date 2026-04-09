@@ -205,6 +205,7 @@ class HomePage(Home_page_Locators):
         # ==========================
         all_links = self.page.query_selector_all(self.Doctor_voice_all_links)
         BASE = "https://www.physiciansweekly.com"
+        assert len(all_links) == 16,"in Revenew section hyperlinks or read more links or text links or images missing"
 
         for item in all_links:
             link = item.get_attribute("href")
@@ -259,6 +260,8 @@ class HomePage(Home_page_Locators):
                     print(f"Error fetching {link}: {e}")
         all_links = self.page.query_selector_all(self.Knowledge_Hub_all_links)
         BASE_URL = "https://www.physiciansweekly.com"
+        assert len(all_links) == 16,"in Revenew section hyperlinks or read more links or text links or images missing"
+
         for i in all_links:
             link = i.get_attribute("href")
             if link:
@@ -319,6 +322,7 @@ class HomePage(Home_page_Locators):
         # ==========================
         all_links = self.page.query_selector_all(self.Business_of_Medicine_all_links)
         BASE_URL = "https://www.physiciansweekly.com"
+        assert len(all_links) == 16,"in Revenew section hyperlinks or read more links or text links or images missing"
 
         for a in all_links:
             link = a.get_attribute("href")
@@ -390,6 +394,7 @@ class HomePage(Home_page_Locators):
         # ==========================
         all_links = self.page.query_selector_all(self.cartoons_all_links)
         BASE_URL = "https://www.physiciansweekly.com"
+        assert len(all_links) == 16,"in Revenew section hyperlinks or read more links or text links or images missing"
 
         for a in all_links:
             link = a.get_attribute("href")

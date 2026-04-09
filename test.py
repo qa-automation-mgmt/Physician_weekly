@@ -23,7 +23,7 @@ with sync_playwright() as p:
         link = img.get_attribute("src")
 
         if link:
-            # 🔥 FIX: handle relative URLs
+            #FIX: handle relative URLs
             if link.startswith("/"):
                 link = BASE_URL + link
 

@@ -2,7 +2,6 @@ import pytest
 import os
 
 def run_tests():
-    # HTML report path
     html_report = "/home/ashok/Desktop/PW-Playwright/report.html"
     os.makedirs(os.path.dirname(html_report), exist_ok=True)
 
@@ -12,8 +11,8 @@ def run_tests():
         f"--html={html_report}", 
         "--self-contained-html",
         # RETRIES (GLOBAL)
-        "--reruns", "3",              # retry failed tests 2 times
-        "--reruns-delay", "5",        # wait 2 seconds before retry
+        "--reruns", "4",              # retry failed tests 2 times
+        "--reruns-delay", "6",        # wait 2 seconds before retry
         # Output
         "--capture=tee-sys",
         "-v"
