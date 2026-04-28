@@ -1,0 +1,2 @@
+Search executed successfully for keyword: psycology
+Navigation to searched result article successful and header validated

@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title id="head-title">Physician Weekly – Automation Testing Report [Tester: Ashok]</title>
+      <style type="text/css">body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  /* do not increase min-width as some may use split screens */
+  min-width: 800px;
+  color: #999;
+}
+
+h1 {
+  font-size: 24px;
+  color: black;
+}
+
+h2 {
+  font-size: 16px;
+  color: black;
+}
+
+p {
+  color: black;
+}
+
+a {
+  color: #999;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+/******************************
+ * SUMMARY INFORMATION
+ ******************************/
+#environment td {
+  padding: 5px;
+  border: 1px solid #e6e6e6;
+  vertical-align: top;
+}
+#environment tr:nth-child(odd) {
+  background-color: #f6f6f6;
+}
+#environment ul {
+  margin: 0;
+  padding: 0 20px;
+}
+
+/******************************
+ * TEST RESULT COLORS
+ ******************************/
+span.passed,
+.passed .col-result {
+  color: green;
+}
+
+span.skipped,
+span.xfailed,
+span.rerun,
+.skipped .col-result,
+.xfailed .col-result,
+.rerun .col-result {
+  color: orange;
+}
+
+span.error,
+span.failed,
+span.xpassed,
+.error .col-result,
+.failed .col-result,
+.xpassed .col-result {
+  color: red;
+}
+
+.col-links__extra {
+  margin-right: 3px;
+}
+
+/******************************
+ * RESULTS TABLE
+ *
+ * 1. Table Layout
+ * 2. Extra
+ * 3. Sorting items
+ *
+ ******************************/
+/*------------------
+ * 1. Table Layout
+ *------------------*/
+#results-table {
+  border: 1px solid #e6e6e6;
+  color: #999;
+  font-size: 12px;
+  width: 100%;
+}
+#results-table th,
+#results-table td {
+  padding: 5px;
+  border: 1px solid #e6e6e6;
+  text-align: left;
+}
+#results-table th {
+  font-weight: bold;
+}
+
+/*------------------
+ * 2. Extra
+ *------------------*/
+.logwrapper {
+  max-height: 230px;
+  overflow-y: scroll;
+  background-color: #e6e6e6;
+}
+.logwrapper.expanded {
+  max-height: none;
+}
+.logwrapper.expanded .logexpander:after {
+  content: "collapse [-]";
+}
+.logwrapper .logexpander {
+  z-index: 1;
+  position: sticky;
+  top: 10px;
+  width: max-content;
+  border: 1px solid;
+  border-radius: 3px;
+  padding: 5px 7px;
+  margin: 10px 0 10px calc(100% - 80px);
+  cursor: pointer;
+  background-color: #e6e6e6;
+}
+.logwrapper .logexpander:after {
+  content: "expand [+]";
+}
+.logwrapper .logexpander:hover {
+  color: #000;
+  border-color: #000;
+}
+.logwrapper .log {
+  min-height: 40px;
+  position: relative;
+  top: -50px;
+  height: calc(100% + 50px);
+  border: 1px solid #e6e6e6;
+  color: black;
+  display: block;
+  font-family: "Courier New", Courier, monospace;
+  padding: 5px;
+  padding-right: 80px;
+  white-space: pre-wrap;
+}
+
+div.media {
+  border: 1px solid #e6e6e6;
+  float: right;
+  height: 240px;
+  margin: 0 5px;
+  overflow: hidden;
+  width: 320px;
+}
+
+.media-container {
+  display: grid;
+  grid-template-columns: 25px auto 25px;
+  align-items: center;
+  flex: 1 1;
+  overflow: hidden;
+  height: 200px;
+}
+
+.media-container--fullscreen {
+  grid-template-columns: 0px auto 0px;
+}
+
+.media-container__nav--right,
+.media-container__nav--left {
+  text-align: center;
+  cursor: pointer;
+}
+
+.media-container__viewport {
+  cursor: pointer;
+  text-align: center;
+  height: inherit;
+}
+.media-container__viewport img,
+.media-container__viewport video {
+  object-fit: cover;
+  width: 100%;
+  max-height: 100%;
+}
+
+.media__name,
+.media__counter {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex: 0 0 25px;
+  align-items: center;
+}
+
+.collapsible td:not(.col-links) {
+  cursor: pointer;
+}
+.collapsible td:not(.col-links):hover::after {
+  color: #bbb;
+  font-style: italic;
+  cursor: pointer;
+}
+
+.col-result {
+  width: 130px;
+}
+.col-result:hover::after {
+  content: " (hide details)";
+}
+
+.col-result.collapsed:hover::after {
+  content: " (show details)";
+}
+
+#environment-header h2:hover::after {
+  content: " (hide details)";
+  color: #bbb;
+  font-style: italic;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+#environment-header.collapsed h2:hover::after {
+  content: " (show details)";
+  color: #bbb;
+  font-style: italic;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/*------------------
+ * 3. Sorting items
+ *------------------*/
+.sortable {
+  cursor: pointer;
+}
+.sortable.desc:after {
+  content: " ";
+  position: relative;
+  left: 5px;
+  bottom: -12.5px;
+  border: 10px solid #4caf50;
+  border-bottom: 0;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+.sortable.asc:after {
+  content: " ";
+  position: relative;
+  left: 5px;
+  bottom: 12.5px;
+  border: 10px solid #4caf50;
+  border-top: 0;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+.hidden, .summary__reload__button.hidden {
+  display: none;
+}
+
+.summary__data {
+  flex: 0 0 550px;
+}
+.summary__reload {
+  flex: 1 1;
+  display: flex;
+  justify-content: center;
+}
+.summary__reload__button {
+  flex: 0 0 300px;
+  display: flex;
+  color: white;
+  font-weight: bold;
+  background-color: #4caf50;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.summary__reload__button:hover {
+  background-color: #46a049;
+}
+.summary__spacer {
+  flex: 0 0 550px;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+}
+
+.filters,
+.collapse {
+  display: flex;
+  align-items: center;
+}
+.filters button,
+.collapse button {
+  color: #999;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.filters button:hover,
+.collapse button:hover {
+  color: #ccc;
+}
+
+.filter__label {
+  margin-right: 10px;
+}
+
+      </style>
+    
+  </head>
+  <body>
+    <h1 id="title">Physician Weekly – Automation Testing Report [Tester: Ashok]</h1>
+    <p>Report generated on 24-Apr-2026 at 15:02:43 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a>
+        v4.1.1</p>
+    <div id="environment-header">
+      <h2>Environment</h2>
+    </div>
+    <table id="environment"></table>
+    <!-- TEMPLATES -->
+      <template id="template_environment_row">
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+    </template>
+    <template id="template_results-table__body--empty">
+      <tbody class="results-table-row">
+        <tr id="not-found-message">
+          <td colspan="4">No results found. Check the filters.</th>
+        </tr>
+    </template>
+    <template id="template_results-table__tbody">
+      <tbody class="results-table-row">
+        <tr class="collapsible">
+        </tr>
+        <tr class="extras-row">
+          <td class="extra" colspan="4">
+            <div class="extraHTML"></div>
+            <div class="media">
+              <div class="media-container">
+                  <div class="media-container__nav--left"><</div>
+                  <div class="media-container__viewport">
+                    <img src="" />
+                    <video controls>
+                      <source src="" type="video/mp4">
+                    </video>
+                  </div>
+                  <div class="media-container__nav--right">></div>
+                </div>
+                <div class="media__name"></div>
+                <div class="media__counter"></div>
+            </div>
+            <div class="logwrapper">
+              <div class="logexpander"></div>
+              <div class="log"></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </template>
+    <!-- END TEMPLATES -->
+    <div class="summary">
+      <div class="summary__data">
+        <h2>Summary</h2>
+        <div class="additional-summary prefix">
+          ('Project Name', 'Physician Weekly')
+          ('Tester', 'Ashok Kumar')
+          ('URL', 'https://www.physiciansweekly.com/')
+          ('Browser', 'Chromium')
+          ('Environment', 'Production')
+        </div>
+        <p class="run-count">23 tests took 00:08:17.</p>
+        <p class="filter">(Un)check the boxes to filter the results.</p>
+        <div class="summary__reload">
+          <div class="summary__reload__button hidden" onclick="location.reload()">
+            <div>There are still tests running. <br />Reload this page to get the latest results!</div>
+          </div>
+        </div>
+        <div class="summary__spacer"></div>
+        <div class="controls">
+          <div class="filters">
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="failed" />
+            <span class="failed">1 Failed,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="passed" />
+            <span class="passed">22 Passed,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="skipped" disabled/>
+            <span class="skipped">0 Skipped,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="xfailed" disabled/>
+            <span class="xfailed">0 Expected failures,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="xpassed" disabled/>
+            <span class="xpassed">0 Unexpected passes,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="error" disabled/>
+            <span class="error">0 Errors,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="rerun" />
+            <span class="rerun">2 Reruns</span>
+          </div>
+          <div class="collapse">
+            <button id="show_all_details">Show all details</button>&nbsp;/&nbsp;<button id="hide_all_details">Hide all details</button>
+          </div>
+        </div>
+      </div>
+      <div class="additional-summary summary">
+      </div>
+      <div class="additional-summary postfix">
+      </div>
+    </div>
+    <table id="results-table">
+      <thead id="results-table-head">
+        <tr>
+          <th class="sortable" data-column-type="result">Result</th>
+          <th class="sortable" data-column-type="testId">Test</th>
+          <th class="sortable" data-column-type="duration">Duration</th>
+          <th>Links</th>
+        </tr>
+      </thead>
+    </table>
+  </body>
+  <footer>
+    <div id="data-container" data-jsonblob="{&#34;environment&#34;: {&#34;Python&#34;: &#34;3.10.12&#34;, &#34;Platform&#34;: &#34;Linux-6.8.0-110-generic-x86_64-with-glibc2.35&#34;, &#34;Packages&#34;: {&#34;pytest&#34;: &#34;8.4.2&#34;, &#34;pluggy&#34;: &#34;1.6.0&#34;}, &#34;Plugins&#34;: {&#34;rerunfailures&#34;: &#34;16.1&#34;, &#34;playwright&#34;: &#34;0.7.2&#34;, &#34;metadata&#34;: &#34;3.1.1&#34;, &#34;base-url&#34;: &#34;2.1.0&#34;, &#34;xdist&#34;: &#34;3.8.0&#34;, &#34;html&#34;: &#34;4.1.1&#34;, &#34;allure-pytest&#34;: &#34;2.15.3&#34;, &#34;anyio&#34;: &#34;4.13.0&#34;}, &#34;Base URL&#34;: &#34;&#34;}, &#34;tests&#34;: {&#34;tests/test_e2e_flow.py::TestE2EFlow::test_search_functionality&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_e2e_flow.py::TestE2EFlow::test_search_functionality&#34;, &#34;duration&#34;: &#34;00:01:12&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_e2e_flow.py::TestE2EFlow::test_search_functionality&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:01:12&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;---------------------------- Captured stdout setup -----------------------------\nPrivacy popup detected and closed\n\n----------------------------- Captured stdout call -----------------------------\nlogo is displayed\nSearch executed successfully for keyword: surgen\nNavigation to searched result article successful and header validated\n\nValidating Author &amp;amp; Last Updated...\nAuthor found: Vin Sellinger\nAuthor link: /author/vin-sellinger\n\u2714 Author hyperlink valid (Status: 200)\nLast Updated: Last Updated: December 17, 2024\n\u2714 Author &amp;amp; Last Updated validation successful.\n\n\nChecking social media share buttons...\nTotal social media buttons found: 5\nIcon 1: Share on Facebook\nIcon 2: Share on X\nIcon 3: Share on LinkedIn\nIcon 4: Share by email\nMissing aria-label for icon #5\nSocial media button validation completed.\n\nNo visible images found in featured articles section or found more than 1 image.\nTotal images found in Related post: 5\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/307-Giraffe-1.jpg\n Image opened successfully (Status: 200)\nOpened in SAME TAB: https://www.physiciansweekly.com/post/critter-cal-findings\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/QUACKHYPO-scaled.jpg\n Image opened successfully (Status: 200)\nOpened in SAME TAB: https://www.physiciansweekly.com/post/critter-cal-findings\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/EASTER-hopupSEP60.jpg\n Image opened successfully (Status: 200)\nOpened in SAME TAB: https://www.physiciansweekly.com/post/fowl-language\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/03/03-30-27-Dog-Training-AB-1.jpg\n Image opened successfully (Status: 200)\nOpened in SAME TAB: https://www.physiciansweekly.com/post/bunny-hop\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/03/nystuntman-scaled.jpg\n Image opened successfully (Status: 200)\nOpened in SAME TAB: https://www.physiciansweekly.com/post/canine-cardio-coach\nLink URL: /post/cutaneous-conundrum\nLink opened successfully (Status code: 200)\nLink URL: /post/cutaneous-conundrum\nLink opened successfully (Status code: 200)\nLink URL: /category/cartoons\nLink opened successfully (Status code: 200)\nLink URL: /post/cutaneous-conundrum\nLink opened successfully (Status code: 200)\nLink URL: /post/critter-cal-findings\nLink opened successfully (Status code: 200)\nLink URL: /post/critter-cal-findings\nLink opened successfully (Status code: 200)\nLink URL: /category/cartoons\nLink opened successfully (Status code: 200)\nLink URL: /post/critter-cal-findings\nLink opened successfully (Status code: 200)\nLink URL: /post/fowl-language\nLink opened successfully (Status code: 200)\nLink URL: /post/fowl-language\nLink opened successfully (Status code: 200)\nLink URL: /category/cartoons\nLink opened successfully (Status code: 200)\nLink URL: /post/fowl-language\nLink opened successfully (Status code: 200)\nLink URL: /post/bunny-hop\nLink opened successfully (Status code: 200)\nLink URL: /post/bunny-hop\nLink opened successfully (Status code: 200)\nLink URL: /category/cartoons\nLink opened successfully (Status code: 200)\nLink URL: /post/bunny-hop\nLink opened successfully (Status code: 200)\nLink URL: /post/canine-cardio-coach\nLink opened successfully (Status code: 200)\nLink URL: /post/canine-cardio-coach\nLink opened successfully (Status code: 200)\nLink URL: /category/cartoons\nLink opened successfully (Status code: 200)\nLink URL: /post/canine-cardio-coach\nLink opened successfully (Status code: 200)\n&#34;}], &#34;tests/test_header_page.py::TestHeaderPage::test_logo_redirect_to_homepage&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_header_page.py::TestHeaderPage::test_logo_redirect_to_homepage&#34;, &#34;duration&#34;: &#34;00:00:12&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_header_page.py::TestHeaderPage::test_logo_redirect_to_homepage&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:12&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;---------------------------- Captured stdout setup -----------------------------\nPrivacy popup detected and closed\n\n----------------------------- Captured stdout call -----------------------------\nLogo navigation from another page test passed\n&#34;}], &#34;tests/test_header_page.py::TestHeaderPage::test_specialties_status_and_navigation&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_header_page.py::TestHeaderPage::test_specialties_status_and_navigation&#34;, &#34;duration&#34;: &#34;00:00:21&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_header_page.py::TestHeaderPage::test_specialties_status_and_navigation&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:21&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nFound \u2192 Allergy &amp;amp; Immunology: /page/allergy-immunology\nFound \u2192 Cardiology: /page/cardiology\nFound \u2192 Critical Care: /page/critical-care\nFound \u2192 Dermatology: /page/dermatology\nFound \u2192 Endocrinology: /page/endocrinology\nFound \u2192 Gastroenterology: /page/gastroenterology\nFound \u2192 Infectious Disease: /page/infectious-disease\nFound \u2192 Nephrology: /page/nephrology\nFound \u2192 Neurology: /page/neurology\nFound \u2192 OB/GYN: /page/obgyn\nFound \u2192 Oncology / Hematology: /page/oncology-hematology\nFound \u2192 Ophthalmology: /page/ophthalmology\nFound \u2192 Pain: /page/pain\nFound \u2192 Pediatrics: /page/pediatrics\nFound \u2192 Primary Care: /page/primary-care\nFound \u2192 Psychiatry: /page/psychiatry\nFound \u2192 Pulmonology: /page/pulmonology\nFound \u2192 Rheumatology: /page/rheumatology\nFound \u2192 Surgery: /page/surgery\nFound \u2192 Urology: /page/urology\nFound \u2192 Cartoons: /page/cartoons\nFound \u2192 Doctor\u2019s Voice: /page/doctors-voice\nFound \u2192 Peer-to-Peer: /page/peer-to-peer\nFound \u2192 Podcast: /page/podcast\n\u2705 Allergy &amp;amp; Immunology \u2192 200 OK\n\u2705 Cardiology \u2192 200 OK\n\u2705 Critical Care \u2192 200 OK\n\u2705 Dermatology \u2192 200 OK\n\u2705 Endocrinology \u2192 200 OK\n\u2705 Gastroenterology \u2192 200 OK\n\u2705 Infectious Disease \u2192 200 OK\n\u2705 Nephrology \u2192 200 OK\n\u2705 Neurology \u2192 200 OK\n\u2705 OB/GYN \u2192 200 OK\n\u2705 Oncology / Hematology \u2192 200 OK\n\u2705 Ophthalmology \u2192 200 OK\n\u2705 Pain \u2192 200 OK\n\u2705 Pediatrics \u2192 200 OK\n\u2705 Primary Care \u2192 200 OK\n\u2705 Psychiatry \u2192 200 OK\n\u2705 Pulmonology \u2192 200 OK\n\u2705 Rheumatology \u2192 200 OK\n\u2705 Surgery \u2192 200 OK\n\u2705 Urology \u2192 200 OK\n\u2705 Cartoons \u2192 200 OK\n\u274c Status check failed for Doctor\u2019s Voice \u2192 https://www.physiciansweekly.com/page/doctors-voice (Doctor\u2019s Voice \u2192 https://www.physiciansweekly.com/page/doctors-voice returned 404)\n&#34;}], &#34;tests/test_header_page.py::TestHeaderPage::test_specialties_menu_redirection&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_header_page.py::TestHeaderPage::test_specialties_menu_redirection&#34;, &#34;duration&#34;: &#34;00:00:46&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_header_page.py::TestHeaderPage::test_specialties_menu_redirection&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:46&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nFound 24 specialties under the menu.\nValidating \u2192 Allergy &amp;amp; Immunology : /page/allergy-immunology\nURL validation success\nAllergy &amp;amp; Immunology \u2192 correct URL + header\nValidating \u2192 Cardiology : /page/cardiology\nURL validation success\nCardiology \u2192 correct URL + header\nValidating \u2192 Critical Care : /page/critical-care\nURL validation success\nCritical Care \u2192 correct URL + header\nValidating \u2192 Dermatology : /page/dermatology\nURL validation success\nDermatology \u2192 correct URL + header\nValidating \u2192 Endocrinology : /page/endocrinology\nURL validation success\nEndocrinology \u2192 correct URL + header\nValidating \u2192 Gastroenterology : /page/gastroenterology\nURL validation success\nGastroenterology \u2192 correct URL + header\nValidating \u2192 Infectious Disease : /page/infectious-disease\nURL validation success\nInfectious Disease \u2192 correct URL + header\nValidating \u2192 Nephrology : /page/nephrology\nURL validation success\nNephrology \u2192 correct URL + header\nValidating \u2192 Neurology : /page/neurology\nURL validation success\nNeurology \u2192 correct URL + header\nValidating \u2192 OB/GYN : /page/obgyn\nURL validation success\nOB/GYN \u2192 correct URL + header\nValidating \u2192 Oncology / Hematology : /page/oncology-hematology\nURL validation success\nOncology / Hematology \u2192 correct URL + header\nValidating \u2192 Ophthalmology : /page/ophthalmology\nURL validation success\nOphthalmology \u2192 correct URL + header\nValidating \u2192 Pain : /page/pain\nURL validation success\nPain \u2192 correct URL + header\nValidating \u2192 Pediatrics : /page/pediatrics\nURL validation success\nPediatrics \u2192 correct URL + header\nValidating \u2192 Primary Care : /page/primary-care\nURL validation success\nPrimary Care \u2192 correct URL + header\nValidating \u2192 Psychiatry : /page/psychiatry\nURL validation success\nPsychiatry \u2192 correct URL + header\nValidating \u2192 Pulmonology : /page/pulmonology\nURL validation success\nPulmonology \u2192 correct URL + header\nValidating \u2192 Rheumatology : /page/rheumatology\nURL validation success\nRheumatology \u2192 correct URL + header\nValidating \u2192 Surgery : /page/surgery\nURL validation success\nSurgery \u2192 correct URL + header\nValidating \u2192 Urology : /page/urology\nURL validation success\nUrology \u2192 correct URL + header\nValidating \u2192 Cartoons : /page/cartoons\nSkipping Cartoons (not in expected list)\nValidating \u2192 Doctor\u2019s Voice : /page/doctors-voice\nSkipping Doctor\u2019s Voice (not in expected list)\nValidating \u2192 Peer-to-Peer : /page/peer-to-peer\nSkipping Peer-to-Peer (not in expected list)\nValidating \u2192 Podcast : /page/podcast\nSkipping Podcast (not in expected list)\n\nALL SPECIALTIES VALIDATED SUCCESSFULLY!\n&#34;}], &#34;tests/test_header_page.py::TestHeaderPage::test_header_commentary_menu_redirection&#34;: [{&#34;extras&#34;: [{&#34;name&#34;: &#34;Image&#34;, &#34;format_type&#34;: &#34;image&#34;, &#34;content&#34;: &#34;reports/Run_2026_04_24_14_54_18/screenshots/test_header_commentary_menu_redirection_1777022830.png&#34;, &#34;mime_type&#34;: &#34;image/png&#34;, &#34;extension&#34;: &#34;png&#34;}], &#34;result&#34;: &#34;Rerun&#34;, &#34;testId&#34;: &#34;tests/test_header_page.py::TestHeaderPage::test_header_commentary_menu_redirection&#34;, &#34;duration&#34;: &#34;00:00:23&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Rerun&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_header_page.py::TestHeaderPage::test_header_commentary_menu_redirection&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:23&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;self = &amp;lt;test_header_page.TestHeaderPage object at 0x724f2238eef0&amp;gt;\npage = &amp;lt;Page url=&amp;#x27;https://www.physiciansweekly.com/page/doctors-voice&amp;#x27;&amp;gt;\n\n    def test_header_commentary_menu_redirection(self,page):\n       from urls import URLs   #URLs.specialties dictionary is imported\n       home = HeaderPage(page)\n&amp;gt;      home.validate_commentary_menu_redirection(URLs)\n\ntests/test_header_page.py:22: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = &amp;lt;pages.Header_page.HeaderPage object at 0x724f20df9510&amp;gt;, URLs = &amp;lt;class &amp;#x27;urls.URLs&amp;#x27;&amp;gt;\n\n    def validate_commentary_menu_redirection(self, URLs):\n        &amp;quot;&amp;quot;&amp;quot;Validate Header Commentary menu redirection (Stable &amp;amp; CI-safe)&amp;quot;&amp;quot;&amp;quot;\n    \n        # Navigate to homepage\n        self.page.goto(self.base_url)\n    \n        expected_headings = {\n            &amp;quot;Cartoons&amp;quot;: &amp;quot;Cartoons&amp;quot;,\n            &amp;quot;Doctor\u2019s Voice&amp;quot;: &amp;quot;Doctor&amp;#x27;s Voice&amp;quot;,\n            &amp;quot;Peer-to-Peer&amp;quot;: &amp;quot;Peer-to-Peer&amp;quot;,\n            &amp;quot;Podcast&amp;quot;: &amp;quot;PeerPOV&amp;quot;,\n        }\n    \n        commentary_menu = self.page.locator(&amp;quot;a[href=&amp;#x27;/page/commentary&amp;#x27;]&amp;quot;)\n        expect(commentary_menu).to_be_visible()\n    \n        # Open menu\n        commentary_menu.hover()\n    \n        menu = self.page.locator(self.Commentary_menu)\n        expect(menu.first).to_be_visible(timeout=15000)\n    \n        count = menu.count()\n        assert count &amp;gt; 0, &amp;quot;No Commentary menu links found&amp;quot;\n    \n        for i in range(count):\n            # Re-open menu every loop (hover menus collapse)\n            commentary_menu.hover()\n    \n            link = self.page.locator(self.Commentary_menu).nth(i)\n            link_text = link.inner_text().strip()\n    \n            if link_text not in URLs.Commentary:\n                print(f&amp;quot;Skipping {link_text} (not in expected mapping)&amp;quot;)\n                continue\n    \n            expected_url = URLs.Commentary[link_text]\n            print(f&amp;quot;Validating \u2192 {link_text}&amp;quot;)\n    \n            # Click (NO expect_navigation)\n            link.click()\n    \n            # URL validation (regex = stable)\n            expect(self.page).to_have_url(\n                re.compile(re.escape(expected_url), re.IGNORECASE),\n                timeout=15000\n            )\n    \n            # Header validation\n            header = self.page.locator(self.headings_1)\n&amp;gt;           expect(header).to_be_visible(timeout=15000)\nE           AssertionError: Locator expected to be visible\nE           Actual value: None\nE           Error: element(s) not found \nE           Call log:\nE             - Expect &amp;quot;to_be_visible&amp;quot; with timeout 15000ms\nE             - waiting for locator(&amp;quot;//div[@class=\\&amp;quot;pageInfoBox MuiBox-root css-0\\&amp;quot;]//h1&amp;quot;)\n\npages/Header_page.py:207: AssertionError\n&#34;}, {&#34;extras&#34;: [{&#34;name&#34;: &#34;Image&#34;, &#34;format_type&#34;: &#34;image&#34;, &#34;content&#34;: &#34;reports/Run_2026_04_24_14_54_18/screenshots/test_header_commentary_menu_redirection_1777022856.png&#34;, &#34;mime_type&#34;: &#34;image/png&#34;, &#34;extension&#34;: &#34;png&#34;}], &#34;result&#34;: &#34;Rerun&#34;, &#34;testId&#34;: &#34;tests/test_header_page.py::TestHeaderPage::test_header_commentary_menu_redirection&#34;, &#34;duration&#34;: &#34;00:00:23&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Rerun&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_header_page.py::TestHeaderPage::test_header_commentary_menu_redirection&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:23&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;self = &amp;lt;test_header_page.TestHeaderPage object at 0x724f2238eef0&amp;gt;\npage = &amp;lt;Page url=&amp;#x27;https://www.physiciansweekly.com/page/doctors-voice&amp;#x27;&amp;gt;\n\n    def test_header_commentary_menu_redirection(self,page):\n       from urls import URLs   #URLs.specialties dictionary is imported\n       home = HeaderPage(page)\n&amp;gt;      home.validate_commentary_menu_redirection(URLs)\n\ntests/test_header_page.py:22: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = &amp;lt;pages.Header_page.HeaderPage object at 0x724f20d32f20&amp;gt;, URLs = &amp;lt;class &amp;#x27;urls.URLs&amp;#x27;&amp;gt;\n\n    def validate_commentary_menu_redirection(self, URLs):\n        &amp;quot;&amp;quot;&amp;quot;Validate Header Commentary menu redirection (Stable &amp;amp; CI-safe)&amp;quot;&amp;quot;&amp;quot;\n    \n        # Navigate to homepage\n        self.page.goto(self.base_url)\n    \n        expected_headings = {\n            &amp;quot;Cartoons&amp;quot;: &amp;quot;Cartoons&amp;quot;,\n            &amp;quot;Doctor\u2019s Voice&amp;quot;: &amp;quot;Doctor&amp;#x27;s Voice&amp;quot;,\n            &amp;quot;Peer-to-Peer&amp;quot;: &amp;quot;Peer-to-Peer&amp;quot;,\n            &amp;quot;Podcast&amp;quot;: &amp;quot;PeerPOV&amp;quot;,\n        }\n    \n        commentary_menu = self.page.locator(&amp;quot;a[href=&amp;#x27;/page/commentary&amp;#x27;]&amp;quot;)\n        expect(commentary_menu).to_be_visible()\n    \n        # Open menu\n        commentary_menu.hover()\n    \n        menu = self.page.locator(self.Commentary_menu)\n        expect(menu.first).to_be_visible(timeout=15000)\n    \n        count = menu.count()\n        assert count &amp;gt; 0, &amp;quot;No Commentary menu links found&amp;quot;\n    \n        for i in range(count):\n            # Re-open menu every loop (hover menus collapse)\n            commentary_menu.hover()\n    \n            link = self.page.locator(self.Commentary_menu).nth(i)\n            link_text = link.inner_text().strip()\n    \n            if link_text not in URLs.Commentary:\n                print(f&amp;quot;Skipping {link_text} (not in expected mapping)&amp;quot;)\n                continue\n    \n            expected_url = URLs.Commentary[link_text]\n            print(f&amp;quot;Validating \u2192 {link_text}&amp;quot;)\n    \n            # Click (NO expect_navigation)\n            link.click()\n    \n            # URL validation (regex = stable)\n            expect(self.page).to_have_url(\n                re.compile(re.escape(expected_url), re.IGNORECASE),\n                timeout=15000\n            )\n    \n            # Header validation\n            header = self.page.locator(self.headings_1)\n&amp;gt;           expect(header).to_be_visible(timeout=15000)\nE           AssertionError: Locator expected to be visible\nE           Actual value: None\nE           Error: element(s) not found \nE           Call log:\nE             - Expect &amp;quot;to_be_visible&amp;quot; with timeout 15000ms\nE             - waiting for locator(&amp;quot;//div[@class=\\&amp;quot;pageInfoBox MuiBox-root css-0\\&amp;quot;]//h1&amp;quot;)\n\npages/Header_page.py:207: AssertionError\n&#34;}, {&#34;extras&#34;: [{&#34;name&#34;: &#34;Image&#34;, &#34;format_type&#34;: &#34;image&#34;, &#34;content&#34;: &#34;reports/Run_2026_04_24_14_54_18/screenshots/test_header_commentary_menu_redirection_1777022882.png&#34;, &#34;mime_type&#34;: &#34;image/png&#34;, &#34;extension&#34;: &#34;png&#34;}], &#34;result&#34;: &#34;Failed&#34;, &#34;testId&#34;: &#34;tests/test_header_page.py::TestHeaderPage::test_header_commentary_menu_redirection&#34;, &#34;duration&#34;: &#34;00:00:23&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Failed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_header_page.py::TestHeaderPage::test_header_commentary_menu_redirection&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:23&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;self = &amp;lt;test_header_page.TestHeaderPage object at 0x724f2238eef0&amp;gt;\npage = &amp;lt;Page url=&amp;#x27;https://www.physiciansweekly.com/page/doctors-voice&amp;#x27;&amp;gt;\n\n    def test_header_commentary_menu_redirection(self,page):\n       from urls import URLs   #URLs.specialties dictionary is imported\n       home = HeaderPage(page)\n&amp;gt;      home.validate_commentary_menu_redirection(URLs)\n\ntests/test_header_page.py:22: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ \n\nself = &amp;lt;pages.Header_page.HeaderPage object at 0x724f20d33940&amp;gt;, URLs = &amp;lt;class &amp;#x27;urls.URLs&amp;#x27;&amp;gt;\n\n    def validate_commentary_menu_redirection(self, URLs):\n        &amp;quot;&amp;quot;&amp;quot;Validate Header Commentary menu redirection (Stable &amp;amp; CI-safe)&amp;quot;&amp;quot;&amp;quot;\n    \n        # Navigate to homepage\n        self.page.goto(self.base_url)\n    \n        expected_headings = {\n            &amp;quot;Cartoons&amp;quot;: &amp;quot;Cartoons&amp;quot;,\n            &amp;quot;Doctor\u2019s Voice&amp;quot;: &amp;quot;Doctor&amp;#x27;s Voice&amp;quot;,\n            &amp;quot;Peer-to-Peer&amp;quot;: &amp;quot;Peer-to-Peer&amp;quot;,\n            &amp;quot;Podcast&amp;quot;: &amp;quot;PeerPOV&amp;quot;,\n        }\n    \n        commentary_menu = self.page.locator(&amp;quot;a[href=&amp;#x27;/page/commentary&amp;#x27;]&amp;quot;)\n        expect(commentary_menu).to_be_visible()\n    \n        # Open menu\n        commentary_menu.hover()\n    \n        menu = self.page.locator(self.Commentary_menu)\n        expect(menu.first).to_be_visible(timeout=15000)\n    \n        count = menu.count()\n        assert count &amp;gt; 0, &amp;quot;No Commentary menu links found&amp;quot;\n    \n        for i in range(count):\n            # Re-open menu every loop (hover menus collapse)\n            commentary_menu.hover()\n    \n            link = self.page.locator(self.Commentary_menu).nth(i)\n            link_text = link.inner_text().strip()\n    \n            if link_text not in URLs.Commentary:\n                print(f&amp;quot;Skipping {link_text} (not in expected mapping)&amp;quot;)\n                continue\n    \n            expected_url = URLs.Commentary[link_text]\n            print(f&amp;quot;Validating \u2192 {link_text}&amp;quot;)\n    \n            # Click (NO expect_navigation)\n            link.click()\n    \n            # URL validation (regex = stable)\n            expect(self.page).to_have_url(\n                re.compile(re.escape(expected_url), re.IGNORECASE),\n                timeout=15000\n            )\n    \n            # Header validation\n            header = self.page.locator(self.headings_1)\n&amp;gt;           expect(header).to_be_visible(timeout=15000)\nE           AssertionError: Locator expected to be visible\nE           Actual value: None\nE           Error: element(s) not found \nE           Call log:\nE             - Expect &amp;quot;to_be_visible&amp;quot; with timeout 15000ms\nE             - waiting for locator(&amp;quot;//div[@class=\\&amp;quot;pageInfoBox MuiBox-root css-0\\&amp;quot;]//h1&amp;quot;)\n\npages/Header_page.py:207: AssertionError\n\n----------------------------- Captured stdout call -----------------------------\nValidating \u2192 Cartoons\n\u2705 Cartoons \u2192 correct URL &amp;amp; header\nValidating \u2192 Doctor\u2019s Voice\n\n----------------------------- Captured stdout call -----------------------------\nValidating \u2192 Cartoons\n\u2705 Cartoons \u2192 correct URL &amp;amp; header\nValidating \u2192 Doctor\u2019s Voice\n\n----------------------------- Captured stdout call -----------------------------\nValidating \u2192 Cartoons\n\u2705 Cartoons \u2192 correct URL &amp;amp; header\nValidating \u2192 Doctor\u2019s Voice\n&#34;}], &#34;tests/test_header_page.py::TestHeaderPage::test_header_option_navigation_and_header_validation&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_header_page.py::TestHeaderPage::test_header_option_navigation_and_header_validation&#34;, &#34;duration&#34;: &#34;00:00:17&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_header_page.py::TestHeaderPage::test_header_option_navigation_and_header_validation&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:17&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nPhysician&amp;#x27;s Weekly | www.PhysiciansWeekly.com\nClicking: Specialties\nPage Header: Specialties\nHeading validation success for: Specialties\nClicking: Conference Coverage\nPage Header: Conference Coverage\nHeading validation success for: Conference Coverage\nClicking: Knowledge Hub\nPage Header: Knowledge Hub\nHeading validation success for: Knowledge Hub\nClicking: Cases and Quizzes\nPage Header: Cases and Quizzes\nHeading validation success for: Cases and Quizzes\nClicking: Commentary\nPage Header: Commentary\nHeading validation success for: Commentary\nClicking: Business of Medicine\nPage Header: Business of Medicine\nHeading validation success for: Business of Medicine\n&#34;}], &#34;tests/test_header_page.py::TestHeaderPage::test_contribute_PV_and_subscription_navigations_another_tab&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_header_page.py::TestHeaderPage::test_contribute_PV_and_subscription_navigations_another_tab&#34;, &#34;duration&#34;: &#34;00:00:12&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_header_page.py::TestHeaderPage::test_contribute_PV_and_subscription_navigations_another_tab&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:12&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nTotal items: 2\nTotal items: 2\n\nChecking: Contribute to PW\nOld tab count: 1\nNew tab count: 2\nContribute to PW opened in new tab successfully \nCurrent URL: https://app.smartsheet.com/b/form/8f2ab169168247d7aadc46f1367e61ed\nFinal URL: https://app.smartsheet.com/b/form/8f2ab169168247d7aadc46f1367e61ed\nContribute to PW redirected correctly \n\nChecking: Subscribe\nOld tab count: 1\nNew tab count: 2\nSubscribe opened in new tab successfully \nCurrent URL: https://hosted.pushplanet.com/fm/subscriptions_physw?__cf_chl_rt_tk=qjqID9L0M39CUMeLx8anXOtShZbcJ3GnUs.vo3G3WyA-1777022911-1.0.1.1-ygyCHSF5n61Mfb22Efl2CEF4edGsFOTUbgC1ZYqI1z4\nFinal URL: https://hosted.pushplanet.com/fm/subscriptions_physw?__cf_chl_rt_tk=qjqID9L0M39CUMeLx8anXOtShZbcJ3GnUs.vo3G3WyA-1777022911-1.0.1.1-ygyCHSF5n61Mfb22Efl2CEF4edGsFOTUbgC1ZYqI1z4\nSubscribe redirected correctly \n&#34;}], &#34;tests/test_header_page.py::TestHeaderPage::test_header_search_functionality_valid_data&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_header_page.py::TestHeaderPage::test_header_search_functionality_valid_data&#34;, &#34;duration&#34;: &#34;00:00:07&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_header_page.py::TestHeaderPage::test_header_search_functionality_valid_data&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:07&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nSearch executed successfully for keyword: psycology\nNavigation to searched result article successful and header validated\n&#34;}], &#34;tests/test_header_page.py::TestHeaderPage::test_header_search_functionality_invalid_data&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_header_page.py::TestHeaderPage::test_header_search_functionality_invalid_data&#34;, &#34;duration&#34;: &#34;00:00:06&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_header_page.py::TestHeaderPage::test_header_search_functionality_invalid_data&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:06&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n&amp;#x27;Nothing Found&amp;#x27;: message displayed successfully for invalid search &amp;#x27;usdgshdtwujhvh&amp;#x27;\n&amp;#x27;Nothing Found&amp;#x27;: message displayed successfully for empty search input\n&#34;}], &#34;tests/test_home_page.py::TestHomePage::test_home_page_validation&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_home_page.py::TestHomePage::test_home_page_validation&#34;, &#34;duration&#34;: &#34;00:00:08&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_home_page.py::TestHomePage::test_home_page_validation&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:08&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;---------------------------- Captured stdout setup -----------------------------\nPrivacy popup detected and closed\n\n----------------------------- Captured stdout call -----------------------------\nFeatured heading: Featured Articles\nVisible Hero Banner images: 1\n&#34;}], &#34;tests/test_home_page.py::TestHomePage::test_subfeatured_articles&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_home_page.py::TestHomePage::test_subfeatured_articles&#34;, &#34;duration&#34;: &#34;00:00:37&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_home_page.py::TestHomePage::test_subfeatured_articles&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:37&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nTotal images found: 8\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/KOL-Headshot-Template-8.png\nLoaded successfully (HTTP 200)\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/Joanna-Tsai-MD-and-Stuart-Ray-MD-featured-image.png\nLoaded successfully (HTTP 200)\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/Brian-A.-Cahn-MD-featured-image.png\nLoaded successfully (HTTP 200)\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/iStock-2190057386-modified-6ae3ffc2-2bc5-4db9-94eb-12038a06c317.jpg\nLoaded successfully (HTTP 200)\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/KOL-Headshot_Dr.Ratafi-11.png\nLoaded successfully (HTTP 200)\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/KOL-Headshot-Template-7.png\nLoaded successfully (HTTP 200)\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/KOL-Headshot-Template-22.png\nLoaded successfully (HTTP 200)\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/Dr.-LaBedz.png\nLoaded successfully (HTTP 200)\nhttps://www.physiciansweekly.com/post/is-it-time-to-rethink-pe-treatment-functional-outcomes-from-storm-pe ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/cardiology ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/qa-diagnosing-treating-co-and-superinfections-in-viral-pneumonia ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/infectious-disease ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/qa-guidance-for-managing-bccs-in-gorlin-syndrome ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/oncology-hematology ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/pediatric-asthma-medication-use-drops-nearly-7-after-public-housing-upgrades ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/allergy-immunology ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/qa-how-misdiagnosis-fuels-antibiotic-overuse-masks-interstitial-cystitis ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/urology ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/beyond-a1c-is-not-enough-how-glp-1-therapy-is-changing-frontline-care-2 ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/endocrinology ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/qa-navigating-guidance-on-use-of-steroids-in-sepsis ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/critical-care ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/qa-understanding-the-barriers-and-motivators-of-inhaler-adherence-in-copd ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/pulmonology ---&amp;gt; 200\nTotal Articles: 8\nStored Titles: [(&amp;#x27;Is It Time to Rethink PE Treatment? Functional Outcomes From STORM\u2011PE&amp;#x27;, &amp;#x27;/post/is-it-time-to-rethink-pe-treatment-functional-outcomes-from-storm-pe&amp;#x27;), (&amp;#x27;Q&amp;amp;A: Diagnosing &amp;amp; Treating Co- and Superinfections in Viral Pneumonia&amp;#x27;, &amp;#x27;/post/qa-diagnosing-treating-co-and-superinfections-in-viral-pneumonia&amp;#x27;), (&amp;#x27;Q&amp;amp;A: Guidance for Managing BCCs in Gorlin Syndrome&amp;#x27;, &amp;#x27;/post/qa-guidance-for-managing-bccs-in-gorlin-syndrome&amp;#x27;), (&amp;#x27;Pediatric Asthma Medication Use Drops Nearly 7% After Public Housing Upgrades&amp;#x27;, &amp;#x27;/post/pediatric-asthma-medication-use-drops-nearly-7-after-public-housing-upgrades&amp;#x27;), (&amp;#x27;Q&amp;amp;A: How Misdiagnosis Fuels Antibiotic Overuse &amp;amp; Masks Interstitial Cystitis&amp;#x27;, &amp;#x27;/post/qa-how-misdiagnosis-fuels-antibiotic-overuse-masks-interstitial-cystitis&amp;#x27;), (&amp;#x27;Beyond A1c Is Not Enough: How GLP-1 Therapy Is Changing Frontline Care&amp;#x27;, &amp;#x27;/post/beyond-a1c-is-not-enough-how-glp-1-therapy-is-changing-frontline-care-2&amp;#x27;), (&amp;#x27;Q&amp;amp;A: Navigating Guidance on Use of Steroids in Sepsis&amp;#x27;, &amp;#x27;/post/qa-navigating-guidance-on-use-of-steroids-in-sepsis&amp;#x27;), (&amp;#x27;Q&amp;amp;A: Understanding the Barriers &amp;amp; Motivators of Inhaler Adherence in COPD&amp;#x27;, &amp;#x27;/post/qa-understanding-the-barriers-and-motivators-of-inhaler-adherence-in-copd&amp;#x27;)]\n\nClicking: Is It Time to Rethink PE Treatment? Functional Outcomes From STORM\u2011PE\nNavigating to: https://www.physiciansweekly.com/post/is-it-time-to-rethink-pe-treatment-functional-outcomes-from-storm-pe\nOpened Article Heading: Is It Time to Rethink PE Treatment? Functional Outcomes From STORM\u2011PE\nValidated: Is It Time to Rethink PE Treatment? Functional Outcomes From STORM\u2011PE\n\nClicking: Q&amp;amp;A: Diagnosing &amp;amp; Treating Co- and Superinfections in Viral Pneumonia\nNavigating to: https://www.physiciansweekly.com/post/qa-diagnosing-treating-co-and-superinfections-in-viral-pneumonia\nOpened Article Heading: Q&amp;amp;A: Diagnosing &amp;amp; Treating Co- and Superinfections in Viral Pneumonia\nValidated: Q&amp;amp;A: Diagnosing &amp;amp; Treating Co- and Superinfections in Viral Pneumonia\n\nClicking: Q&amp;amp;A: Guidance for Managing BCCs in Gorlin Syndrome\nNavigating to: https://www.physiciansweekly.com/post/qa-guidance-for-managing-bccs-in-gorlin-syndrome\nOpened Article Heading: Q&amp;amp;A: Guidance for Managing BCCs in Gorlin Syndrome\nValidated: Q&amp;amp;A: Guidance for Managing BCCs in Gorlin Syndrome\n\nClicking: Pediatric Asthma Medication Use Drops Nearly 7% After Public Housing Upgrades\nNavigating to: https://www.physiciansweekly.com/post/pediatric-asthma-medication-use-drops-nearly-7-after-public-housing-upgrades\nOpened Article Heading: Pediatric Asthma Medication Use Drops Nearly 7% After Public Housing Upgrades\nValidated: Pediatric Asthma Medication Use Drops Nearly 7% After Public Housing Upgrades\n\nClicking: Q&amp;amp;A: How Misdiagnosis Fuels Antibiotic Overuse &amp;amp; Masks Interstitial Cystitis\nNavigating to: https://www.physiciansweekly.com/post/qa-how-misdiagnosis-fuels-antibiotic-overuse-masks-interstitial-cystitis\nOpened Article Heading: Q&amp;amp;A: How Misdiagnosis Fuels Antibiotic Overuse &amp;amp; Masks Interstitial Cystitis\nValidated: Q&amp;amp;A: How Misdiagnosis Fuels Antibiotic Overuse &amp;amp; Masks Interstitial Cystitis\n\nClicking: Beyond A1c Is Not Enough: How GLP-1 Therapy Is Changing Frontline Care\nNavigating to: https://www.physiciansweekly.com/post/beyond-a1c-is-not-enough-how-glp-1-therapy-is-changing-frontline-care-2\nOpened Article Heading: Beyond A1c Is Not Enough: How GLP-1 Therapy Is Changing Frontline Care\nValidated: Beyond A1c Is Not Enough: How GLP-1 Therapy Is Changing Frontline Care\n\nClicking: Q&amp;amp;A: Navigating Guidance on Use of Steroids in Sepsis\nNavigating to: https://www.physiciansweekly.com/post/qa-navigating-guidance-on-use-of-steroids-in-sepsis\nOpened Article Heading: Q&amp;amp;A: Navigating Guidance on Use of Steroids in Sepsis\nValidated: Q&amp;amp;A: Navigating Guidance on Use of Steroids in Sepsis\n\nClicking: Q&amp;amp;A: Understanding the Barriers &amp;amp; Motivators of Inhaler Adherence in COPD\nNavigating to: https://www.physiciansweekly.com/post/qa-understanding-the-barriers-and-motivators-of-inhaler-adherence-in-copd\nOpened Article Heading: Q&amp;amp;A: Understanding the Barriers &amp;amp; Motivators of Inhaler Adherence in COPD\nValidated: Q&amp;amp;A: Understanding the Barriers &amp;amp; Motivators of Inhaler Adherence in COPD\n&#34;}], &#34;tests/test_home_page.py::TestHomePage::test_main_headings&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_home_page.py::TestHomePage::test_main_headings&#34;, &#34;duration&#34;: &#34;00:00:02&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_home_page.py::TestHomePage::test_main_headings&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:02&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nFound sections: [&amp;#x27;Featured Articles&amp;#x27;, &amp;#x27;Figure 1&amp;#x27;, &amp;quot;Doctor&amp;#x27;s Voice&amp;quot;, &amp;#x27;Knowledge Hub&amp;#x27;, &amp;#x27;Business of Medicine&amp;#x27;, &amp;#x27;Cartoons&amp;#x27;, &amp;#x27;Podcasts&amp;#x27;]\nAll expected sections are present.\n&#34;}], &#34;tests/test_home_page.py::TestHomePage::test_doctors_voice_section&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_home_page.py::TestHomePage::test_doctors_voice_section&#34;, &#34;duration&#34;: &#34;00:00:20&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_home_page.py::TestHomePage::test_doctors_voice_section&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:20&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nDoctor&amp;#x27;s Voice images count is correct (4).\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/03/KOL-Headshot-Template-13.png ---&amp;gt; status 200\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/03/KOL-Headshot-Template-2.png ---&amp;gt; status 200\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/CT-Scan-Computerized-Tomography-shows-absence-of-blood-flow-to-left-brain.-ischemic-stroke.png ---&amp;gt; status 200\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/KOL-Headshot-Template-20.png ---&amp;gt; status 200\nAll Doctor&amp;#x27;s Voice images are valid.\nhttps://www.physiciansweekly.com/post/the-paradox-of-performance-why-the-best-physicians-burn-out-first ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/the-paradox-of-performance-why-the-best-physicians-burn-out-first ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/doctors-voice ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/the-paradox-of-performance-why-the-best-physicians-burn-out-first ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/how-technology-access-bias-and-culture-influence-care-funding-cuts-workforce-shortages-punitive-culture ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/how-technology-access-bias-and-culture-influence-care-funding-cuts-workforce-shortages-punitive-culture ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/doctors-voice ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/how-technology-access-bias-and-culture-influence-care-funding-cuts-workforce-shortages-punitive-culture ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/evidence-mounts-against-iv-thrombolysis-in-mild-ischemic-stroke ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/evidence-mounts-against-iv-thrombolysis-in-mild-ischemic-stroke ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/doctors-voice ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/evidence-mounts-against-iv-thrombolysis-in-mild-ischemic-stroke ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/rethinking-longevity-what-55-heritability-means-for-clinical-care ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/rethinking-longevity-what-55-heritability-means-for-clinical-care ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/doctors-voice ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/rethinking-longevity-what-55-heritability-means-for-clinical-care ---&amp;gt; 200\nAll Doctor&amp;#x27;s Voice links returned HTTP 200.\nAll Doctor&amp;#x27;s Voice titles are clickable and navigable.\n&#34;}], &#34;tests/test_home_page.py::TestHomePage::test_Knowladge_hub__all_links_images_naviagtion_count_and_statuscodes&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_home_page.py::TestHomePage::test_Knowladge_hub__all_links_images_naviagtion_count_and_statuscodes&#34;, &#34;duration&#34;: &#34;00:00:22&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_home_page.py::TestHomePage::test_Knowladge_hub__all_links_images_naviagtion_count_and_statuscodes&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:22&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nKnowladge hub images count matched suiccesfully\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2024/01/Senior-woman-in-wheelchair-having-respiratory-difficulties-on-oxygen-therapy-COPD-pulmonology.-Illustration.jpg  ---&amp;gt; status code :  200\nall images, hyperlinks, and text links are not broken\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2024/05/iStock-1151402031-modified-028cc9b2-c063-4796-9526-5745aad092ec.jpg  ---&amp;gt; status code :  200\nall images, hyperlinks, and text links are not broken\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2025/07/iStock-2166017651-1.jpg  ---&amp;gt; status code :  200\nall images, hyperlinks, and text links are not broken\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2025/02/Epithelial-Barrier-in-Chronic-Rhinosinusitis-with-Nasal-Polyps.png  ---&amp;gt; status code :  200\nall images, hyperlinks, and text links are not broken\nhttps://www.physiciansweekly.com/page/condition-spotlight-copd  ---&amp;gt; status code :  200\nhttps://www.physiciansweekly.com/page/condition-spotlight-copd  ---&amp;gt; status code :  200\nhttps://www.physiciansweekly.com/category/  ---&amp;gt; status code :  404\nError fetching https://www.physiciansweekly.com/category/: Broken link: https://www.physiciansweekly.com/category/ returned status 404\nhttps://www.physiciansweekly.com/page/condition-spotlight-copd  ---&amp;gt; status code :  200\nhttps://www.physiciansweekly.com/page/oncology-clinical-trials  ---&amp;gt; status code :  200\nhttps://www.physiciansweekly.com/page/oncology-clinical-trials  ---&amp;gt; status code :  200\nhttps://www.physiciansweekly.com/category/  ---&amp;gt; status code :  404\nError fetching https://www.physiciansweekly.com/category/: Broken link: https://www.physiciansweekly.com/category/ returned status 404\nhttps://www.physiciansweekly.com/page/oncology-clinical-trials  ---&amp;gt; status code :  200\nhttps://www.physiciansweekly.com/page/disparities-in-obesity  ---&amp;gt; status code :  200\nhttps://www.physiciansweekly.com/page/disparities-in-obesity  ---&amp;gt; status code :  200\nhttps://www.physiciansweekly.com/category/  ---&amp;gt; status code :  404\nError fetching https://www.physiciansweekly.com/category/: Broken link: https://www.physiciansweekly.com/category/ returned status 404\nhttps://www.physiciansweekly.com/page/disparities-in-obesity  ---&amp;gt; status code :  200\nhttps://www.physiciansweekly.com/page/nasal-polyps-2  ---&amp;gt; status code :  200\nhttps://www.physiciansweekly.com/page/nasal-polyps-2  ---&amp;gt; status code :  200\nhttps://www.physiciansweekly.com/category/  ---&amp;gt; status code :  404\nError fetching https://www.physiciansweekly.com/category/: Broken link: https://www.physiciansweekly.com/category/ returned status 404\nhttps://www.physiciansweekly.com/page/nasal-polyps-2  ---&amp;gt; status code :  200\nall images in knowladge hub section are clickable and naviageted \n&#34;}], &#34;tests/test_home_page.py::TestHomePage::test_business_of_medicine&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_home_page.py::TestHomePage::test_business_of_medicine&#34;, &#34;duration&#34;: &#34;00:00:19&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_home_page.py::TestHomePage::test_business_of_medicine&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:19&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nBusiness of Medicine images count matched successfully\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/iStock-187597198-modified-57096137-1b9b-4c94-b3ab-ad8a056d691a.jpg ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/iStock-1383531961-modified-3ef41637-bc07-43bf-94f9-6ad3292154d2.jpg ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/KOL-Headshot-Template-4.png ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/03/KOL-Headshot-Template-17.png ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/how-to-handle-consent-when-loved-ones-lack-legal-standing ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/how-to-handle-consent-when-loved-ones-lack-legal-standing ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/category/business-of-medicine ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/how-to-handle-consent-when-loved-ones-lack-legal-standing ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/next-of-kin-consent-standoff-can-clinics-override-family-authority ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/next-of-kin-consent-standoff-can-clinics-override-family-authority ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/category/business-of-medicine ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/next-of-kin-consent-standoff-can-clinics-override-family-authority ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/qa-doctors-see-trumprx-as-another-discount-tool-not-a-pricing-fix ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/qa-doctors-see-trumprx-as-another-discount-tool-not-a-pricing-fix ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/category/business-of-medicine ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/qa-doctors-see-trumprx-as-another-discount-tool-not-a-pricing-fix ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/defining-the-role-of-generative-ai-in-clinical-care ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/defining-the-role-of-generative-ai-in-clinical-care ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/category/business-of-medicine ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/defining-the-role-of-generative-ai-in-clinical-care ---&amp;gt; status code: 200\nAll Business of Medicine images &amp;amp; titles navigated successfully.\n&#34;}], &#34;tests/test_home_page.py::TestHomePage::test_cartoons_section&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_home_page.py::TestHomePage::test_cartoons_section&#34;, &#34;duration&#34;: &#34;00:00:25&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_home_page.py::TestHomePage::test_cartoons_section&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:25&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nCartoon Section images count matched successfully\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/307-Giraffe-1.jpg ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/nymole-scaled.jpg ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/QUACKHYPO-scaled.jpg ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/EASTER-hopupSEP60.jpg ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/cutaneous-conundrum ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/cutaneous-conundrum ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/category/cartoons ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/cutaneous-conundrum ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/critter-cal-findings ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/critter-cal-findings ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/category/cartoons ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/critter-cal-findings ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/fowl-language ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/fowl-language ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/category/cartoons ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/fowl-language ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/bunny-hop ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/bunny-hop ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/category/cartoons ---&amp;gt; status code: 200\nhttps://www.physiciansweekly.com/post/bunny-hop ---&amp;gt; status code: 200\nAll images of Cartoon section are clickable and navigated successfully.\n&#34;}], &#34;tests/test_home_page.py::TestHomePage::test_all_buttons&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_home_page.py::TestHomePage::test_all_buttons&#34;, &#34;duration&#34;: &#34;00:00:23&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_home_page.py::TestHomePage::test_all_buttons&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:23&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nTotal buttons found 7\nClicked button #1 Button Name: Read More\nClicked button #2 Button Name: View All\nClicked button #3 Button Name: View All\nClicked button #4 Button Name: More Knowledge Hubs\nClicked button #5 Button Name: View All\nClicked button #6 Button Name: More Cartoons\nClicked button #7 Button Name: More Podcasts\nAll buttons are clickable and navigated successfully.\n&#34;}], &#34;tests/test_home_page.py::TestHomePage::test_podcast_section&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_home_page.py::TestHomePage::test_podcast_section&#34;, &#34;duration&#34;: &#34;00:00:07&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_home_page.py::TestHomePage::test_podcast_section&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:07&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nPause buttons found: 4\nPause Button 1 visible in the Podcast section \u2192 True\nPause Button 2 visible in the Podcast section \u2192 True\nPause Button 3 visible in the Podcast section \u2192 True\nPause Button 4 visible in the Podcast section \u2192 True\nTotal podcast links found: 8\n\nChecking \u2192 https://www.physiciansweekly.com/podcast/dealing-with-your-own-error-disclosure-best-practices-for-physicians\nStatus: 200\n\u2714 Link OK | Title: Dealing With Your Own Error: Disclosure Best Practices for Physicians\n\nChecking \u2192 https://www.physiciansweekly.com/tag/malpractice\nStatus: 200\n\u2714 Link OK | Title: malpractice\n\nChecking \u2192 https://www.physiciansweekly.com/podcast/the-need-to-strengthen-care-coordination-for-families-after-firearm-injury\nStatus: 200\n\u2714 Link OK | Title: The Need to Strengthen Care Coordination for Families After Firearm Injury\n\nChecking \u2192 https://www.physiciansweekly.com/tag/firearm-trauma\nStatus: 200\n\u2714 Link OK | Title: firearm trauma\n\nChecking \u2192 https://www.physiciansweekly.com/podcast/intensive-hypertension-management-linked-to-survival-in-metastatic-breast-cancer\nStatus: 200\n\u2714 Link OK | Title: Intensive Hypertension Management Linked to Survival in Metastatic Breast Cancer\n\nChecking \u2192 https://www.physiciansweekly.com/tag/breast-cancer\nStatus: 200\n\u2714 Link OK | Title: breast cancer\n\nChecking \u2192 https://www.physiciansweekly.com/podcast/dealing-with-another-doctors-error-how-when-who-to-inform\nStatus: 200\n\u2714 Link OK | Title: Dealing With Another Doctor\u2019s Error: How, When, &amp;amp; Who to Inform\n\nChecking \u2192 https://www.physiciansweekly.com/tag/malpractice\nStatus: 200\n\u2714 Link OK | Title: malpractice\n&#34;}], &#34;tests/test_home_page.py::TestHomePage::test_load_more_featured_articles&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_home_page.py::TestHomePage::test_load_more_featured_articles&#34;, &#34;duration&#34;: &#34;00:00:15&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_home_page.py::TestHomePage::test_load_more_featured_articles&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:15&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nArticles BEFORE Load More: 20\nArticles AFTER 1st Load More: 40\nArticles AFTER 2nd Load More: 60\nTotal displayed articles: 60\n&#34;}], &#34;tests/test_home_page.py::TestHomePage::test_load_more_doctor_voice&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_home_page.py::TestHomePage::test_load_more_doctor_voice&#34;, &#34;duration&#34;: &#34;00:00:18&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_home_page.py::TestHomePage::test_load_more_doctor_voice&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:18&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nArticles BEFORE Load More: 20\nArticles AFTER 1st Load More: 40\nArticles AFTER 2nd Load More: 60\nTotal displayed articles for Doctor Voice: 60\n&#34;}], &#34;tests/test_home_page.py::TestHomePage::test_load_more_business_of_medicine&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_home_page.py::TestHomePage::test_load_more_business_of_medicine&#34;, &#34;duration&#34;: &#34;00:00:15&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_home_page.py::TestHomePage::test_load_more_business_of_medicine&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:15&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nArticles BEFORE Load More: 20\nArticles AFTER 1st Load More: 40\nArticles AFTER 2nd Load More: 60\nTotal displayed articles for Business of Medicine: 60\n&#34;}], &#34;tests/test_home_page.py::TestHomePage::test_specialties_allergy_navigation_K_Articules&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_home_page.py::TestHomePage::test_specialties_allergy_navigation_K_Articules&#34;, &#34;duration&#34;: &#34;00:00:20&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_home_page.py::TestHomePage::test_specialties_allergy_navigation_K_Articules&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:20&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nHovered over Specialties menu.\nScroll position before clicking article: 700\nScroll position after returning: 842\n&#34;}], &#34;tests/test_home_page.py::TestHomePage::test_breadcrumb_functionality&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_home_page.py::TestHomePage::test_breadcrumb_functionality&#34;, &#34;duration&#34;: &#34;00:00:08&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_home_page.py::TestHomePage::test_breadcrumb_functionality&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:08&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nFirst article title: Is It Time to Rethink PE Treatment? Functional Outcomes From STORM\u2011PE\nBreadcrumb text: Home\n&amp;gt;\nCardiology\n&amp;gt;\n\nIs It Time to Rethink PE Treatment? Functional Outcomes From STORM\u2011PE\nBreadcrumb contains article title \u2014 working fine!\nAfter clicking Home breadcrumb, current URL: https://www.physiciansweekly.com/\nClicking &amp;#x27;Home&amp;#x27; breadcrumb navigates back to homepage successfully!\n&#34;}]}, &#34;renderCollapsed&#34;: [&#34;passed&#34;], &#34;initialSort&#34;: &#34;result&#34;, &#34;title&#34;: &#34;Physician Weekly \u2013 Automation Testing Report [Tester: Ashok]&#34;}"></div>
+    <script>
+      (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+const { getCollapsedCategory, setCollapsedIds } = require('./storage.js')
+
+class DataManager {
+    setManager(data) {
+        const collapsedCategories = [...getCollapsedCategory(data.renderCollapsed)]
+        const collapsedIds = []
+        const tests = Object.values(data.tests).flat().map((test, index) => {
+            const collapsed = collapsedCategories.includes(test.result.toLowerCase())
+            const id = `test_${index}`
+            if (collapsed) {
+                collapsedIds.push(id)
+            }
+            return {
+                ...test,
+                id,
+                collapsed,
+            }
+        })
+        const dataBlob = { ...data, tests }
+        this.data = { ...dataBlob }
+        this.renderData = { ...dataBlob }
+        setCollapsedIds(collapsedIds)
+    }
+
+    get allData() {
+        return { ...this.data }
+    }
+
+    resetRender() {
+        this.renderData = { ...this.data }
+    }
+
+    setRender(data) {
+        this.renderData.tests = [...data]
+    }
+
+    toggleCollapsedItem(id) {
+        this.renderData.tests = this.renderData.tests.map((test) =>
+            test.id === id ? { ...test, collapsed: !test.collapsed } : test,
+        )
+    }
+
+    set allCollapsed(collapsed) {
+        this.renderData = { ...this.renderData, tests: [...this.renderData.tests.map((test) => (
+            { ...test, collapsed }
+        ))] }
+    }
+
+    get testSubset() {
+        return [...this.renderData.tests]
+    }
+
+    get environment() {
+        return this.renderData.environment
+    }
+
+    get initialSort() {
+        return this.data.initialSort
+    }
+}
+
+module.exports = {
+    manager: new DataManager(),
+}
+
+},{"./storage.js":8}],2:[function(require,module,exports){
+const mediaViewer = require('./mediaviewer.js')
+const templateEnvRow = document.getElementById('template_environment_row')
+const templateResult = document.getElementById('template_results-table__tbody')
+
+function htmlToElements(html) {
+    const temp = document.createElement('template')
+    temp.innerHTML = html
+    return temp.content.childNodes
+}
+
+const find = (selector, elem) => {
+    if (!elem) {
+        elem = document
+    }
+    return elem.querySelector(selector)
+}
+
+const findAll = (selector, elem) => {
+    if (!elem) {
+        elem = document
+    }
+    return [...elem.querySelectorAll(selector)]
+}
+
+const dom = {
+    getStaticRow: (key, value) => {
+        const envRow = templateEnvRow.content.cloneNode(true)
+        const isObj = typeof value === 'object' && value !== null
+        const values = isObj ? Object.keys(value).map((k) => `${k}: ${value[k]}`) : null
+
+        const valuesElement = htmlToElements(
+            values ? `<ul>${values.map((val) => `<li>${val}</li>`).join('')}<ul>` : `<div>${value}</div>`)[0]
+        const td = findAll('td', envRow)
+        td[0].textContent = key
+        td[1].appendChild(valuesElement)
+
+        return envRow
+    },
+    getResultTBody: ({ testId, id, log, extras, resultsTableRow, tableHtml, result, collapsed }) => {
+        const resultBody = templateResult.content.cloneNode(true)
+        resultBody.querySelector('tbody').classList.add(result.toLowerCase())
+        resultBody.querySelector('tbody').id = testId
+        resultBody.querySelector('.collapsible').dataset.id = id
+
+        resultsTableRow.forEach((html) => {
+            const t = document.createElement('template')
+            t.innerHTML = html
+            resultBody.querySelector('.collapsible').appendChild(t.content)
+        })
+
+        if (log) {
+            // Wrap lines starting with "E" with span.error to color those lines red
+            const wrappedLog = log.replace(/^E.*$/gm, (match) => `<span class="error">${match}</span>`)
+            resultBody.querySelector('.log').innerHTML = wrappedLog
+        } else {
+            resultBody.querySelector('.log').remove()
+        }
+
+        if (collapsed) {
+            resultBody.querySelector('.collapsible > td')?.classList.add('collapsed')
+            resultBody.querySelector('.extras-row').classList.add('hidden')
+        } else {
+            resultBody.querySelector('.collapsible > td')?.classList.remove('collapsed')
+        }
+
+        const media = []
+        extras?.forEach(({ name, format_type, content }) => {
+            if (['image', 'video'].includes(format_type)) {
+                media.push({ path: content, name, format_type })
+            }
+
+            if (format_type === 'html') {
+                resultBody.querySelector('.extraHTML').insertAdjacentHTML('beforeend', `<div>${content}</div>`)
+            }
+        })
+        mediaViewer.setup(resultBody, media)
+
+        // Add custom html from the pytest_html_results_table_html hook
+        tableHtml?.forEach((item) => {
+            resultBody.querySelector('td[class="extra"]').insertAdjacentHTML('beforeend', item)
+        })
+
+        return resultBody
+    },
+}
+
+module.exports = {
+    dom,
+    htmlToElements,
+    find,
+    findAll,
+}
+
+},{"./mediaviewer.js":6}],3:[function(require,module,exports){
+const { manager } = require('./datamanager.js')
+const { doSort } = require('./sort.js')
+const storageModule = require('./storage.js')
+
+const getFilteredSubSet = (filter) =>
+    manager.allData.tests.filter(({ result }) => filter.includes(result.toLowerCase()))
+
+const doInitFilter = () => {
+    const currentFilter = storageModule.getVisible()
+    const filteredSubset = getFilteredSubSet(currentFilter)
+    manager.setRender(filteredSubset)
+}
+
+const doFilter = (type, show) => {
+    if (show) {
+        storageModule.showCategory(type)
+    } else {
+        storageModule.hideCategory(type)
+    }
+
+    const currentFilter = storageModule.getVisible()
+    const filteredSubset = getFilteredSubSet(currentFilter)
+    manager.setRender(filteredSubset)
+
+    const sortColumn = storageModule.getSort()
+    doSort(sortColumn, true)
+}
+
+module.exports = {
+    doFilter,
+    doInitFilter,
+}
+
+},{"./datamanager.js":1,"./sort.js":7,"./storage.js":8}],4:[function(require,module,exports){
+const { redraw, bindEvents, renderStatic } = require('./main.js')
+const { doInitFilter } = require('./filter.js')
+const { doInitSort } = require('./sort.js')
+const { manager } = require('./datamanager.js')
+const data = JSON.parse(document.getElementById('data-container').dataset.jsonblob)
+
+function init() {
+    manager.setManager(data)
+    doInitFilter()
+    doInitSort()
+    renderStatic()
+    redraw()
+    bindEvents()
+}
+
+init()
+
+},{"./datamanager.js":1,"./filter.js":3,"./main.js":5,"./sort.js":7}],5:[function(require,module,exports){
+const { dom, find, findAll } = require('./dom.js')
+const { manager } = require('./datamanager.js')
+const { doSort } = require('./sort.js')
+const { doFilter } = require('./filter.js')
+const {
+    getVisible,
+    getCollapsedIds,
+    setCollapsedIds,
+    getSort,
+    getSortDirection,
+    possibleFilters,
+} = require('./storage.js')
+
+const removeChildren = (node) => {
+    while (node.firstChild) {
+        node.removeChild(node.firstChild)
+    }
+}
+
+const renderStatic = () => {
+    const renderEnvironmentTable = () => {
+        const environment = manager.environment
+        const rows = Object.keys(environment).map((key) => dom.getStaticRow(key, environment[key]))
+        const table = document.getElementById('environment')
+        removeChildren(table)
+        rows.forEach((row) => table.appendChild(row))
+    }
+    renderEnvironmentTable()
+}
+
+const addItemToggleListener = (elem) => {
+    elem.addEventListener('click', ({ target }) => {
+        const id = target.parentElement.dataset.id
+        manager.toggleCollapsedItem(id)
+
+        const collapsedIds = getCollapsedIds()
+        if (collapsedIds.includes(id)) {
+            const updated = collapsedIds.filter((item) => item !== id)
+            setCollapsedIds(updated)
+        } else {
+            collapsedIds.push(id)
+            setCollapsedIds(collapsedIds)
+        }
+        redraw()
+    })
+}
+
+const renderContent = (tests) => {
+    const sortAttr = getSort(manager.initialSort)
+    const sortAsc = JSON.parse(getSortDirection())
+    const rows = tests.map(dom.getResultTBody)
+    const table = document.getElementById('results-table')
+    const tableHeader = document.getElementById('results-table-head')
+
+    const newTable = document.createElement('table')
+    newTable.id = 'results-table'
+
+    // remove all sorting classes and set the relevant
+    findAll('.sortable', tableHeader).forEach((elem) => elem.classList.remove('asc', 'desc'))
+    tableHeader.querySelector(`.sortable[data-column-type="${sortAttr}"]`)?.classList.add(sortAsc ? 'desc' : 'asc')
+    newTable.appendChild(tableHeader)
+
+    if (!rows.length) {
+        const emptyTable = document.getElementById('template_results-table__body--empty').content.cloneNode(true)
+        newTable.appendChild(emptyTable)
+    } else {
+        rows.forEach((row) => {
+            if (!!row) {
+                findAll('.collapsible td:not(.col-links', row).forEach(addItemToggleListener)
+                find('.logexpander', row).addEventListener('click',
+                    (evt) => evt.target.parentNode.classList.toggle('expanded'),
+                )
+                newTable.appendChild(row)
+            }
+        })
+    }
+
+    table.replaceWith(newTable)
+}
+
+const renderDerived = () => {
+    const currentFilter = getVisible()
+    possibleFilters.forEach((result) => {
+        const input = document.querySelector(`input[data-test-result="${result}"]`)
+        input.checked = currentFilter.includes(result)
+    })
+}
+
+const bindEvents = () => {
+    const filterColumn = (evt) => {
+        const { target: element } = evt
+        const { testResult } = element.dataset
+
+        doFilter(testResult, element.checked)
+        const collapsedIds = getCollapsedIds()
+        const updated = manager.renderData.tests.map((test) => {
+            return {
+                ...test,
+                collapsed: collapsedIds.includes(test.id),
+            }
+        })
+        manager.setRender(updated)
+        redraw()
+    }
+
+    const header = document.getElementById('environment-header')
+    header.addEventListener('click', () => {
+        const table = document.getElementById('environment')
+        table.classList.toggle('hidden')
+        header.classList.toggle('collapsed')
+    })
+
+    findAll('input[name="filter_checkbox"]').forEach((elem) => {
+        elem.addEventListener('click', filterColumn)
+    })
+
+    findAll('.sortable').forEach((elem) => {
+        elem.addEventListener('click', (evt) => {
+            const { target: element } = evt
+            const { columnType } = element.dataset
+            doSort(columnType)
+            redraw()
+        })
+    })
+
+    document.getElementById('show_all_details').addEventListener('click', () => {
+        manager.allCollapsed = false
+        setCollapsedIds([])
+        redraw()
+    })
+    document.getElementById('hide_all_details').addEventListener('click', () => {
+        manager.allCollapsed = true
+        const allIds = manager.renderData.tests.map((test) => test.id)
+        setCollapsedIds(allIds)
+        redraw()
+    })
+}
+
+const redraw = () => {
+    const { testSubset } = manager
+
+    renderContent(testSubset)
+    renderDerived()
+}
+
+module.exports = {
+    redraw,
+    bindEvents,
+    renderStatic,
+}
+
+},{"./datamanager.js":1,"./dom.js":2,"./filter.js":3,"./sort.js":7,"./storage.js":8}],6:[function(require,module,exports){
+class MediaViewer {
+    constructor(assets) {
+        this.assets = assets
+        this.index = 0
+    }
+
+    nextActive() {
+        this.index = this.index === this.assets.length - 1 ? 0 : this.index + 1
+        return [this.activeFile, this.index]
+    }
+
+    prevActive() {
+        this.index = this.index === 0 ? this.assets.length - 1 : this.index -1
+        return [this.activeFile, this.index]
+    }
+
+    get currentIndex() {
+        return this.index
+    }
+
+    get activeFile() {
+        return this.assets[this.index]
+    }
+}
+
+
+const setup = (resultBody, assets) => {
+    if (!assets.length) {
+        resultBody.querySelector('.media').classList.add('hidden')
+        return
+    }
+
+    const mediaViewer = new MediaViewer(assets)
+    const container = resultBody.querySelector('.media-container')
+    const leftArrow = resultBody.querySelector('.media-container__nav--left')
+    const rightArrow = resultBody.querySelector('.media-container__nav--right')
+    const mediaName = resultBody.querySelector('.media__name')
+    const counter = resultBody.querySelector('.media__counter')
+    const imageEl = resultBody.querySelector('img')
+    const sourceEl = resultBody.querySelector('source')
+    const videoEl = resultBody.querySelector('video')
+
+    const setImg = (media, index) => {
+        if (media?.format_type === 'image') {
+            imageEl.src = media.path
+
+            imageEl.classList.remove('hidden')
+            videoEl.classList.add('hidden')
+        } else if (media?.format_type === 'video') {
+            sourceEl.src = media.path
+
+            videoEl.classList.remove('hidden')
+            imageEl.classList.add('hidden')
+        }
+
+        mediaName.innerText = media?.name
+        counter.innerText = `${index + 1} / ${assets.length}`
+    }
+    setImg(mediaViewer.activeFile, mediaViewer.currentIndex)
+
+    const moveLeft = () => {
+        const [media, index] = mediaViewer.prevActive()
+        setImg(media, index)
+    }
+    const doRight = () => {
+        const [media, index] = mediaViewer.nextActive()
+        setImg(media, index)
+    }
+    const openImg = () => {
+        window.open(mediaViewer.activeFile.path, '_blank')
+    }
+    if (assets.length === 1) {
+        container.classList.add('media-container--fullscreen')
+    } else {
+        leftArrow.addEventListener('click', moveLeft)
+        rightArrow.addEventListener('click', doRight)
+    }
+    imageEl.addEventListener('click', openImg)
+}
+
+module.exports = {
+    setup,
+}
+
+},{}],7:[function(require,module,exports){
+const { manager } = require('./datamanager.js')
+const storageModule = require('./storage.js')
+
+const genericSort = (list, key, ascending, customOrder) => {
+    let sorted
+    if (customOrder) {
+        sorted = list.sort((a, b) => {
+            const aValue = a.result.toLowerCase()
+            const bValue = b.result.toLowerCase()
+
+            const aIndex = customOrder.findIndex((item) => item.toLowerCase() === aValue)
+            const bIndex = customOrder.findIndex((item) => item.toLowerCase() === bValue)
+
+            // Compare the indices to determine the sort order
+            return aIndex - bIndex
+        })
+    } else {
+        sorted = list.sort((a, b) => a[key] === b[key] ? 0 : a[key] > b[key] ? 1 : -1)
+    }
+
+    if (ascending) {
+        sorted.reverse()
+    }
+    return sorted
+}
+
+const durationSort = (list, ascending) => {
+    const parseDuration = (duration) => {
+        if (duration.includes(':')) {
+            // If it's in the format "HH:mm:ss"
+            const [hours, minutes, seconds] = duration.split(':').map(Number)
+            return (hours * 3600 + minutes * 60 + seconds) * 1000
+        } else {
+            // If it's in the format "nnn ms"
+            return parseInt(duration)
+        }
+    }
+    const sorted = list.sort((a, b) => parseDuration(a['duration']) - parseDuration(b['duration']))
+    if (ascending) {
+        sorted.reverse()
+    }
+    return sorted
+}
+
+const doInitSort = () => {
+    const type = storageModule.getSort(manager.initialSort)
+    const ascending = storageModule.getSortDirection()
+    const list = manager.testSubset
+    const initialOrder = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed', 'Skipped', 'Passed']
+
+    storageModule.setSort(type)
+    storageModule.setSortDirection(ascending)
+
+    if (type?.toLowerCase() === 'original') {
+        manager.setRender(list)
+    } else {
+        let sortedList
+        switch (type) {
+        case 'duration':
+            sortedList = durationSort(list, ascending)
+            break
+        case 'result':
+            sortedList = genericSort(list, type, ascending, initialOrder)
+            break
+        default:
+            sortedList = genericSort(list, type, ascending)
+            break
+        }
+        manager.setRender(sortedList)
+    }
+}
+
+const doSort = (type, skipDirection) => {
+    const newSortType = storageModule.getSort(manager.initialSort) !== type
+    const currentAsc = storageModule.getSortDirection()
+    let ascending
+    if (skipDirection) {
+        ascending = currentAsc
+    } else {
+        ascending = newSortType ? false : !currentAsc
+    }
+    storageModule.setSort(type)
+    storageModule.setSortDirection(ascending)
+
+    const list = manager.testSubset
+    const sortedList = type === 'duration' ? durationSort(list, ascending) : genericSort(list, type, ascending)
+    manager.setRender(sortedList)
+}
+
+module.exports = {
+    doInitSort,
+    doSort,
+}
+
+},{"./datamanager.js":1,"./storage.js":8}],8:[function(require,module,exports){
+const possibleFilters = [
+    'passed',
+    'skipped',
+    'failed',
+    'error',
+    'xfailed',
+    'xpassed',
+    'rerun',
+]
+
+const getVisible = () => {
+    const url = new URL(window.location.href)
+    const settings = new URLSearchParams(url.search).get('visible')
+    const lower = (item) => {
+        const lowerItem = item.toLowerCase()
+        if (possibleFilters.includes(lowerItem)) {
+            return lowerItem
+        }
+        return null
+    }
+    return settings === null ?
+        possibleFilters :
+        [...new Set(settings?.split(',').map(lower).filter((item) => item))]
+}
+
+const hideCategory = (categoryToHide) => {
+    const url = new URL(window.location.href)
+    const visibleParams = new URLSearchParams(url.search).get('visible')
+    const currentVisible = visibleParams ? visibleParams.split(',') : [...possibleFilters]
+    const settings = [...new Set(currentVisible)].filter((f) => f !== categoryToHide).join(',')
+
+    url.searchParams.set('visible', settings)
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const showCategory = (categoryToShow) => {
+    if (typeof window === 'undefined') {
+        return
+    }
+    const url = new URL(window.location.href)
+    const currentVisible = new URLSearchParams(url.search).get('visible')?.split(',').filter(Boolean) ||
+        [...possibleFilters]
+    const settings = [...new Set([categoryToShow, ...currentVisible])]
+    const noFilter = possibleFilters.length === settings.length || !settings.length
+
+    noFilter ? url.searchParams.delete('visible') : url.searchParams.set('visible', settings.join(','))
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const getSort = (initialSort) => {
+    const url = new URL(window.location.href)
+    let sort = new URLSearchParams(url.search).get('sort')
+    if (!sort) {
+        sort = initialSort || 'result'
+    }
+    return sort
+}
+
+const setSort = (type) => {
+    const url = new URL(window.location.href)
+    url.searchParams.set('sort', type)
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const getCollapsedCategory = (renderCollapsed) => {
+    let categories
+    if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href)
+        const collapsedItems = new URLSearchParams(url.search).get('collapsed')
+        switch (true) {
+        case !renderCollapsed && collapsedItems === null:
+            categories = ['passed']
+            break
+        case collapsedItems?.length === 0 || /^["']{2}$/.test(collapsedItems):
+            categories = []
+            break
+        case /^all$/.test(collapsedItems) || collapsedItems === null && /^all$/.test(renderCollapsed):
+            categories = [...possibleFilters]
+            break
+        default:
+            categories = collapsedItems?.split(',').map((item) => item.toLowerCase()) || renderCollapsed
+            break
+        }
+    } else {
+        categories = []
+    }
+    return categories
+}
+
+const getSortDirection = () => JSON.parse(sessionStorage.getItem('sortAsc')) || false
+const setSortDirection = (ascending) => sessionStorage.setItem('sortAsc', ascending)
+
+const getCollapsedIds = () => JSON.parse(sessionStorage.getItem('collapsedIds')) || []
+const setCollapsedIds = (list) => sessionStorage.setItem('collapsedIds', JSON.stringify(list))
+
+module.exports = {
+    getVisible,
+    hideCategory,
+    showCategory,
+    getCollapsedIds,
+    setCollapsedIds,
+    getSort,
+    setSort,
+    getSortDirection,
+    setSortDirection,
+    getCollapsedCategory,
+    possibleFilters,
+}
+
+},{}]},{},[4]);
+    </script>
+  </footer>
+</html>

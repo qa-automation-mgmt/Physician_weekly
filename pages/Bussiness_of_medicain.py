@@ -20,9 +20,7 @@ class Bussiness_of_medicaina_Module(Home_page_Locators):
         self.page.goto("https://www.physiciansweekly.com/page/business-of-medicine")
         self.page.wait_for_load_state("domcontentloaded")
 
-        print("Navigated to Business of Medicine page")
-   
-    
+        print("Navigated to Business of Medicine page")   
    
     
    

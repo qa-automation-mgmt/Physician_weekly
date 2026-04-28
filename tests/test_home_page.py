@@ -65,7 +65,7 @@ class TestHomePage:
         home = HomePage(page)
         home.validate_breadcrumb_functionality()
 
-    def test_Figure_1_section(self,page):
+    def tst_Figure_1_section(self,page):
         home = HomePage(page)
         home.validate_Figure_1_section()
     #MOBILE AND TABLET Responsive test cases

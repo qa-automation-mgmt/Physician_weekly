@@ -4,6 +4,7 @@ from playwright.sync_api import expect
 from urls import URLs 
 
 class TestFooterPage:
+    
     def test_footer_about_connect_links_validation_naviagtion_and_count(self,page):
         home = FooterPage(page)
         home.validate_footer_about_connect_links()

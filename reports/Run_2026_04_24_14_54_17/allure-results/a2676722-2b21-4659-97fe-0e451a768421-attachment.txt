@@ -1,0 +1,75 @@
+Total images found: 8
+Image URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/KOL-Headshot-Template-8.png
+Loaded successfully (HTTP 200)
+Image URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/Joanna-Tsai-MD-and-Stuart-Ray-MD-featured-image.png
+Loaded successfully (HTTP 200)
+Image URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/Brian-A.-Cahn-MD-featured-image.png
+Loaded successfully (HTTP 200)
+Image URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/iStock-2190057386-modified-6ae3ffc2-2bc5-4db9-94eb-12038a06c317.jpg
+Loaded successfully (HTTP 200)
+Image URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/KOL-Headshot_Dr.Ratafi-11.png
+Loaded successfully (HTTP 200)
+Image URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/KOL-Headshot-Template-7.png
+Loaded successfully (HTTP 200)
+Image URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/KOL-Headshot-Template-22.png
+Loaded successfully (HTTP 200)
+Image URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/Dr.-LaBedz.png
+Loaded successfully (HTTP 200)
+https://www.physiciansweekly.com/post/is-it-time-to-rethink-pe-treatment-functional-outcomes-from-storm-pe ---> 200
+https://www.physiciansweekly.com/category/cardiology ---> 200
+https://www.physiciansweekly.com/post/qa-diagnosing-treating-co-and-superinfections-in-viral-pneumonia ---> 200
+https://www.physiciansweekly.com/category/infectious-disease ---> 200
+https://www.physiciansweekly.com/post/qa-guidance-for-managing-bccs-in-gorlin-syndrome ---> 200
+https://www.physiciansweekly.com/category/oncology-hematology ---> 200
+https://www.physiciansweekly.com/post/pediatric-asthma-medication-use-drops-nearly-7-after-public-housing-upgrades ---> 200
+https://www.physiciansweekly.com/category/allergy-immunology ---> 200
+https://www.physiciansweekly.com/post/qa-how-misdiagnosis-fuels-antibiotic-overuse-masks-interstitial-cystitis ---> 200
+https://www.physiciansweekly.com/category/urology ---> 200
+https://www.physiciansweekly.com/post/beyond-a1c-is-not-enough-how-glp-1-therapy-is-changing-frontline-care-2 ---> 200
+https://www.physiciansweekly.com/category/endocrinology ---> 200
+https://www.physiciansweekly.com/post/qa-navigating-guidance-on-use-of-steroids-in-sepsis ---> 200
+https://www.physiciansweekly.com/category/critical-care ---> 200
+https://www.physiciansweekly.com/post/qa-understanding-the-barriers-and-motivators-of-inhaler-adherence-in-copd ---> 200
+https://www.physiciansweekly.com/category/pulmonology ---> 200
+Total Articles: 8
+Stored Titles: [('Is It Time to Rethink PE Treatment? Functional Outcomes From STORM‑PE', '/post/is-it-time-to-rethink-pe-treatment-functional-outcomes-from-storm-pe'), ('Q&A: Diagnosing & Treating Co- and Superinfections in Viral Pneumonia', '/post/qa-diagnosing-treating-co-and-superinfections-in-viral-pneumonia'), ('Q&A: Guidance for Managing BCCs in Gorlin Syndrome', '/post/qa-guidance-for-managing-bccs-in-gorlin-syndrome'), ('Pediatric Asthma Medication Use Drops Nearly 7% After Public Housing Upgrades', '/post/pediatric-asthma-medication-use-drops-nearly-7-after-public-housing-upgrades'), ('Q&A: How Misdiagnosis Fuels Antibiotic Overuse & Masks Interstitial Cystitis', '/post/qa-how-misdiagnosis-fuels-antibiotic-overuse-masks-interstitial-cystitis'), ('Beyond A1c Is Not Enough: How GLP-1 Therapy Is Changing Frontline Care', '/post/beyond-a1c-is-not-enough-how-glp-1-therapy-is-changing-frontline-care-2'), ('Q&A: Navigating Guidance on Use of Steroids in Sepsis', '/post/qa-navigating-guidance-on-use-of-steroids-in-sepsis'), ('Q&A: Understanding the Barriers & Motivators of Inhaler Adherence in COPD', '/post/qa-understanding-the-barriers-and-motivators-of-inhaler-adherence-in-copd')]
+
+Clicking: Is It Time to Rethink PE Treatment? Functional Outcomes From STORM‑PE
+Navigating to: https://www.physiciansweekly.com/post/is-it-time-to-rethink-pe-treatment-functional-outcomes-from-storm-pe
+Opened Article Heading: Is It Time to Rethink PE Treatment? Functional Outcomes From STORM‑PE
+Validated: Is It Time to Rethink PE Treatment? Functional Outcomes From STORM‑PE
+
+Clicking: Q&A: Diagnosing & Treating Co- and Superinfections in Viral Pneumonia
+Navigating to: https://www.physiciansweekly.com/post/qa-diagnosing-treating-co-and-superinfections-in-viral-pneumonia
+Opened Article Heading: Q&A: Diagnosing & Treating Co- and Superinfections in Viral Pneumonia
+Validated: Q&A: Diagnosing & Treating Co- and Superinfections in Viral Pneumonia
+
+Clicking: Q&A: Guidance for Managing BCCs in Gorlin Syndrome
+Navigating to: https://www.physiciansweekly.com/post/qa-guidance-for-managing-bccs-in-gorlin-syndrome
+Opened Article Heading: Q&A: Guidance for Managing BCCs in Gorlin Syndrome
+Validated: Q&A: Guidance for Managing BCCs in Gorlin Syndrome
+
+Clicking: Pediatric Asthma Medication Use Drops Nearly 7% After Public Housing Upgrades
+Navigating to: https://www.physiciansweekly.com/post/pediatric-asthma-medication-use-drops-nearly-7-after-public-housing-upgrades
+Opened Article Heading: Pediatric Asthma Medication Use Drops Nearly 7% After Public Housing Upgrades
+Validated: Pediatric Asthma Medication Use Drops Nearly 7% After Public Housing Upgrades
+
+Clicking: Q&A: How Misdiagnosis Fuels Antibiotic Overuse & Masks Interstitial Cystitis
+Navigating to: https://www.physiciansweekly.com/post/qa-how-misdiagnosis-fuels-antibiotic-overuse-masks-interstitial-cystitis
+Opened Article Heading: Q&A: How Misdiagnosis Fuels Antibiotic Overuse & Masks Interstitial Cystitis
+Validated: Q&A: How Misdiagnosis Fuels Antibiotic Overuse & Masks Interstitial Cystitis
+
+Clicking: Beyond A1c Is Not Enough: How GLP-1 Therapy Is Changing Frontline Care
+Navigating to: https://www.physiciansweekly.com/post/beyond-a1c-is-not-enough-how-glp-1-therapy-is-changing-frontline-care-2
+Opened Article Heading: Beyond A1c Is Not Enough: How GLP-1 Therapy Is Changing Frontline Care
+Validated: Beyond A1c Is Not Enough: How GLP-1 Therapy Is Changing Frontline Care
+
+Clicking: Q&A: Navigating Guidance on Use of Steroids in Sepsis
+Navigating to: https://www.physiciansweekly.com/post/qa-navigating-guidance-on-use-of-steroids-in-sepsis
+Opened Article Heading: Q&A: Navigating Guidance on Use of Steroids in Sepsis
+Validated: Q&A: Navigating Guidance on Use of Steroids in Sepsis
+
+Clicking: Q&A: Understanding the Barriers & Motivators of Inhaler Adherence in COPD
+Navigating to: https://www.physiciansweekly.com/post/qa-understanding-the-barriers-and-motivators-of-inhaler-adherence-in-copd
+Opened Article Heading: Q&A: Understanding the Barriers & Motivators of Inhaler Adherence in COPD
+Validated: Q&A: Understanding the Barriers & Motivators of Inhaler Adherence in COPD

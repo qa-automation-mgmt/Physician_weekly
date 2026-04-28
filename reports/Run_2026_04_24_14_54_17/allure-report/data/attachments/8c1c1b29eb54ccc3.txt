@@ -1,0 +1,18 @@
+Total items: 2
+Total items: 2
+
+Checking: Contribute to PW
+Old tab count: 1
+New tab count: 2
+Contribute to PW opened in new tab successfully 
+Current URL: https://app.smartsheet.com/b/form/8f2ab169168247d7aadc46f1367e61ed
+Final URL: https://app.smartsheet.com/b/form/8f2ab169168247d7aadc46f1367e61ed
+Contribute to PW redirected correctly 
+
+Checking: Subscribe
+Old tab count: 1
+New tab count: 2
+Subscribe opened in new tab successfully 
+Current URL: https://hosted.pushplanet.com/fm/subscriptions_physw?__cf_chl_rt_tk=qjqID9L0M39CUMeLx8anXOtShZbcJ3GnUs.vo3G3WyA-1777022911-1.0.1.1-ygyCHSF5n61Mfb22Efl2CEF4edGsFOTUbgC1ZYqI1z4
+Final URL: https://hosted.pushplanet.com/fm/subscriptions_physw?__cf_chl_rt_tk=qjqID9L0M39CUMeLx8anXOtShZbcJ3GnUs.vo3G3WyA-1777022911-1.0.1.1-ygyCHSF5n61Mfb22Efl2CEF4edGsFOTUbgC1ZYqI1z4
+Subscribe redirected correctly 

@@ -1,0 +1,22 @@
+Cartoon Section images count matched successfully
+https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/307-Giraffe-1.jpg ---> status code: 200
+https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/nymole-scaled.jpg ---> status code: 200
+https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/QUACKHYPO-scaled.jpg ---> status code: 200
+https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/EASTER-hopupSEP60.jpg ---> status code: 200
+https://www.physiciansweekly.com/post/cutaneous-conundrum ---> status code: 200
+https://www.physiciansweekly.com/post/cutaneous-conundrum ---> status code: 200
+https://www.physiciansweekly.com/category/cartoons ---> status code: 200
+https://www.physiciansweekly.com/post/cutaneous-conundrum ---> status code: 200
+https://www.physiciansweekly.com/post/critter-cal-findings ---> status code: 200
+https://www.physiciansweekly.com/post/critter-cal-findings ---> status code: 200
+https://www.physiciansweekly.com/category/cartoons ---> status code: 200
+https://www.physiciansweekly.com/post/critter-cal-findings ---> status code: 200
+https://www.physiciansweekly.com/post/fowl-language ---> status code: 200
+https://www.physiciansweekly.com/post/fowl-language ---> status code: 200
+https://www.physiciansweekly.com/category/cartoons ---> status code: 200
+https://www.physiciansweekly.com/post/fowl-language ---> status code: 200
+https://www.physiciansweekly.com/post/bunny-hop ---> status code: 200
+https://www.physiciansweekly.com/post/bunny-hop ---> status code: 200
+https://www.physiciansweekly.com/category/cartoons ---> status code: 200
+https://www.physiciansweekly.com/post/bunny-hop ---> status code: 200
+All images of Cartoon section are clickable and navigated successfully.

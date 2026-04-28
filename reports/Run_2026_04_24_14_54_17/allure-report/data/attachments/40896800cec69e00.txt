@@ -1,0 +1,22 @@
+Business of Medicine images count matched successfully
+https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/iStock-187597198-modified-57096137-1b9b-4c94-b3ab-ad8a056d691a.jpg ---> status code: 200
+https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/iStock-1383531961-modified-3ef41637-bc07-43bf-94f9-6ad3292154d2.jpg ---> status code: 200
+https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/KOL-Headshot-Template-4.png ---> status code: 200
+https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/03/KOL-Headshot-Template-17.png ---> status code: 200
+https://www.physiciansweekly.com/post/how-to-handle-consent-when-loved-ones-lack-legal-standing ---> status code: 200
+https://www.physiciansweekly.com/post/how-to-handle-consent-when-loved-ones-lack-legal-standing ---> status code: 200
+https://www.physiciansweekly.com/category/business-of-medicine ---> status code: 200
+https://www.physiciansweekly.com/post/how-to-handle-consent-when-loved-ones-lack-legal-standing ---> status code: 200
+https://www.physiciansweekly.com/post/next-of-kin-consent-standoff-can-clinics-override-family-authority ---> status code: 200
+https://www.physiciansweekly.com/post/next-of-kin-consent-standoff-can-clinics-override-family-authority ---> status code: 200
+https://www.physiciansweekly.com/category/business-of-medicine ---> status code: 200
+https://www.physiciansweekly.com/post/next-of-kin-consent-standoff-can-clinics-override-family-authority ---> status code: 200
+https://www.physiciansweekly.com/post/qa-doctors-see-trumprx-as-another-discount-tool-not-a-pricing-fix ---> status code: 200
+https://www.physiciansweekly.com/post/qa-doctors-see-trumprx-as-another-discount-tool-not-a-pricing-fix ---> status code: 200
+https://www.physiciansweekly.com/category/business-of-medicine ---> status code: 200
+https://www.physiciansweekly.com/post/qa-doctors-see-trumprx-as-another-discount-tool-not-a-pricing-fix ---> status code: 200
+https://www.physiciansweekly.com/post/defining-the-role-of-generative-ai-in-clinical-care ---> status code: 200
+https://www.physiciansweekly.com/post/defining-the-role-of-generative-ai-in-clinical-care ---> status code: 200
+https://www.physiciansweekly.com/category/business-of-medicine ---> status code: 200
+https://www.physiciansweekly.com/post/defining-the-role-of-generative-ai-in-clinical-care ---> status code: 200
+All Business of Medicine images & titles navigated successfully.

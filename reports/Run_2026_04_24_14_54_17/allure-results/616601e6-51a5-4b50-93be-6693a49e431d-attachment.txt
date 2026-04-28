@@ -1,0 +1,19 @@
+Physician's Weekly | www.PhysiciansWeekly.com
+Clicking: Specialties
+Page Header: Specialties
+Heading validation success for: Specialties
+Clicking: Conference Coverage
+Page Header: Conference Coverage
+Heading validation success for: Conference Coverage
+Clicking: Knowledge Hub
+Page Header: Knowledge Hub
+Heading validation success for: Knowledge Hub
+Clicking: Cases and Quizzes
+Page Header: Cases and Quizzes
+Heading validation success for: Cases and Quizzes
+Clicking: Commentary
+Page Header: Commentary
+Heading validation success for: Commentary
+Clicking: Business of Medicine
+Page Header: Business of Medicine
+Heading validation success for: Business of Medicine

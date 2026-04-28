@@ -1,0 +1,71 @@
+Found 24 specialties under the menu.
+Validating → Allergy & Immunology : /page/allergy-immunology
+URL validation success
+Allergy & Immunology → correct URL + header
+Validating → Cardiology : /page/cardiology
+URL validation success
+Cardiology → correct URL + header
+Validating → Critical Care : /page/critical-care
+URL validation success
+Critical Care → correct URL + header
+Validating → Dermatology : /page/dermatology
+URL validation success
+Dermatology → correct URL + header
+Validating → Endocrinology : /page/endocrinology
+URL validation success
+Endocrinology → correct URL + header
+Validating → Gastroenterology : /page/gastroenterology
+URL validation success
+Gastroenterology → correct URL + header
+Validating → Infectious Disease : /page/infectious-disease
+URL validation success
+Infectious Disease → correct URL + header
+Validating → Nephrology : /page/nephrology
+URL validation success
+Nephrology → correct URL + header
+Validating → Neurology : /page/neurology
+URL validation success
+Neurology → correct URL + header
+Validating → OB/GYN : /page/obgyn
+URL validation success
+OB/GYN → correct URL + header
+Validating → Oncology / Hematology : /page/oncology-hematology
+URL validation success
+Oncology / Hematology → correct URL + header
+Validating → Ophthalmology : /page/ophthalmology
+URL validation success
+Ophthalmology → correct URL + header
+Validating → Pain : /page/pain
+URL validation success
+Pain → correct URL + header
+Validating → Pediatrics : /page/pediatrics
+URL validation success
+Pediatrics → correct URL + header
+Validating → Primary Care : /page/primary-care
+URL validation success
+Primary Care → correct URL + header
+Validating → Psychiatry : /page/psychiatry
+URL validation success
+Psychiatry → correct URL + header
+Validating → Pulmonology : /page/pulmonology
+URL validation success
+Pulmonology → correct URL + header
+Validating → Rheumatology : /page/rheumatology
+URL validation success
+Rheumatology → correct URL + header
+Validating → Surgery : /page/surgery
+URL validation success
+Surgery → correct URL + header
+Validating → Urology : /page/urology
+URL validation success
+Urology → correct URL + header
+Validating → Cartoons : /page/cartoons
+Skipping Cartoons (not in expected list)
+Validating → Doctor’s Voice : /page/doctors-voice
+Skipping Doctor’s Voice (not in expected list)
+Validating → Peer-to-Peer : /page/peer-to-peer
+Skipping Peer-to-Peer (not in expected list)
+Validating → Podcast : /page/podcast
+Skipping Podcast (not in expected list)
+
+ALL SPECIALTIES VALIDATED SUCCESSFULLY!

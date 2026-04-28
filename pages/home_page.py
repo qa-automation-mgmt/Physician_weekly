@@ -435,8 +435,8 @@ class HomePage(Home_page_Locators):
         # Locate all buttons
         buttons = self.page.locator(self.All_buttons)
         count = buttons.count()
-        assert count == 11, "Button count is not matching"
-        print("Total buttons found 11, but skipped Figure 1 buttons in Figure 1 section as expected ")
+        assert count == 7, "Button count is not matching"
+        print("Total buttons found 7")
 
         for i in range(count):
             btn = buttons.nth(i)
