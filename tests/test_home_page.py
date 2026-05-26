@@ -13,7 +13,7 @@ class TestHomePage:
         assert heading_text != "", "Featured Articles heading not found"
         assert 0 < visible_count < 2, "Unexpected number of Hero Banner images"
 
-    def test_subfeatured_articles(self, page):
+    def test_subfeatured_articles_heading_validation_Navigation_Again_validate_heading(self, page):
         home = HomePage(page)
         home.validate_subfeatured_articles_images_and_titles()
 

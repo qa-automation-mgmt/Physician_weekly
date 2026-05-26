@@ -5,7 +5,6 @@ import uuid
 from datetime import datetime
 from playwright.sync_api import sync_playwright, TimeoutError as PlaywrightTimeoutError
 from pytest_html import extras as html_extras
-
 import pandas as pd
 from openpyxl import Workbook
 from openpyxl.styles import Font, PatternFill, Border, Side, Alignment
@@ -16,7 +15,7 @@ from openpyxl.chart.series import DataPoint
 # ═══════════════════════════════════════════════════════
 #  RUN FOLDER SETUP  (one timestamped folder per run)
 # ═══════════════════════════════════════════════════════
-RUN_TIME     = datetime.now().strftime("%Y_%m_%d_%H_%M_%S")
+RUN_TIME     = datetime.now().strftime("%d_%m_%Y_%H_%M_%S")
 REPORT_DIR   = f"reports/Run_{RUN_TIME}"
 SCREENSHOT_DIR = f"{REPORT_DIR}/screenshots"
 HTML_REPORT  = f"{REPORT_DIR}/PW_Report.html"
@@ -47,27 +46,22 @@ def wait_and_close_privacy_popup(page, timeout=15000):
         print("Privacy popup detected and closed")
     except PlaywrightTimeoutError:
         print("Privacy popup not shown")
-
 # ═══════════════════════════════════════════════════════
 #  BROWSER FIXTURE  (class-scoped – one browser per class)
 # ═══════════════════════════════════════════════════════
 @pytest.fixture(scope="class")
 def page(request):
     playwright = sync_playwright().start()
-
     browser = playwright.chromium.launch(headless=True)
-
+    #browser = playwright.chromium.launch(channel="msedge", headless=True)
     context = browser.new_context(viewport={"width": 1920, "height": 1080})
     context.set_default_timeout(30000)
     context.set_default_navigation_timeout(30000)
-
     page = context.new_page()
-    page.goto("https://www.physiciansweekly.com", wait_until="domcontentloaded")
+    page.goto("https://www.physiciansweekly.com", wait_until="domcontentloaded",timeout=20000)
     wait_and_close_privacy_popup(page)
-
     request.node.page = page
     yield page
-
     context.close()
     browser.close()
     playwright.stop()
@@ -159,7 +153,7 @@ def pytest_runtest_makereport(item, call):
                 suggested_action = "Review detailed error log and retry"
                 priority         = "Low"
 
-            manual_note = "✋ Verify manually before closing defect"
+            manual_note = " Verify manually before closing defect"
             remarks     = f"Failure – {failure_reason}"
 
             # ── Screenshot on failure ───────────────────────
@@ -189,7 +183,7 @@ def pytest_runtest_makereport(item, call):
             "Module":             item.module.__name__.replace("test_", "").replace("_", " ").title(),
             "Status":             status,
             "Execution Time (s)": round(report.duration, 2),
-            "Execution Date":     datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "Execution Date":     datetime.now().strftime("%d-%m-%Y %H:%M:%S"),
             "Browser":            "Chromium",
             "Environment":        "Production",
             "Failure Reason":     failure_reason,
@@ -289,7 +283,7 @@ def _generate_excel_report(results, filepath, run_time, previous_excel=None):
     #  SHEET 1 – EXECUTIVE SUMMARY
     # ────────────────────────────────────────────────────
     ws1 = wb.active
-    ws1.title = "📊 Executive Summary"
+    ws1.title = " Executive Summary"
     ws1.sheet_view.showGridLines = False
     ws1.freeze_panes = "A6"
 
@@ -322,12 +316,12 @@ def _generate_excel_report(results, filepath, run_time, previous_excel=None):
 
     kpis = [
         ("Total Test Cases", total,            "BDD7EE", "000000"),
-        ("✅  Passed",       passed,            C["pass_bg"], C["pass_fg"]),
-        ("❌  Failed",       failed,            C["fail_bg"], C["fail_fg"]),
-        ("📈  Pass Rate",    f"{pass_rate}%",   "FFEB9C" if pass_rate < 100 else C["pass_bg"],
+        ("  Passed",       passed,            C["pass_bg"], C["pass_fg"]),
+        ("  Failed",       failed,            C["fail_bg"], C["fail_fg"]),
+        ("  Pass Rate",    f"{pass_rate}%",   "FFEB9C" if pass_rate < 100 else C["pass_bg"],
                                                C["warn_fg"] if pass_rate < 100 else C["pass_fg"]),
-        ("⏱  Total Time",   f"{total_time}s",  "BDD7EE", "000000"),
-        ("⚡  Avg Time",     f"{avg_time}s",    "BDD7EE", "000000"),
+        ("  Total Time",   f"{total_time}s",  "BDD7EE", "000000"),
+        ("  Avg Time",     f"{avg_time}s",    "BDD7EE", "000000"),
     ]
     col_pairs = [1, 3, 5, 7, 9, 11]
     for idx, (label, value, bg, fg) in enumerate(kpis):
@@ -350,11 +344,11 @@ def _generate_excel_report(results, filepath, run_time, previous_excel=None):
         ws1.row_dimensions[r].height = 16
 
     # ── Failed test detail ──────────────────────────────
-    ws1.cell(row=12, column=1).value = "⚠️  FAILED TEST CASES"
+    ws1.cell(row=12, column=1).value = "  FAILED TEST CASES"
     ws1.cell(row=12, column=1).font  = fnt(bold=True, sz=12, color=C["fail_fg"])
     ws1.merge_cells("A12:L12")
 
-    hdr_row(ws1, 13, ["TC_ID","Test Case Name","Module","Failure Reason","Root Cause","Suggested Action","Priority","Screenshot"], bg=C["fail_fg"])
+    hdr_row(ws1, 13, ["TC_ID","Test Case Name","Module","Failure Reason","Root Cause","Suggested Action","Priority","Screenshot(To view the SS press Ctrl click)"], bg=C["fail_fg"])
 
     failed_df = df[df["Status"] == "FAILED"]
     r_idx = 14
@@ -367,7 +361,7 @@ def _generate_excel_report(results, filepath, run_time, previous_excel=None):
             row["Root Cause"]      or "–",
             row["Suggested Action"] or "–",
             prio,
-            "📸 Captured" if row["Screenshot Path"] else "–",
+            " Captured" if row["Screenshot Path"] else "–",
         ]
         for ci, val in enumerate(vals, 1):
             c = ws1.cell(row=r_idx, column=ci, value=val)
@@ -379,7 +373,7 @@ def _generate_excel_report(results, filepath, run_time, previous_excel=None):
         r_idx += 1
 
     if len(failed_df) == 0:
-        c = ws1.cell(row=14, column=1, value="🎉  All test cases PASSED! No failures to report.")
+        c = ws1.cell(row=14, column=1, value="  All test cases PASSED! No failures to report.")
         c.font  = Font(bold=True, size=11, color=C["pass_fg"], name="Arial")
         c.fill  = fill(C["pass_bg"])
         ws1.merge_cells("A14:L14")
@@ -402,7 +396,7 @@ def _generate_excel_report(results, filepath, run_time, previous_excel=None):
         ok   = mr["Failed"] == 0
         is_alt = ri % 2 == 0
         vals = [mr["Module"], mr["Total"], mr["Passed"], mr["Failed"],
-                f"{mr['Pass Rate']}%", "✅ PASS" if ok else "❌ FAIL"]
+                f"{mr['Pass Rate']}%", " PASS" if ok else " FAIL"]
         bgs  = [C["alt"] if is_alt else C["white"],
                 C["white"], C["pass_bg"] if mr["Passed"] else C["white"],
                 C["fail_bg"] if mr["Failed"] else C["white"],
@@ -444,38 +438,38 @@ def _generate_excel_report(results, filepath, run_time, previous_excel=None):
 
     # ── Bar chart (execution time) ──────────────────────
     bc_start = chart_data_row + 5
-    ws1.cell(row=bc_start, column=1, value="Test #")
-    ws1.cell(row=bc_start, column=2, value="Time (s)")
+    ws1.cell(row=bc_start, column=1, value="Test's")
+    ws1.cell(row=bc_start, column=2, value="Time (seconds)")
     for i, (_, row) in enumerate(df.iterrows()):
         ws1.cell(row=bc_start+1+i, column=1, value=int(row["TC_ID"]))
         ws1.cell(row=bc_start+1+i, column=2, value=row["Execution Time (s)"])
 
-    bar = BarChart()
-    bar.type    = "bar"
-    bar.title   = "Execution Time per Test (s)"
-    bar.style   = 10
-    bar.width   = max(28, len(df) * 0.4)   # scale width with test count
-    bar.height  = max(14, len(df) * 0.22)  # scale height so bars don't squash
-    bar.y_axis.title = "Seconds"
-    bar.x_axis.title = "TC_ID"
-    # Force every TC_ID label to show — no skipping
-    bar.x_axis.tickLblSkip  = 1
-    bar.x_axis.tickMarkSkip = 1
-    bar.x_axis.noMultiLvlLbl = True
-    td = Reference(ws1, min_col=2, min_row=bc_start, max_row=bc_start+len(df))
-    tc = Reference(ws1, min_col=1, min_row=bc_start+1, max_row=bc_start+len(df))
-    bar.add_data(td, titles_from_data=True)
-    bar.set_categories(tc)
-    ws1.add_chart(bar, "A" + str(mstart + len(mod_grp) + 4))
+    # bar = BarChart()
+    # bar.type    = "bar"
+    # bar.title   = "Execution Time per Test (s)"
+    # bar.style   = 10
+    # bar.width   = max(28, len(df) * 0.4)   # scale width with test count
+    # bar.height  = max(14, len(df) * 0.22)  # scale height so bars don't squash
+    # bar.y_axis.title = "Seconds"
+    # bar.x_axis.title = "TC_ID"
+    # # Force every TC_ID label to show — no skipping
+    # bar.x_axis.tickLblSkip  = 1
+    # bar.x_axis.tickMarkSkip = 1
+    # bar.x_axis.noMultiLvlLbl = True
+    # td = Reference(ws1, min_col=2, min_row=bc_start, max_row=bc_start+len(df))
+    # tc = Reference(ws1, min_col=1, min_row=bc_start+1, max_row=bc_start+len(df))
+    # bar.add_data(td, titles_from_data=True)
+    # bar.set_categories(tc)
+    # ws1.add_chart(bar, "A" + str(mstart + len(mod_grp) + 4))
 
-    # column widths for sheet 1
-    for ci, w in enumerate([6,10,14,14,14,14,12,12], 1):
-        ws1.column_dimensions[get_column_letter(ci)].width = w
+    # # column widths for sheet 1
+    # for ci, w in enumerate([6,10,14,14,14,14,12,12], 1):
+    #     ws1.column_dimensions[get_column_letter(ci)].width = w
 
     # ────────────────────────────────────────────────────
     #  SHEET 2 – DETAILED EXECUTION LOG
     # ────────────────────────────────────────────────────
-    ws2 = wb.create_sheet("📋 Execution Log")
+    ws2 = wb.create_sheet(" Execution Log")
     ws2.sheet_view.showGridLines = False
     ws2.freeze_panes = "A4"
 
@@ -503,7 +497,7 @@ def _generate_excel_report(results, filepath, run_time, previous_excel=None):
         base    = C["alt"] if alt else C["white"]
         vals = [
             row["TC_ID"], row["Test Case Name"], row["Module"],
-            "✅ PASS" if is_pass else "❌ FAIL",
+            " PASS" if is_pass else " FAIL",
             row["Execution Time (s)"], row["Execution Date"],
             row["Browser"], row["Environment"],
             row["Failure Reason"] or "–", row["Remarks"],
@@ -563,7 +557,7 @@ def _generate_excel_report(results, filepath, run_time, previous_excel=None):
     # ────────────────────────────────────────────────────
     #  SHEET 3 – FAILURE ANALYSIS
     # ────────────────────────────────────────────────────
-    ws3 = wb.create_sheet("🔍 Failure Analysis")
+    ws3 = wb.create_sheet(" Failure Analysis")
     ws3.sheet_view.showGridLines = False
 
     ws3.merge_cells("A1:H2")
@@ -593,7 +587,7 @@ def _generate_excel_report(results, filepath, run_time, previous_excel=None):
             row["Failure Reason"] or "–",
             row["Root Cause"]      or "–",
             row["Suggested Action"] or "–",
-            prio, "🔴 Open",
+            prio, " Open",
         ]
         for ci, val in enumerate(vals, 1):
             c = ws3.cell(row=r_idx, column=ci, value=val)
@@ -609,7 +603,7 @@ def _generate_excel_report(results, filepath, run_time, previous_excel=None):
         r_idx += 1
 
     if len(failed_df) == 0:
-        c = ws3.cell(row=4, column=1, value="✅  No failures in this run. Great job!")
+        c = ws3.cell(row=4, column=1, value="  No failures in this run. Great job!")
         c.font  = Font(bold=True, size=12, color=C["pass_fg"], name="Arial")
         c.fill  = fill(C["pass_bg"])
         ws3.merge_cells("A4:H4")
@@ -617,7 +611,7 @@ def _generate_excel_report(results, filepath, run_time, previous_excel=None):
     # ────────────────────────────────────────────────────
     #  SHEET 4 – RUN HISTORY  (auto-accumulated across runs)
     # ────────────────────────────────────────────────────
-    ws4 = wb.create_sheet("📝 Run History")
+    ws4 = wb.create_sheet(" Run History")
     ws4.sheet_view.showGridLines = False
 
     ws4.merge_cells("A1:G2")
@@ -688,8 +682,7 @@ def _generate_excel_report(results, filepath, run_time, previous_excel=None):
 
     tip_row = last_data_row + 11
     tip = ws4.cell(row=tip_row, column=1,
-                   value="💡 Run history is auto-accumulated. Each new run appends automatically.")
+                   value=" Run history is auto-accumulated. Each new run appends automatically.")
     tip.font = Font(italic=True, size=9, color="666666", name="Arial")
     ws4.merge_cells(f"A{tip_row}:G{tip_row}")
-
     wb.save(filepath)

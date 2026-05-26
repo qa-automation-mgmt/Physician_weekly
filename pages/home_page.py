@@ -1,4 +1,5 @@
 from locators import Home_page_Locators
+from helpers.common_functions import CommonHelper
 import requests
 import time
 
@@ -9,6 +10,7 @@ class HomePage(Home_page_Locators):
 
     def __init__(self, page):
         self.page = page
+        self.FromHelper = CommonHelper()
 #Navigates to the home page, validates that the **Featured Articles heading is visible and captures its text**, and **counts the number of visible images in the Hero Banner section**.
 
     def validate_featured_articles_and_hero_banner(self):
@@ -134,8 +136,7 @@ class HomePage(Home_page_Locators):
                 assert expected_title.lower() in article_heading.lower(), \
                     f"Mismatch! Expected '{expected_title}', but opened '{article_heading}'"
 
-                print("Validated:", expected_title)
-
+                print("Validated:", expected_title)              
                 # go back to the homepage
                 self.page.goto(BASE_URL)
             except Exception as e: 

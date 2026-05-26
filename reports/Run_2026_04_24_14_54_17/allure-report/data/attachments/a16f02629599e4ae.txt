@@ -1,3 +1,0 @@
-Hovered over Specialties menu.
-Scroll position before clicking article: 700
-Scroll position after returning: 842

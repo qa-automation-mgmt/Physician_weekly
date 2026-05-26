@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8"/>
+    <title id="head-title">Physician Weekly – Automation Testing Report [Tester: Ashok]</title>
+      <style type="text/css">body {
+  font-family: Helvetica, Arial, sans-serif;
+  font-size: 12px;
+  /* do not increase min-width as some may use split screens */
+  min-width: 800px;
+  color: #999;
+}
+
+h1 {
+  font-size: 24px;
+  color: black;
+}
+
+h2 {
+  font-size: 16px;
+  color: black;
+}
+
+p {
+  color: black;
+}
+
+a {
+  color: #999;
+}
+
+table {
+  border-collapse: collapse;
+}
+
+/******************************
+ * SUMMARY INFORMATION
+ ******************************/
+#environment td {
+  padding: 5px;
+  border: 1px solid #e6e6e6;
+  vertical-align: top;
+}
+#environment tr:nth-child(odd) {
+  background-color: #f6f6f6;
+}
+#environment ul {
+  margin: 0;
+  padding: 0 20px;
+}
+
+/******************************
+ * TEST RESULT COLORS
+ ******************************/
+span.passed,
+.passed .col-result {
+  color: green;
+}
+
+span.skipped,
+span.xfailed,
+span.rerun,
+.skipped .col-result,
+.xfailed .col-result,
+.rerun .col-result {
+  color: orange;
+}
+
+span.error,
+span.failed,
+span.xpassed,
+.error .col-result,
+.failed .col-result,
+.xpassed .col-result {
+  color: red;
+}
+
+.col-links__extra {
+  margin-right: 3px;
+}
+
+/******************************
+ * RESULTS TABLE
+ *
+ * 1. Table Layout
+ * 2. Extra
+ * 3. Sorting items
+ *
+ ******************************/
+/*------------------
+ * 1. Table Layout
+ *------------------*/
+#results-table {
+  border: 1px solid #e6e6e6;
+  color: #999;
+  font-size: 12px;
+  width: 100%;
+}
+#results-table th,
+#results-table td {
+  padding: 5px;
+  border: 1px solid #e6e6e6;
+  text-align: left;
+}
+#results-table th {
+  font-weight: bold;
+}
+
+/*------------------
+ * 2. Extra
+ *------------------*/
+.logwrapper {
+  max-height: 230px;
+  overflow-y: scroll;
+  background-color: #e6e6e6;
+}
+.logwrapper.expanded {
+  max-height: none;
+}
+.logwrapper.expanded .logexpander:after {
+  content: "collapse [-]";
+}
+.logwrapper .logexpander {
+  z-index: 1;
+  position: sticky;
+  top: 10px;
+  width: max-content;
+  border: 1px solid;
+  border-radius: 3px;
+  padding: 5px 7px;
+  margin: 10px 0 10px calc(100% - 80px);
+  cursor: pointer;
+  background-color: #e6e6e6;
+}
+.logwrapper .logexpander:after {
+  content: "expand [+]";
+}
+.logwrapper .logexpander:hover {
+  color: #000;
+  border-color: #000;
+}
+.logwrapper .log {
+  min-height: 40px;
+  position: relative;
+  top: -50px;
+  height: calc(100% + 50px);
+  border: 1px solid #e6e6e6;
+  color: black;
+  display: block;
+  font-family: "Courier New", Courier, monospace;
+  padding: 5px;
+  padding-right: 80px;
+  white-space: pre-wrap;
+}
+
+div.media {
+  border: 1px solid #e6e6e6;
+  float: right;
+  height: 240px;
+  margin: 0 5px;
+  overflow: hidden;
+  width: 320px;
+}
+
+.media-container {
+  display: grid;
+  grid-template-columns: 25px auto 25px;
+  align-items: center;
+  flex: 1 1;
+  overflow: hidden;
+  height: 200px;
+}
+
+.media-container--fullscreen {
+  grid-template-columns: 0px auto 0px;
+}
+
+.media-container__nav--right,
+.media-container__nav--left {
+  text-align: center;
+  cursor: pointer;
+}
+
+.media-container__viewport {
+  cursor: pointer;
+  text-align: center;
+  height: inherit;
+}
+.media-container__viewport img,
+.media-container__viewport video {
+  object-fit: cover;
+  width: 100%;
+  max-height: 100%;
+}
+
+.media__name,
+.media__counter {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  flex: 0 0 25px;
+  align-items: center;
+}
+
+.collapsible td:not(.col-links) {
+  cursor: pointer;
+}
+.collapsible td:not(.col-links):hover::after {
+  color: #bbb;
+  font-style: italic;
+  cursor: pointer;
+}
+
+.col-result {
+  width: 130px;
+}
+.col-result:hover::after {
+  content: " (hide details)";
+}
+
+.col-result.collapsed:hover::after {
+  content: " (show details)";
+}
+
+#environment-header h2:hover::after {
+  content: " (hide details)";
+  color: #bbb;
+  font-style: italic;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+#environment-header.collapsed h2:hover::after {
+  content: " (show details)";
+  color: #bbb;
+  font-style: italic;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+/*------------------
+ * 3. Sorting items
+ *------------------*/
+.sortable {
+  cursor: pointer;
+}
+.sortable.desc:after {
+  content: " ";
+  position: relative;
+  left: 5px;
+  bottom: -12.5px;
+  border: 10px solid #4caf50;
+  border-bottom: 0;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+.sortable.asc:after {
+  content: " ";
+  position: relative;
+  left: 5px;
+  bottom: 12.5px;
+  border: 10px solid #4caf50;
+  border-top: 0;
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+.hidden, .summary__reload__button.hidden {
+  display: none;
+}
+
+.summary__data {
+  flex: 0 0 550px;
+}
+.summary__reload {
+  flex: 1 1;
+  display: flex;
+  justify-content: center;
+}
+.summary__reload__button {
+  flex: 0 0 300px;
+  display: flex;
+  color: white;
+  font-weight: bold;
+  background-color: #4caf50;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  border-radius: 3px;
+  cursor: pointer;
+}
+.summary__reload__button:hover {
+  background-color: #46a049;
+}
+.summary__spacer {
+  flex: 0 0 550px;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+}
+
+.filters,
+.collapse {
+  display: flex;
+  align-items: center;
+}
+.filters button,
+.collapse button {
+  color: #999;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-decoration: underline;
+}
+.filters button:hover,
+.collapse button:hover {
+  color: #ccc;
+}
+
+.filter__label {
+  margin-right: 10px;
+}
+
+      </style>
+    
+  </head>
+  <body>
+    <h1 id="title">Physician Weekly – Automation Testing Report [Tester: Ashok]</h1>
+    <p>Report generated on 06-May-2026 at 17:58:54 by <a href="https://pypi.python.org/pypi/pytest-html">pytest-html</a>
+        v4.1.1</p>
+    <div id="environment-header">
+      <h2>Environment</h2>
+    </div>
+    <table id="environment"></table>
+    <!-- TEMPLATES -->
+      <template id="template_environment_row">
+      <tr>
+        <td></td>
+        <td></td>
+      </tr>
+    </template>
+    <template id="template_results-table__body--empty">
+      <tbody class="results-table-row">
+        <tr id="not-found-message">
+          <td colspan="4">No results found. Check the filters.</th>
+        </tr>
+    </template>
+    <template id="template_results-table__tbody">
+      <tbody class="results-table-row">
+        <tr class="collapsible">
+        </tr>
+        <tr class="extras-row">
+          <td class="extra" colspan="4">
+            <div class="extraHTML"></div>
+            <div class="media">
+              <div class="media-container">
+                  <div class="media-container__nav--left"><</div>
+                  <div class="media-container__viewport">
+                    <img src="" />
+                    <video controls>
+                      <source src="" type="video/mp4">
+                    </video>
+                  </div>
+                  <div class="media-container__nav--right">></div>
+                </div>
+                <div class="media__name"></div>
+                <div class="media__counter"></div>
+            </div>
+            <div class="logwrapper">
+              <div class="logexpander"></div>
+              <div class="log"></div>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </template>
+    <!-- END TEMPLATES -->
+    <div class="summary">
+      <div class="summary__data">
+        <h2>Summary</h2>
+        <div class="additional-summary prefix">
+          ('Project Name', 'Physician Weekly')
+          ('Tester', 'Ashok Kumar')
+          ('URL', 'https://www.physiciansweekly.com/')
+          ('Browser', 'Chromium')
+          ('Environment', 'Production')
+        </div>
+        <p class="run-count">16 tests took 00:05:42.</p>
+        <p class="filter">(Un)check the boxes to filter the results.</p>
+        <div class="summary__reload">
+          <div class="summary__reload__button hidden" onclick="location.reload()">
+            <div>There are still tests running. <br />Reload this page to get the latest results!</div>
+          </div>
+        </div>
+        <div class="summary__spacer"></div>
+        <div class="controls">
+          <div class="filters">
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="failed" />
+            <span class="failed">1 Failed,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="passed" />
+            <span class="passed">15 Passed,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="skipped" disabled/>
+            <span class="skipped">0 Skipped,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="xfailed" disabled/>
+            <span class="xfailed">0 Expected failures,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="xpassed" disabled/>
+            <span class="xpassed">0 Unexpected passes,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="error" disabled/>
+            <span class="error">0 Errors,</span>
+            <input checked="true" class="filter" name="filter_checkbox" type="checkbox" data-test-result="rerun" />
+            <span class="rerun">4 Reruns</span>
+          </div>
+          <div class="collapse">
+            <button id="show_all_details">Show all details</button>&nbsp;/&nbsp;<button id="hide_all_details">Hide all details</button>
+          </div>
+        </div>
+      </div>
+      <div class="additional-summary summary">
+      </div>
+      <div class="additional-summary postfix">
+      </div>
+    </div>
+    <table id="results-table">
+      <thead id="results-table-head">
+        <tr>
+          <th class="sortable" data-column-type="result">Result</th>
+          <th class="sortable" data-column-type="testId">Test</th>
+          <th class="sortable" data-column-type="duration">Duration</th>
+          <th>Links</th>
+        </tr>
+      </thead>
+    </table>
+  </body>
+  <footer>
+    <div id="data-container" data-jsonblob="{&#34;environment&#34;: {&#34;Python&#34;: &#34;3.10.12&#34;, &#34;Platform&#34;: &#34;Linux-6.8.0-110-generic-x86_64-with-glibc2.35&#34;, &#34;Packages&#34;: {&#34;pytest&#34;: &#34;8.4.2&#34;, &#34;pluggy&#34;: &#34;1.6.0&#34;}, &#34;Plugins&#34;: {&#34;rerunfailures&#34;: &#34;16.1&#34;, &#34;playwright&#34;: &#34;0.7.2&#34;, &#34;metadata&#34;: &#34;3.1.1&#34;, &#34;base-url&#34;: &#34;2.1.0&#34;, &#34;xdist&#34;: &#34;3.8.0&#34;, &#34;html&#34;: &#34;4.1.1&#34;, &#34;allure-pytest&#34;: &#34;2.15.3&#34;, &#34;anyio&#34;: &#34;4.13.0&#34;}, &#34;Base URL&#34;: &#34;&#34;}, &#34;tests&#34;: {&#34;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_naviagtion_and_hero_banner&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_naviagtion_and_hero_banner&#34;, &#34;duration&#34;: &#34;00:00:06&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_naviagtion_and_hero_banner&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:06&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;---------------------------- Captured stdout setup -----------------------------\nPrivacy popup detected and closed\n\n----------------------------- Captured stdout call -----------------------------\nNavigated to Business of Medicine page\n&#34;}], &#34;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_verify_buttons&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_verify_buttons&#34;, &#34;duration&#34;: &#34;00:00:15&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_verify_buttons&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:15&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nAlready on Business of Medicine page\nTotal buttons found: 4\n\nClicking Button: Careers\nPage Header: Business of Medicine - Careers\nValidated: Careers\n\nClicking Button: Finance\nPage Header: Business of Medicine - Finance\nValidated: Finance\n\nClicking Button: Medical Law\nPage Header: Business of Medicine - Medical Law\nValidated: Medical Law\n\nClicking Button: Revenue\nPage Header: Business of Medicine - Revenue\nValidated: Revenue\n&#34;}], &#34;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_verify_Relevant_Articles_in_Business_of_Medicine_titles_navigation_header_validation&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_verify_Relevant_Articles_in_Business_of_Medicine_titles_navigation_header_validation&#34;, &#34;duration&#34;: &#34;00:00:34&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_verify_Relevant_Articles_in_Business_of_Medicine_titles_navigation_header_validation&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:34&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n6\nTotal images found: 6\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/Tom-Helm-MD-featured-image.png\nLoaded successfully (HTTP 200)\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/iStock-187597198-modified-57096137-1b9b-4c94-b3ab-ad8a056d691a.jpg\nLoaded successfully (HTTP 200)\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/iStock-1383531961-modified-3ef41637-bc07-43bf-94f9-6ad3292154d2.jpg\nLoaded successfully (HTTP 200)\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/KOL-Headshot-Template-4.png\nLoaded successfully (HTTP 200)\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/03/KOL-Headshot-Template-17.png\nLoaded successfully (HTTP 200)\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/03/AI-with-gavel-and-stethoscope-medmal-liability-medlaw.png\nLoaded successfully (HTTP 200)\nhttps://www.physiciansweekly.com/post/qa-is-leaving-private-practice-for-academia-a-better-option-for-dermatologists ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/business-of-medicine ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/how-to-handle-consent-when-loved-ones-lack-legal-standing ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/business-of-medicine ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/next-of-kin-consent-standoff-can-clinics-override-family-authority ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/business-of-medicine ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/qa-doctors-see-trumprx-as-another-discount-tool-not-a-pricing-fix ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/business-of-medicine ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/defining-the-role-of-generative-ai-in-clinical-care ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/business-of-medicine ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/we-need-to-talk-about-ai-what-courts-expect-of-physicians ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/business-of-medicine ---&amp;gt; 200\nTotal Articles: 6\nStored Titles: [(&amp;#x27;Q&amp;amp;A: Is Leaving Private Practice for Academia a Better Option for Dermatologists?&amp;#x27;, &amp;#x27;/post/qa-is-leaving-private-practice-for-academia-a-better-option-for-dermatologists&amp;#x27;), (&amp;#x27;How to Handle Consent When Loved Ones Lack Legal Standing&amp;#x27;, &amp;#x27;/post/how-to-handle-consent-when-loved-ones-lack-legal-standing&amp;#x27;), (&amp;#x27;Next-of-Kin Consent Standoff: Can Clinics Override Family Authority?&amp;#x27;, &amp;#x27;/post/next-of-kin-consent-standoff-can-clinics-override-family-authority&amp;#x27;), (&amp;#x27;Q&amp;amp;A: Doctors See TrumpRx as Another Discount Tool Not a Pricing Fix&amp;#x27;, &amp;#x27;/post/qa-doctors-see-trumprx-as-another-discount-tool-not-a-pricing-fix&amp;#x27;), (&amp;#x27;Defining the Role of Generative AI in Clinical Care&amp;#x27;, &amp;#x27;/post/defining-the-role-of-generative-ai-in-clinical-care&amp;#x27;), (&amp;#x27;We Need to Talk About AI: What Courts Expect of Physicians&amp;#x27;, &amp;#x27;/post/we-need-to-talk-about-ai-what-courts-expect-of-physicians&amp;#x27;)]\n\nClicking: Q&amp;amp;A: Is Leaving Private Practice for Academia a Better Option for Dermatologists?\nNavigating to: https://www.physiciansweekly.com/post/qa-is-leaving-private-practice-for-academia-a-better-option-for-dermatologists\nOpened Article Heading: Q&amp;amp;A: Is Leaving Private Practice for Academia a Better Option for Dermatologists?\nValidated: Q&amp;amp;A: Is Leaving Private Practice for Academia a Better Option for Dermatologists?\n\nClicking: How to Handle Consent When Loved Ones Lack Legal Standing\nNavigating to: https://www.physiciansweekly.com/post/how-to-handle-consent-when-loved-ones-lack-legal-standing\nOpened Article Heading: How to Handle Consent When Loved Ones Lack Legal Standing\nValidated: How to Handle Consent When Loved Ones Lack Legal Standing\n\nClicking: Next-of-Kin Consent Standoff: Can Clinics Override Family Authority?\nNavigating to: https://www.physiciansweekly.com/post/next-of-kin-consent-standoff-can-clinics-override-family-authority\nOpened Article Heading: Next-of-Kin Consent Standoff: Can Clinics Override Family Authority?\nValidated: Next-of-Kin Consent Standoff: Can Clinics Override Family Authority?\n\nClicking: Q&amp;amp;A: Doctors See TrumpRx as Another Discount Tool Not a Pricing Fix\nNavigating to: https://www.physiciansweekly.com/post/qa-doctors-see-trumprx-as-another-discount-tool-not-a-pricing-fix\nOpened Article Heading: Q&amp;amp;A: Doctors See TrumpRx as Another Discount Tool Not a Pricing Fix\nValidated: Q&amp;amp;A: Doctors See TrumpRx as Another Discount Tool Not a Pricing Fix\n\nClicking: Defining the Role of Generative AI in Clinical Care\nNavigating to: https://www.physiciansweekly.com/post/defining-the-role-of-generative-ai-in-clinical-care\nOpened Article Heading: Defining the Role of Generative AI in Clinical Care\nValidated: Defining the Role of Generative AI in Clinical Care\n\nClicking: We Need to Talk About AI: What Courts Expect of Physicians\nNavigating to: https://www.physiciansweekly.com/post/we-need-to-talk-about-ai-what-courts-expect-of-physicians\nOpened Article Heading: We Need to Talk About AI: What Courts Expect of Physicians\nValidated: We Need to Talk About AI: What Courts Expect of Physicians\n&#34;}], &#34;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_validate_main_headings&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_validate_main_headings&#34;, &#34;duration&#34;: &#34;00:00:02&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_validate_main_headings&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:02&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nAlready on Business of Medicine page\nFound sections: [&amp;#x27;Relevant Articles in Business of Medicine &amp;#x27;, &amp;#x27;Careers&amp;#x27;, &amp;#x27;Finance&amp;#x27;, &amp;#x27;Medical Law&amp;#x27;, &amp;#x27; Revenue&amp;#x27;]\nAll expected sections are present.\n&#34;}], &#34;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_validate_career_section&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_validate_career_section&#34;, &#34;duration&#34;: &#34;00:00:18&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_validate_career_section&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:18&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nAlready on Business of Medicine page\nCareer images count is correct (3).\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2025/07/iStock-637207652-modified-0f873d0e-a05a-44bd-804d-5288653e121c-2.jpg ---&amp;gt; status 200\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2025/05/iStock-1215793602-modified-59a4ed59-13a1-4c7d-ab42-fe06ab4a3b59.jpg ---&amp;gt; status 200\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2025/04/teamwork-of-doctor-assembling-a-brain-with-heart-jigsaw-puzzle-concept-for-wellness-of_s1024x1024wisk20c5LQP8oQ4pXAK7le7wllmUna8rEtAw1pLHIM9ilKy0tk.jpg ---&amp;gt; status 200\nAll Career images are valid.\nhttps://www.physiciansweekly.com/post/easing-licensing-for-foreign-trained-physicians-to-curb-rural-gaps ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/easing-licensing-for-foreign-trained-physicians-to-curb-rural-gaps ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/business-of-medicine ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/easing-licensing-for-foreign-trained-physicians-to-curb-rural-gaps ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/how-to-handle-generational-conflicts-in-the-medical-workplace ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/how-to-handle-generational-conflicts-in-the-medical-workplace ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/business-of-medicine ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/how-to-handle-generational-conflicts-in-the-medical-workplace ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/why-many-physicians-do-not-stay-at-their-first-jobs-for-the-long-term ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/why-many-physicians-do-not-stay-at-their-first-jobs-for-the-long-term ---&amp;gt; 200\nhttps://www.physiciansweekly.com/category/business-of-medicine ---&amp;gt; 200\nhttps://www.physiciansweekly.com/post/why-many-physicians-do-not-stay-at-their-first-jobs-for-the-long-term ---&amp;gt; 200\nAll Career links returned HTTP 200.\nStarting Career title navigation validation\nClicking Career Title #1: Easing Foreign-Trained Physician Licensing to Curb Rural Gaps\nOpened page heading: Easing Foreign-Trained Physician Licensing to Curb Rural Gaps\nClicking Career Title #2: How to Handle Generational Conflicts in the Medical Workplace\nOpened page heading: How to Handle Generational Conflicts in the Medical Workplace\nClicking Career Title #3: New Physicians Leave First Jobs Within 2 Years: MGMA Study\nOpened page heading: New Physicians Leave First Jobs Within 2 Years: MGMA Study\nAll Career titles validated successfully.\n&#34;}], &#34;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_validate_finance_section&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_validate_finance_section&#34;, &#34;duration&#34;: &#34;00:00:16&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_validate_finance_section&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:16&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nAlready on Business of Medicine page\nStarting Finance section validation\nFinance images count matched successfully\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2025/06/iStock-1220763031-modified-e681538f-dd05-4600-90e4-4e1d3f5a545e-e1750827289465.jpg -&amp;gt; 200\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2025/06/iStock-1365445918-modified-573d284f-2dd6-47df-aed0-aa098b0de35c-e1750212159825.jpg -&amp;gt; 200\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2025/06/iStock-1194307738-modified-e4f7778e-8160-42ed-bd87-6648e5a6fdc0-1-e1762383562641.jpg -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/how-smart-billing-helps-physicians-boost-revenue -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/how-smart-billing-helps-physicians-boost-revenue -&amp;gt; 200\nhttps://www.physiciansweekly.com/category/business-of-medicine -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/how-smart-billing-helps-physicians-boost-revenue -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/selecting-the-right-physician-retirement-investment-option-for-you -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/selecting-the-right-physician-retirement-investment-option-for-you -&amp;gt; 200\nhttps://www.physiciansweekly.com/category/business-of-medicine -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/selecting-the-right-physician-retirement-investment-option-for-you -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/selecting-a-smarter-physician-retirement-planning-strategy -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/selecting-a-smarter-physician-retirement-planning-strategy -&amp;gt; 200\nhttps://www.physiciansweekly.com/category/business-of-medicine -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/selecting-a-smarter-physician-retirement-planning-strategy -&amp;gt; 200\nFinance links validated successfully\nStarting Finance section title navigation\nOpening Finance Title #4: How Smart Billing Helps Physicians Boost Revenue\nOpened Page: How Smart Billing Helps Physicians Boost Revenue\nOpening Finance Title #5: Key Retirement Investment Options Physicians Should Know\nOpened Page: Key Retirement Investment Options Physicians Should Know\nOpening Finance Title #6: Selecting a Smarter Physician Retirement Planning Strategy\nOpened Page: Selecting a Smarter Physician Retirement Planning Strategy\nAll finance section titles navigated successfully\n&#34;}], &#34;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_validate_medical_law_section&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_validate_medical_law_section&#34;, &#34;duration&#34;: &#34;00:00:17&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_validate_medical_law_section&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:17&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nAlready on Business of Medicine page\nStarting Medical Law validation\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2025/10/PWPeerPOV_AppIcon_RGB-1-1-e1761841147261.jpg -&amp;gt; 200\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/iStock-187597198-modified-57096137-1b9b-4c94-b3ab-ad8a056d691a.jpg -&amp;gt; 200\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/iStock-1383531961-modified-3ef41637-bc07-43bf-94f9-6ad3292154d2.jpg -&amp;gt; 200\nhttps://www.physiciansweekly.com/podcast/dealing-with-your-own-error-disclosure-best-practices-for-physicians -&amp;gt; 200\nhttps://www.physiciansweekly.com/podcast/dealing-with-your-own-error-disclosure-best-practices-for-physicians -&amp;gt; 200\nhttps://www.physiciansweekly.com/category/peerpov -&amp;gt; 200\nhttps://www.physiciansweekly.com/podcast/dealing-with-your-own-error-disclosure-best-practices-for-physicians -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/how-to-handle-consent-when-loved-ones-lack-legal-standing -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/how-to-handle-consent-when-loved-ones-lack-legal-standing -&amp;gt; 200\nhttps://www.physiciansweekly.com/category/business-of-medicine -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/how-to-handle-consent-when-loved-ones-lack-legal-standing -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/next-of-kin-consent-standoff-can-clinics-override-family-authority -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/next-of-kin-consent-standoff-can-clinics-override-family-authority -&amp;gt; 200\nhttps://www.physiciansweekly.com/category/business-of-medicine -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/next-of-kin-consent-standoff-can-clinics-override-family-authority -&amp;gt; 200\nMedical Law title navigation\nClicking: Easing Foreign-Trained Physician Licensing to Curb Rural Gaps\nOpened: Easing Foreign-Trained Physician Licensing to Curb Rural Gaps\nClicking: How to Handle Generational Conflicts in the Medical Workplace\nOpened: How to Handle Generational Conflicts in the Medical Workplace\nClicking: New Physicians Leave First Jobs Within 2 Years: MGMA Study\nOpened: New Physicians Leave First Jobs Within 2 Years: MGMA Study\nMedical Law validation completed\n&#34;}], &#34;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_validate_revenue_section&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_validate_revenue_section&#34;, &#34;duration&#34;: &#34;00:00:16&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_validate_revenue_section&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:16&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nAlready on Business of Medicine page\nStarting Revenue validation\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2025/07/medical-claim-denied-2.png -&amp;gt; 200\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2025/05/boxer-fighting-man-sport-symbol-vector-illustration-composed-of-particles_s1024x1024wisk20c4Fj2c2X3-okj_0bTm4TjrgftNXgYb-e1747169227500.jpg -&amp;gt; 200\nhttps://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2025/03/iStock-1355686471-modified-ddbd9aa2-e59d-44b1-9861-225ac9064876.jpg -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/top-tips-for-first-pass-clean-claims -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/top-tips-for-first-pass-clean-claims -&amp;gt; 200\nhttps://www.physiciansweekly.com/category/business-of-medicine -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/top-tips-for-first-pass-clean-claims -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/how-battling-claim-denials-with-ai-can-unlock-physician-revenue -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/how-battling-claim-denials-with-ai-can-unlock-physician-revenue -&amp;gt; 200\nhttps://www.physiciansweekly.com/category/business-of-medicine -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/how-battling-claim-denials-with-ai-can-unlock-physician-revenue -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/how-effective-revenue-cycle-management-can-create-a-successful-system-for-collecting-payments -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/how-effective-revenue-cycle-management-can-create-a-successful-system-for-collecting-payments -&amp;gt; 200\nhttps://www.physiciansweekly.com/category/business-of-medicine -&amp;gt; 200\nhttps://www.physiciansweekly.com/post/how-effective-revenue-cycle-management-can-create-a-successful-system-for-collecting-payments -&amp;gt; 200\nRevenue title navigation\nClicking: How Smart Billing Helps Physicians Boost Revenue\nOpened: How Smart Billing Helps Physicians Boost Revenue\nClicking: Key Retirement Investment Options Physicians Should Know\nOpened: Key Retirement Investment Options Physicians Should Know\nClicking: Selecting a Smarter Physician Retirement Planning Strategy\nOpened: Selecting a Smarter Physician Retirement Planning Strategy\nRevenue validation completed\n&#34;}], &#34;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_validate_all_buttons_business_module&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_validate_all_buttons_business_module&#34;, &#34;duration&#34;: &#34;00:00:12&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_Bussiness_of_medician.py::Test_Bussiness_of_medician::test_validate_all_buttons_business_module&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:12&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\nAlready on Business of Medicine page\nTotal buttons found: 6\n\nClicking Button #1: Read More\nNavigated: Read More\n\nClicking Button #2: More Business of Medicine\nNavigated: More Business of Medicine\n\nClicking Button #3: More Careers\nNavigated: More Careers\n\nClicking Button #4: More Finance\nNavigated: More Finance\n\nClicking Button #5: More Medical Law\nNavigated: More Medical Law\n\nClicking Button #6: More Revenue\nNavigated: More Revenue\nAll buttons validated successfully.\n&#34;}], &#34;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_hero_banner[https://www.physiciansweekly.com/page/allergy-immunology]&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_hero_banner[https://www.physiciansweekly.com/page/allergy-immunology]&#34;, &#34;duration&#34;: &#34;00:00:05&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_hero_banner[https://www.physiciansweekly.com/page/allergy-immunology]&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:05&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;---------------------------- Captured stdout setup -----------------------------\nPrivacy popup detected and closed\n\n----------------------------- Captured stdout call -----------------------------\n\nTesting page: https://www.physiciansweekly.com/page/allergy-immunology Test Case: Validates that **the specialty articles page heading matches the URL (after normalization)** and **verifies the count of visible Hero Banner images on the page**.\nBoth Page Heading and Page URL are successfully matched\nHeading text: &amp;#x27;Allergy &amp;amp; Immunology&amp;#x27;\nHeading url: &amp;#x27;https://www.physiciansweekly.com/page/allergy-immunology&amp;#x27;\nFound 1 visible Hero Banner image in main articles section.\n&#34;}], &#34;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_article_images_links_and_title_naviagtion_validation[https://www.physiciansweekly.com/page/allergy-immunology]&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_article_images_links_and_title_naviagtion_validation[https://www.physiciansweekly.com/page/allergy-immunology]&#34;, &#34;duration&#34;: &#34;00:00:57&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_article_images_links_and_title_naviagtion_validation[https://www.physiciansweekly.com/page/allergy-immunology]&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:57&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n\nTesting page: https://www.physiciansweekly.com/page/allergy-immunology and Test case : Validates that **the specialty articles page displays exactly 6 images** and **all image URLs return HTTP 200**.\nTotal images found: 6\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2025/10/iStock-1455289630-e1777564512687.jpg\nImage opened successfully with Status code: 200\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2025/11/iStock-2173054795.jpg\nImage opened successfully with Status code: 200\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/KOL-Headshot-Template-11.png\nImage opened successfully with Status code: 200\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/03/iStock-2183708629-modified-a380e3b6-499d-4d34-8c73-00293bbe8ced-scaled.jpg\nImage opened successfully with Status code: 200\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/iStock-135455668-modified-4dd57e7a-ec45-471e-9f7c-eb0352280c0a.jpg\nImage opened successfully with Status code: 200\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=240,h=240,q=85,f=auto,fit=scale-down,width=640/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/iStock-1202344207-modified-c1314f19-ab47-4489-a2bf-11c472fd8abc.jpg\nImage opened successfully with Status code: 200\nTotal Articles: 6\nStored Titles: [(&amp;#x27;Eosinophilic Lung Disease: Considerations for Differential Diagnosis&amp;#x27;, &amp;#x27;/post/eosinophilic-lung-disease-considerations-for-differential-diagnosis&amp;#x27;), (&amp;#x27;GOLD or ATS/ERS? COPD Guideline Comparison at a Glance&amp;#x27;, &amp;#x27;/post/gold-or-ats-ers-copd-guideline-comparison-at-a-glance&amp;#x27;), (&amp;#x27;How Ambient AI Helped Some Clinicians Reconnect With Patients&amp;#x27;, &amp;#x27;/post/how-ambient-ai-helped-some-clinicians-reconnect-with-patients&amp;#x27;), (&amp;#x27;18 Recommendations to Support Shared Decision Making in Asthma Care&amp;#x27;, &amp;#x27;/post/18-recommendations-to-support-shared-decision-making-in-asthma-care&amp;#x27;), (&amp;#x27;Comparing Topical Tapinarof 0.5% Versus 1% for Atopic Dermatitis&amp;#x27;, &amp;#x27;/post/comparing-topical-tapinarof-0-5-versus-1-for-atopic-dermatitis&amp;#x27;), (&amp;#x27;Earlier Biologics Initiation Tied to Fewer Severe Pediatric Asthma Exacerbations&amp;#x27;, &amp;#x27;/post/earlier-biologics-initiation-tied-to-fewer-severe-pediatric-asthma-exacerbations&amp;#x27;)]\n\nClicking: Eosinophilic Lung Disease: Considerations for Differential Diagnosis\nNavigating to: https://www.physiciansweekly.com/post/eosinophilic-lung-disease-considerations-for-differential-diagnosis\nOpened Article Heading: Eosinophilic Lung Disease: Considerations for Differential Diagnosis\nValidated: Eosinophilic Lung Disease: Considerations for Differential Diagnosis\n\nClicking: GOLD or ATS/ERS? COPD Guideline Comparison at a Glance\nNavigating to: https://www.physiciansweekly.com/post/gold-or-ats-ers-copd-guideline-comparison-at-a-glance\nWe got error on this url Locator.inner_text: Timeout 30000ms exceeded.\nCall log:\n  - waiting for locator(&amp;quot;//div[@class=\\&amp;quot;MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-12 MuiGrid-grid-md-12 MuiGrid-grid-lg-12 css-15j76c0\\&amp;quot;]//h1&amp;quot;)\n https://www.physiciansweekly.com/post/gold-or-ats-ers-copd-guideline-comparison-at-a-glance\n\nClicking: How Ambient AI Helped Some Clinicians Reconnect With Patients\nNavigating to: https://www.physiciansweekly.com/post/how-ambient-ai-helped-some-clinicians-reconnect-with-patients\nOpened Article Heading: How Ambient AI Helped Some Clinicians Reconnect With Patients\nValidated: How Ambient AI Helped Some Clinicians Reconnect With Patients\n\nClicking: 18 Recommendations to Support Shared Decision Making in Asthma Care\nNavigating to: https://www.physiciansweekly.com/post/18-recommendations-to-support-shared-decision-making-in-asthma-care\nOpened Article Heading: 18 Recommendations to Support Shared Decision Making in Asthma Care\nValidated: 18 Recommendations to Support Shared Decision Making in Asthma Care\n\nClicking: Comparing Topical Tapinarof 0.5% Versus 1% for Atopic Dermatitis\nNavigating to: https://www.physiciansweekly.com/post/comparing-topical-tapinarof-0-5-versus-1-for-atopic-dermatitis\nOpened Article Heading: Comparing Topical Tapinarof 0.5% Versus 1% for Atopic Dermatitis\nValidated: Comparing Topical Tapinarof 0.5% Versus 1% for Atopic Dermatitis\n\nClicking: Earlier Biologics Initiation Tied to Fewer Severe Pediatric Asthma Exacerbations\nNavigating to: https://www.physiciansweekly.com/post/earlier-biologics-initiation-tied-to-fewer-severe-pediatric-asthma-exacerbations\nOpened Article Heading: Earlier Biologics Initiation Tied to Fewer Severe Pediatric Asthma Exacerbations\nValidated: Earlier Biologics Initiation Tied to Fewer Severe Pediatric Asthma Exacerbations\n&#34;}], &#34;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_doctor_voice[https://www.physiciansweekly.com/page/allergy-immunology]&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_doctor_voice[https://www.physiciansweekly.com/page/allergy-immunology]&#34;, &#34;duration&#34;: &#34;00:00:11&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_doctor_voice[https://www.physiciansweekly.com/page/allergy-immunology]&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:11&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n\nTesting page: https://www.physiciansweekly.com/page/allergy-immunology and Test Case : Validates that the **Doctor Voice section on the given page shows exactly 3 images**, all **image URLs return HTTP 200**, and all **associated article links load successfully with HTTP 200**.\nTotal images found in Doctor Voice section: 3\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/05/iStock-1487922051-modified-26f3a732-8c2a-4b6e-b348-33456c08a5d0.jpg\nImage opened successfully (Status code: 200)\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/iStock-1298953088-modified-ebcf0061-3ff8-4736-aba1-a55cf8bc4506.jpg\nImage opened successfully (Status code: 200)\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/iStock-2181300577-modified-65f2e7a6-007a-4cf3-a48c-0dd270c15adc.jpg\nImage opened successfully (Status code: 200)\nLink URL: /post/rebuilding-patient-trust-amid-the-politicization-of-medicine\nLink opened successfully (Status code: 200)\nLink URL: /post/rebuilding-patient-trust-amid-the-politicization-of-medicine\nLink opened successfully (Status code: 200)\nLink URL: /category/doctors-voice\nLink opened successfully (Status code: 200)\nLink URL: /post/rebuilding-patient-trust-amid-the-politicization-of-medicine\nLink opened successfully (Status code: 200)\nLink URL: /post/garys-saline-scheme-a-clinical-cautionary-tale\nLink opened successfully (Status code: 200)\nLink URL: /post/garys-saline-scheme-a-clinical-cautionary-tale\nLink opened successfully (Status code: 200)\nLink URL: /category/doctors-voice\nLink opened successfully (Status code: 200)\nLink URL: /post/garys-saline-scheme-a-clinical-cautionary-tale\nLink opened successfully (Status code: 200)\nLink URL: /post/how-digital-care-drains-clinicians-erodes-trust-harms-the-healing-relationship\nLink opened successfully (Status code: 200)\nLink URL: /post/how-digital-care-drains-clinicians-erodes-trust-harms-the-healing-relationship\nLink opened successfully (Status code: 200)\nLink URL: /category/doctors-voice\nLink opened successfully (Status code: 200)\nLink URL: /post/how-digital-care-drains-clinicians-erodes-trust-harms-the-healing-relationship\nLink opened successfully (Status code: 200)\nLink URL: /page/doctors-voice\nLink opened successfully (Status code: 200)\n&#34;}], &#34;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_business_of_medicine[https://www.physiciansweekly.com/page/allergy-immunology]&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_business_of_medicine[https://www.physiciansweekly.com/page/allergy-immunology]&#34;, &#34;duration&#34;: &#34;00:00:12&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_business_of_medicine[https://www.physiciansweekly.com/page/allergy-immunology]&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:12&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n\nTesting page: https://www.physiciansweekly.com/page/allergy-immunology and Validates that the **Business of Medicine section on the given page displays exactly 3 images**, all **image URLs return HTTP 200**, and all **associated article links load successfully with HTTP 200**.\nTotal images found in Bussiness of Medician: 3\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/05/iStock-1448569319-modified-4b4778b4-a70e-44f9-a370-866931d6fa59.jpg\nImage opened successfully (Status code: 200)\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/Tom-Helm-MD-featured-image.png\nImage opened successfully (Status code: 200)\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/iStock-187597198-modified-57096137-1b9b-4c94-b3ab-ad8a056d691a.jpg\nImage opened successfully (Status code: 200)\nLink URL: /post/delegation-denied-when-loved-ones-cant-legally-speak-for-patients\nLink opened successfully (Status code: 200)\nLink URL: /post/delegation-denied-when-loved-ones-cant-legally-speak-for-patients\nLink opened successfully (Status code: 200)\nLink URL: /category/business-of-medicine\nLink opened successfully (Status code: 200)\nLink URL: /post/delegation-denied-when-loved-ones-cant-legally-speak-for-patients\nLink opened successfully (Status code: 200)\nLink URL: /post/qa-is-leaving-private-practice-for-academia-a-better-option-for-dermatologists\nLink opened successfully (Status code: 200)\nLink URL: /post/qa-is-leaving-private-practice-for-academia-a-better-option-for-dermatologists\nLink opened successfully (Status code: 200)\nLink URL: /category/business-of-medicine\nLink opened successfully (Status code: 200)\nLink URL: /post/qa-is-leaving-private-practice-for-academia-a-better-option-for-dermatologists\nLink opened successfully (Status code: 200)\nLink URL: /post/how-to-handle-consent-when-loved-ones-lack-legal-standing\nLink opened successfully (Status code: 200)\nLink URL: /post/how-to-handle-consent-when-loved-ones-lack-legal-standing\nLink opened successfully (Status code: 200)\nLink URL: /category/business-of-medicine\nLink opened successfully (Status code: 200)\nLink URL: /post/how-to-handle-consent-when-loved-ones-lack-legal-standing\nLink opened successfully (Status code: 200)\n&#34;}], &#34;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_cartoons[https://www.physiciansweekly.com/page/allergy-immunology]&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_cartoons[https://www.physiciansweekly.com/page/allergy-immunology]&#34;, &#34;duration&#34;: &#34;00:00:13&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_cartoons[https://www.physiciansweekly.com/page/allergy-immunology]&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:13&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n\nTesting page: https://www.physiciansweekly.com/page/allergy-immunology and Test Case : Validates that the **Cartoons section on the given page displays exactly 3 images**, all **image URLs return HTTP 200**, and all **associated article links load successfully with HTTP 200**.\nTotal images found: 3\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/05/23-Banana-Psych-Color-1.jpg\nImage opened successfully (Status code: 200)\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/454-Medi-Copter.jpg\nImage opened successfully (Status code: 200)\nImage URL: https://www.physiciansweekly.com/cdn-cgi/image/w=680,h=400,q=85,f=auto,fit=scale-down,width=1920/https://cdn.physiciansweekly.com/wp-content/uploads/2026/04/307-Giraffe-1.jpg\nImage opened successfully (Status code: 200)\nLink URL: /post/peel-sonality-disorder\nFinal URL to validate: https://www.physiciansweekly.com/post/peel-sonality-disorder\nLink opened successfully (Status code: 200)\nLink URL: /post/peel-sonality-disorder\nFinal URL to validate: https://www.physiciansweekly.com/post/peel-sonality-disorder\nLink opened successfully (Status code: 200)\nLink URL: /category/cartoons\nFinal URL to validate: https://www.physiciansweekly.com/category/cartoons\nLink opened successfully (Status code: 200)\nLink URL: /post/peel-sonality-disorder\nFinal URL to validate: https://www.physiciansweekly.com/post/peel-sonality-disorder\nLink opened successfully (Status code: 200)\nLink URL: /post/airborne-aesthetics\nFinal URL to validate: https://www.physiciansweekly.com/post/airborne-aesthetics\nLink opened successfully (Status code: 200)\nLink URL: /post/airborne-aesthetics\nFinal URL to validate: https://www.physiciansweekly.com/post/airborne-aesthetics\nLink opened successfully (Status code: 200)\nLink URL: /category/cartoons\nFinal URL to validate: https://www.physiciansweekly.com/category/cartoons\nLink opened successfully (Status code: 200)\nLink URL: /post/airborne-aesthetics\nFinal URL to validate: https://www.physiciansweekly.com/post/airborne-aesthetics\nLink opened successfully (Status code: 200)\nLink URL: /post/cutaneous-conundrum\nFinal URL to validate: https://www.physiciansweekly.com/post/cutaneous-conundrum\nLink opened successfully (Status code: 200)\nLink URL: /post/cutaneous-conundrum\nFinal URL to validate: https://www.physiciansweekly.com/post/cutaneous-conundrum\nLink opened successfully (Status code: 200)\nLink URL: /category/cartoons\nFinal URL to validate: https://www.physiciansweekly.com/category/cartoons\nLink opened successfully (Status code: 200)\nLink URL: /post/cutaneous-conundrum\nFinal URL to validate: https://www.physiciansweekly.com/post/cutaneous-conundrum\nLink opened successfully (Status code: 200)\n&#34;}], &#34;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_buttons[https://www.physiciansweekly.com/page/allergy-immunology]&#34;: [{&#34;extras&#34;: [], &#34;result&#34;: &#34;Passed&#34;, &#34;testId&#34;: &#34;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_buttons[https://www.physiciansweekly.com/page/allergy-immunology]&#34;, &#34;duration&#34;: &#34;00:00:14&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Passed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_buttons[https://www.physiciansweekly.com/page/allergy-immunology]&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:14&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;----------------------------- Captured stdout call -----------------------------\n\nTesting page: https://www.physiciansweekly.com/page/allergy-immunology and Test Case : Validates that **all buttons on specialty pages (excluding \u201cJoin the Conversation\u201d) are clickable and navigate correctly**.\nTesting all buttons in url : https://www.physiciansweekly.com/page/allergy-immunology\nClicked button #1 Button Name: Read More\nClicked button #2 Button Name: More Allergy &amp;amp; Immunology\nClicked button #3 Button Name: More Doctor&amp;#x27;s Voice\nClicked button #4 Button Name: More Business of Medicine\nClicked button #5 Button Name: More Cartoons\nClicked button #6 Button Name: More Case Consult\nAll buttons are clickable and navigated successfully.\n&#34;}], &#34;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_breadcrumb[https://www.physiciansweekly.com/page/allergy-immunology]&#34;: [{&#34;extras&#34;: [{&#34;name&#34;: &#34;Image&#34;, &#34;format_type&#34;: &#34;image&#34;, &#34;content&#34;: &#34;reports/Run_06_05_2026_17_52_52/screenshots/test_speciality_breadcrumb[https://www.physiciansweekly.com/page/allergy-immunology]_1778070439.png&#34;, &#34;mime_type&#34;: &#34;image/png&#34;, &#34;extension&#34;: &#34;png&#34;}], &#34;result&#34;: &#34;Rerun&#34;, &#34;testId&#34;: &#34;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_breadcrumb[https://www.physiciansweekly.com/page/allergy-immunology]&#34;, &#34;duration&#34;: &#34;00:00:19&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Rerun&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_breadcrumb[https://www.physiciansweekly.com/page/allergy-immunology]&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:19&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;self = &amp;lt;test_specialitie_pages.Test_Specilaities_page object at 0x7eea447a1e10&amp;gt;\npage = &amp;lt;Page url=&amp;#x27;https://www.physiciansweekly.com/post/gold-or-ats-ers-copd-guideline-comparison-at-a-glance&amp;#x27;&amp;gt;\nurl = &amp;#x27;https://www.physiciansweekly.com/page/allergy-immunology&amp;#x27;\n\n    @pytest.mark.parametrize(&amp;quot;url&amp;quot;, URLS)\n    def test_speciality_breadcrumb(self, page, url):\n        speciality = SpecialityPages(page)\n&amp;gt;       speciality.verify_specialty_breadcrumb_flow(url)\n\ntests/test_specialitie_pages.py:40: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\npages/specialities_pages.py:586: in verify_specialty_breadcrumb_flow\n    breadcrumb_locator.first.wait_for(timeout=15000)\n../../.local/lib/python3.10/site-packages/playwright/sync_api/_generated.py:18005: in wait_for\n    self._sync(self._impl_obj.wait_for(timeout=timeout, state=state))\n../../.local/lib/python3.10/site-packages/playwright/_impl/_locator.py:692: in wait_for\n    await self._frame.wait_for_selector(\n../../.local/lib/python3.10/site-packages/playwright/_impl/_frame.py:369: in wait_for_selector\n    await self._channel.send(\n../../.local/lib/python3.10/site-packages/playwright/_impl/_connection.py:69: in send\n    return await self._connection.wrap_api_call(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = &amp;lt;playwright._impl._connection.Connection object at 0x7eea3f274ca0&amp;gt;\ncb = &amp;lt;function Channel.send.&amp;lt;locals&amp;gt;.&amp;lt;lambda&amp;gt; at 0x7eea3efdbac0&amp;gt;, is_internal = False, title = None\n\n    async def wrap_api_call(\n        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None\n    ) -&amp;gt; Any:\n        if self._api_zone.get():\n            return await cb()\n        task = asyncio.current_task(self._loop)\n        st: List[inspect.FrameInfo] = getattr(\n            task, &amp;quot;__pw_stack__&amp;quot;, None\n        ) or inspect.stack(0)\n    \n        parsed_st = _extract_stack_trace_information_from_stack(st, is_internal, title)\n        self._api_zone.set(parsed_st)\n        try:\n            return await cb()\n        except Exception as error:\n&amp;gt;           raise rewrite_error(error, f&amp;quot;{parsed_st[&amp;#x27;apiName&amp;#x27;]}: {error}&amp;quot;) from None\nE           playwright._impl._errors.TimeoutError: Locator.wait_for: Timeout 15000ms exceeded.\nE           Call log:\nE             - waiting for locator(&amp;quot;//ol[contains(@class,\\&amp;quot;MuiBreadcrumbs-ol\\&amp;quot;)]//p&amp;quot;).first to be visible\n\n../../.local/lib/python3.10/site-packages/playwright/_impl/_connection.py:559: TimeoutError\n&#34;}, {&#34;extras&#34;: [{&#34;name&#34;: &#34;Image&#34;, &#34;format_type&#34;: &#34;image&#34;, &#34;content&#34;: &#34;reports/Run_06_05_2026_17_52_52/screenshots/test_speciality_breadcrumb[https://www.physiciansweekly.com/page/allergy-immunology]_1778070463.png&#34;, &#34;mime_type&#34;: &#34;image/png&#34;, &#34;extension&#34;: &#34;png&#34;}], &#34;result&#34;: &#34;Rerun&#34;, &#34;testId&#34;: &#34;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_breadcrumb[https://www.physiciansweekly.com/page/allergy-immunology]&#34;, &#34;duration&#34;: &#34;00:00:19&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Rerun&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_breadcrumb[https://www.physiciansweekly.com/page/allergy-immunology]&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:19&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;self = &amp;lt;test_specialitie_pages.Test_Specilaities_page object at 0x7eea447a1e10&amp;gt;\npage = &amp;lt;Page url=&amp;#x27;https://www.physiciansweekly.com/post/gold-or-ats-ers-copd-guideline-comparison-at-a-glance&amp;#x27;&amp;gt;\nurl = &amp;#x27;https://www.physiciansweekly.com/page/allergy-immunology&amp;#x27;\n\n    @pytest.mark.parametrize(&amp;quot;url&amp;quot;, URLS)\n    def test_speciality_breadcrumb(self, page, url):\n        speciality = SpecialityPages(page)\n&amp;gt;       speciality.verify_specialty_breadcrumb_flow(url)\n\ntests/test_specialitie_pages.py:40: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\npages/specialities_pages.py:586: in verify_specialty_breadcrumb_flow\n    breadcrumb_locator.first.wait_for(timeout=15000)\n../../.local/lib/python3.10/site-packages/playwright/sync_api/_generated.py:18005: in wait_for\n    self._sync(self._impl_obj.wait_for(timeout=timeout, state=state))\n../../.local/lib/python3.10/site-packages/playwright/_impl/_locator.py:692: in wait_for\n    await self._frame.wait_for_selector(\n../../.local/lib/python3.10/site-packages/playwright/_impl/_frame.py:369: in wait_for_selector\n    await self._channel.send(\n../../.local/lib/python3.10/site-packages/playwright/_impl/_connection.py:69: in send\n    return await self._connection.wrap_api_call(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = &amp;lt;playwright._impl._connection.Connection object at 0x7eea3f274ca0&amp;gt;\ncb = &amp;lt;function Channel.send.&amp;lt;locals&amp;gt;.&amp;lt;lambda&amp;gt; at 0x7eea3ec511b0&amp;gt;, is_internal = False, title = None\n\n    async def wrap_api_call(\n        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None\n    ) -&amp;gt; Any:\n        if self._api_zone.get():\n            return await cb()\n        task = asyncio.current_task(self._loop)\n        st: List[inspect.FrameInfo] = getattr(\n            task, &amp;quot;__pw_stack__&amp;quot;, None\n        ) or inspect.stack(0)\n    \n        parsed_st = _extract_stack_trace_information_from_stack(st, is_internal, title)\n        self._api_zone.set(parsed_st)\n        try:\n            return await cb()\n        except Exception as error:\n&amp;gt;           raise rewrite_error(error, f&amp;quot;{parsed_st[&amp;#x27;apiName&amp;#x27;]}: {error}&amp;quot;) from None\nE           playwright._impl._errors.TimeoutError: Locator.wait_for: Timeout 15000ms exceeded.\nE           Call log:\nE             - waiting for locator(&amp;quot;//ol[contains(@class,\\&amp;quot;MuiBreadcrumbs-ol\\&amp;quot;)]//p&amp;quot;).first to be visible\n\n../../.local/lib/python3.10/site-packages/playwright/_impl/_connection.py:559: TimeoutError\n&#34;}, {&#34;extras&#34;: [{&#34;name&#34;: &#34;Image&#34;, &#34;format_type&#34;: &#34;image&#34;, &#34;content&#34;: &#34;reports/Run_06_05_2026_17_52_52/screenshots/test_speciality_breadcrumb[https://www.physiciansweekly.com/page/allergy-immunology]_1778070486.png&#34;, &#34;mime_type&#34;: &#34;image/png&#34;, &#34;extension&#34;: &#34;png&#34;}], &#34;result&#34;: &#34;Rerun&#34;, &#34;testId&#34;: &#34;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_breadcrumb[https://www.physiciansweekly.com/page/allergy-immunology]&#34;, &#34;duration&#34;: &#34;00:00:19&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Rerun&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_breadcrumb[https://www.physiciansweekly.com/page/allergy-immunology]&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:19&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;self = &amp;lt;test_specialitie_pages.Test_Specilaities_page object at 0x7eea447a1e10&amp;gt;\npage = &amp;lt;Page url=&amp;#x27;https://www.physiciansweekly.com/post/gold-or-ats-ers-copd-guideline-comparison-at-a-glance&amp;#x27;&amp;gt;\nurl = &amp;#x27;https://www.physiciansweekly.com/page/allergy-immunology&amp;#x27;\n\n    @pytest.mark.parametrize(&amp;quot;url&amp;quot;, URLS)\n    def test_speciality_breadcrumb(self, page, url):\n        speciality = SpecialityPages(page)\n&amp;gt;       speciality.verify_specialty_breadcrumb_flow(url)\n\ntests/test_specialitie_pages.py:40: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\npages/specialities_pages.py:586: in verify_specialty_breadcrumb_flow\n    breadcrumb_locator.first.wait_for(timeout=15000)\n../../.local/lib/python3.10/site-packages/playwright/sync_api/_generated.py:18005: in wait_for\n    self._sync(self._impl_obj.wait_for(timeout=timeout, state=state))\n../../.local/lib/python3.10/site-packages/playwright/_impl/_locator.py:692: in wait_for\n    await self._frame.wait_for_selector(\n../../.local/lib/python3.10/site-packages/playwright/_impl/_frame.py:369: in wait_for_selector\n    await self._channel.send(\n../../.local/lib/python3.10/site-packages/playwright/_impl/_connection.py:69: in send\n    return await self._connection.wrap_api_call(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = &amp;lt;playwright._impl._connection.Connection object at 0x7eea3f274ca0&amp;gt;\ncb = &amp;lt;function Channel.send.&amp;lt;locals&amp;gt;.&amp;lt;lambda&amp;gt; at 0x7eea3f35a950&amp;gt;, is_internal = False, title = None\n\n    async def wrap_api_call(\n        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None\n    ) -&amp;gt; Any:\n        if self._api_zone.get():\n            return await cb()\n        task = asyncio.current_task(self._loop)\n        st: List[inspect.FrameInfo] = getattr(\n            task, &amp;quot;__pw_stack__&amp;quot;, None\n        ) or inspect.stack(0)\n    \n        parsed_st = _extract_stack_trace_information_from_stack(st, is_internal, title)\n        self._api_zone.set(parsed_st)\n        try:\n            return await cb()\n        except Exception as error:\n&amp;gt;           raise rewrite_error(error, f&amp;quot;{parsed_st[&amp;#x27;apiName&amp;#x27;]}: {error}&amp;quot;) from None\nE           playwright._impl._errors.TimeoutError: Locator.wait_for: Timeout 15000ms exceeded.\nE           Call log:\nE             - waiting for locator(&amp;quot;//ol[contains(@class,\\&amp;quot;MuiBreadcrumbs-ol\\&amp;quot;)]//p&amp;quot;).first to be visible\n\n../../.local/lib/python3.10/site-packages/playwright/_impl/_connection.py:559: TimeoutError\n&#34;}, {&#34;extras&#34;: [{&#34;name&#34;: &#34;Image&#34;, &#34;format_type&#34;: &#34;image&#34;, &#34;content&#34;: &#34;reports/Run_06_05_2026_17_52_52/screenshots/test_speciality_breadcrumb[https://www.physiciansweekly.com/page/allergy-immunology]_1778070510.png&#34;, &#34;mime_type&#34;: &#34;image/png&#34;, &#34;extension&#34;: &#34;png&#34;}], &#34;result&#34;: &#34;Rerun&#34;, &#34;testId&#34;: &#34;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_breadcrumb[https://www.physiciansweekly.com/page/allergy-immunology]&#34;, &#34;duration&#34;: &#34;00:00:19&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Rerun&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_breadcrumb[https://www.physiciansweekly.com/page/allergy-immunology]&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:19&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;self = &amp;lt;test_specialitie_pages.Test_Specilaities_page object at 0x7eea447a1e10&amp;gt;\npage = &amp;lt;Page url=&amp;#x27;https://www.physiciansweekly.com/post/gold-or-ats-ers-copd-guideline-comparison-at-a-glance&amp;#x27;&amp;gt;\nurl = &amp;#x27;https://www.physiciansweekly.com/page/allergy-immunology&amp;#x27;\n\n    @pytest.mark.parametrize(&amp;quot;url&amp;quot;, URLS)\n    def test_speciality_breadcrumb(self, page, url):\n        speciality = SpecialityPages(page)\n&amp;gt;       speciality.verify_specialty_breadcrumb_flow(url)\n\ntests/test_specialitie_pages.py:40: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\npages/specialities_pages.py:586: in verify_specialty_breadcrumb_flow\n    breadcrumb_locator.first.wait_for(timeout=15000)\n../../.local/lib/python3.10/site-packages/playwright/sync_api/_generated.py:18005: in wait_for\n    self._sync(self._impl_obj.wait_for(timeout=timeout, state=state))\n../../.local/lib/python3.10/site-packages/playwright/_impl/_locator.py:692: in wait_for\n    await self._frame.wait_for_selector(\n../../.local/lib/python3.10/site-packages/playwright/_impl/_frame.py:369: in wait_for_selector\n    await self._channel.send(\n../../.local/lib/python3.10/site-packages/playwright/_impl/_connection.py:69: in send\n    return await self._connection.wrap_api_call(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = &amp;lt;playwright._impl._connection.Connection object at 0x7eea3f274ca0&amp;gt;\ncb = &amp;lt;function Channel.send.&amp;lt;locals&amp;gt;.&amp;lt;lambda&amp;gt; at 0x7eea3f5a4940&amp;gt;, is_internal = False, title = None\n\n    async def wrap_api_call(\n        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None\n    ) -&amp;gt; Any:\n        if self._api_zone.get():\n            return await cb()\n        task = asyncio.current_task(self._loop)\n        st: List[inspect.FrameInfo] = getattr(\n            task, &amp;quot;__pw_stack__&amp;quot;, None\n        ) or inspect.stack(0)\n    \n        parsed_st = _extract_stack_trace_information_from_stack(st, is_internal, title)\n        self._api_zone.set(parsed_st)\n        try:\n            return await cb()\n        except Exception as error:\n&amp;gt;           raise rewrite_error(error, f&amp;quot;{parsed_st[&amp;#x27;apiName&amp;#x27;]}: {error}&amp;quot;) from None\nE           playwright._impl._errors.TimeoutError: Locator.wait_for: Timeout 15000ms exceeded.\nE           Call log:\nE             - waiting for locator(&amp;quot;//ol[contains(@class,\\&amp;quot;MuiBreadcrumbs-ol\\&amp;quot;)]//p&amp;quot;).first to be visible\n\n../../.local/lib/python3.10/site-packages/playwright/_impl/_connection.py:559: TimeoutError\n&#34;}, {&#34;extras&#34;: [{&#34;name&#34;: &#34;Image&#34;, &#34;format_type&#34;: &#34;image&#34;, &#34;content&#34;: &#34;reports/Run_06_05_2026_17_52_52/screenshots/test_speciality_breadcrumb[https://www.physiciansweekly.com/page/allergy-immunology]_1778070533.png&#34;, &#34;mime_type&#34;: &#34;image/png&#34;, &#34;extension&#34;: &#34;png&#34;}], &#34;result&#34;: &#34;Failed&#34;, &#34;testId&#34;: &#34;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_breadcrumb[https://www.physiciansweekly.com/page/allergy-immunology]&#34;, &#34;duration&#34;: &#34;00:00:19&#34;, &#34;resultsTableRow&#34;: [&#34;&lt;td class=\&#34;col-result\&#34;&gt;Failed&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-testId\&#34;&gt;tests/test_specialitie_pages.py::Test_Specilaities_page::test_speciality_breadcrumb[https://www.physiciansweekly.com/page/allergy-immunology]&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-duration\&#34;&gt;00:00:19&lt;/td&gt;&#34;, &#34;&lt;td class=\&#34;col-links\&#34;&gt;&lt;/td&gt;&#34;], &#34;log&#34;: &#34;self = &amp;lt;test_specialitie_pages.Test_Specilaities_page object at 0x7eea447a1e10&amp;gt;\npage = &amp;lt;Page url=&amp;#x27;https://www.physiciansweekly.com/post/gold-or-ats-ers-copd-guideline-comparison-at-a-glance&amp;#x27;&amp;gt;\nurl = &amp;#x27;https://www.physiciansweekly.com/page/allergy-immunology&amp;#x27;\n\n    @pytest.mark.parametrize(&amp;quot;url&amp;quot;, URLS)\n    def test_speciality_breadcrumb(self, page, url):\n        speciality = SpecialityPages(page)\n&amp;gt;       speciality.verify_specialty_breadcrumb_flow(url)\n\ntests/test_specialitie_pages.py:40: \n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\npages/specialities_pages.py:586: in verify_specialty_breadcrumb_flow\n    breadcrumb_locator.first.wait_for(timeout=15000)\n../../.local/lib/python3.10/site-packages/playwright/sync_api/_generated.py:18005: in wait_for\n    self._sync(self._impl_obj.wait_for(timeout=timeout, state=state))\n../../.local/lib/python3.10/site-packages/playwright/_impl/_locator.py:692: in wait_for\n    await self._frame.wait_for_selector(\n../../.local/lib/python3.10/site-packages/playwright/_impl/_frame.py:369: in wait_for_selector\n    await self._channel.send(\n../../.local/lib/python3.10/site-packages/playwright/_impl/_connection.py:69: in send\n    return await self._connection.wrap_api_call(\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\n\nself = &amp;lt;playwright._impl._connection.Connection object at 0x7eea3f274ca0&amp;gt;\ncb = &amp;lt;function Channel.send.&amp;lt;locals&amp;gt;.&amp;lt;lambda&amp;gt; at 0x7eea3f50f640&amp;gt;, is_internal = False, title = None\n\n    async def wrap_api_call(\n        self, cb: Callable[[], Any], is_internal: bool = False, title: str = None\n    ) -&amp;gt; Any:\n        if self._api_zone.get():\n            return await cb()\n        task = asyncio.current_task(self._loop)\n        st: List[inspect.FrameInfo] = getattr(\n            task, &amp;quot;__pw_stack__&amp;quot;, None\n        ) or inspect.stack(0)\n    \n        parsed_st = _extract_stack_trace_information_from_stack(st, is_internal, title)\n        self._api_zone.set(parsed_st)\n        try:\n            return await cb()\n        except Exception as error:\n&amp;gt;           raise rewrite_error(error, f&amp;quot;{parsed_st[&amp;#x27;apiName&amp;#x27;]}: {error}&amp;quot;) from None\nE           playwright._impl._errors.TimeoutError: Locator.wait_for: Timeout 15000ms exceeded.\nE           Call log:\nE             - waiting for locator(&amp;quot;//ol[contains(@class,\\&amp;quot;MuiBreadcrumbs-ol\\&amp;quot;)]//p&amp;quot;).first to be visible\n\n../../.local/lib/python3.10/site-packages/playwright/_impl/_connection.py:559: TimeoutError\n\n----------------------------- Captured stdout call -----------------------------\n\nTesting page: https://www.physiciansweekly.com/page/allergy-immunology\nTest Case: Validates that each specialty article opens correctly and the breadcrumb on the article page contains the corresponding article title.\nTotal articles found: 18\n\nOpening Article 1: Eosinophilic Lung Disease: Considerations for Differential Diagnosis\nBreadcrumb Text: Eosinophilic Lung Disease: Considerations for Differential Diagnosis\n\nOpening Article 2: GOLD or ATS/ERS? COPD Guideline Comparison at a Glance\n\n----------------------------- Captured stdout call -----------------------------\n\nTesting page: https://www.physiciansweekly.com/page/allergy-immunology\nTest Case: Validates that each specialty article opens correctly and the breadcrumb on the article page contains the corresponding article title.\nTotal articles found: 18\n\nOpening Article 1: Eosinophilic Lung Disease: Considerations for Differential Diagnosis\nBreadcrumb Text: Eosinophilic Lung Disease: Considerations for Differential Diagnosis\n\nOpening Article 2: GOLD or ATS/ERS? COPD Guideline Comparison at a Glance\n\n----------------------------- Captured stdout call -----------------------------\n\nTesting page: https://www.physiciansweekly.com/page/allergy-immunology\nTest Case: Validates that each specialty article opens correctly and the breadcrumb on the article page contains the corresponding article title.\nTotal articles found: 18\n\nOpening Article 1: Eosinophilic Lung Disease: Considerations for Differential Diagnosis\nBreadcrumb Text: Eosinophilic Lung Disease: Considerations for Differential Diagnosis\n\nOpening Article 2: GOLD or ATS/ERS? COPD Guideline Comparison at a Glance\n\n----------------------------- Captured stdout call -----------------------------\n\nTesting page: https://www.physiciansweekly.com/page/allergy-immunology\nTest Case: Validates that each specialty article opens correctly and the breadcrumb on the article page contains the corresponding article title.\nTotal articles found: 18\n\nOpening Article 1: Eosinophilic Lung Disease: Considerations for Differential Diagnosis\nBreadcrumb Text: Eosinophilic Lung Disease: Considerations for Differential Diagnosis\n\nOpening Article 2: GOLD or ATS/ERS? COPD Guideline Comparison at a Glance\n\n----------------------------- Captured stdout call -----------------------------\n\nTesting page: https://www.physiciansweekly.com/page/allergy-immunology\nTest Case: Validates that each specialty article opens correctly and the breadcrumb on the article page contains the corresponding article title.\nTotal articles found: 18\n\nOpening Article 1: Eosinophilic Lung Disease: Considerations for Differential Diagnosis\nBreadcrumb Text: Eosinophilic Lung Disease: Considerations for Differential Diagnosis\n\nOpening Article 2: GOLD or ATS/ERS? COPD Guideline Comparison at a Glance\n&#34;}]}, &#34;renderCollapsed&#34;: [&#34;passed&#34;], &#34;initialSort&#34;: &#34;result&#34;, &#34;title&#34;: &#34;Physician Weekly \u2013 Automation Testing Report [Tester: Ashok]&#34;}"></div>
+    <script>
+      (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+const { getCollapsedCategory, setCollapsedIds } = require('./storage.js')
+
+class DataManager {
+    setManager(data) {
+        const collapsedCategories = [...getCollapsedCategory(data.renderCollapsed)]
+        const collapsedIds = []
+        const tests = Object.values(data.tests).flat().map((test, index) => {
+            const collapsed = collapsedCategories.includes(test.result.toLowerCase())
+            const id = `test_${index}`
+            if (collapsed) {
+                collapsedIds.push(id)
+            }
+            return {
+                ...test,
+                id,
+                collapsed,
+            }
+        })
+        const dataBlob = { ...data, tests }
+        this.data = { ...dataBlob }
+        this.renderData = { ...dataBlob }
+        setCollapsedIds(collapsedIds)
+    }
+
+    get allData() {
+        return { ...this.data }
+    }
+
+    resetRender() {
+        this.renderData = { ...this.data }
+    }
+
+    setRender(data) {
+        this.renderData.tests = [...data]
+    }
+
+    toggleCollapsedItem(id) {
+        this.renderData.tests = this.renderData.tests.map((test) =>
+            test.id === id ? { ...test, collapsed: !test.collapsed } : test,
+        )
+    }
+
+    set allCollapsed(collapsed) {
+        this.renderData = { ...this.renderData, tests: [...this.renderData.tests.map((test) => (
+            { ...test, collapsed }
+        ))] }
+    }
+
+    get testSubset() {
+        return [...this.renderData.tests]
+    }
+
+    get environment() {
+        return this.renderData.environment
+    }
+
+    get initialSort() {
+        return this.data.initialSort
+    }
+}
+
+module.exports = {
+    manager: new DataManager(),
+}
+
+},{"./storage.js":8}],2:[function(require,module,exports){
+const mediaViewer = require('./mediaviewer.js')
+const templateEnvRow = document.getElementById('template_environment_row')
+const templateResult = document.getElementById('template_results-table__tbody')
+
+function htmlToElements(html) {
+    const temp = document.createElement('template')
+    temp.innerHTML = html
+    return temp.content.childNodes
+}
+
+const find = (selector, elem) => {
+    if (!elem) {
+        elem = document
+    }
+    return elem.querySelector(selector)
+}
+
+const findAll = (selector, elem) => {
+    if (!elem) {
+        elem = document
+    }
+    return [...elem.querySelectorAll(selector)]
+}
+
+const dom = {
+    getStaticRow: (key, value) => {
+        const envRow = templateEnvRow.content.cloneNode(true)
+        const isObj = typeof value === 'object' && value !== null
+        const values = isObj ? Object.keys(value).map((k) => `${k}: ${value[k]}`) : null
+
+        const valuesElement = htmlToElements(
+            values ? `<ul>${values.map((val) => `<li>${val}</li>`).join('')}<ul>` : `<div>${value}</div>`)[0]
+        const td = findAll('td', envRow)
+        td[0].textContent = key
+        td[1].appendChild(valuesElement)
+
+        return envRow
+    },
+    getResultTBody: ({ testId, id, log, extras, resultsTableRow, tableHtml, result, collapsed }) => {
+        const resultBody = templateResult.content.cloneNode(true)
+        resultBody.querySelector('tbody').classList.add(result.toLowerCase())
+        resultBody.querySelector('tbody').id = testId
+        resultBody.querySelector('.collapsible').dataset.id = id
+
+        resultsTableRow.forEach((html) => {
+            const t = document.createElement('template')
+            t.innerHTML = html
+            resultBody.querySelector('.collapsible').appendChild(t.content)
+        })
+
+        if (log) {
+            // Wrap lines starting with "E" with span.error to color those lines red
+            const wrappedLog = log.replace(/^E.*$/gm, (match) => `<span class="error">${match}</span>`)
+            resultBody.querySelector('.log').innerHTML = wrappedLog
+        } else {
+            resultBody.querySelector('.log').remove()
+        }
+
+        if (collapsed) {
+            resultBody.querySelector('.collapsible > td')?.classList.add('collapsed')
+            resultBody.querySelector('.extras-row').classList.add('hidden')
+        } else {
+            resultBody.querySelector('.collapsible > td')?.classList.remove('collapsed')
+        }
+
+        const media = []
+        extras?.forEach(({ name, format_type, content }) => {
+            if (['image', 'video'].includes(format_type)) {
+                media.push({ path: content, name, format_type })
+            }
+
+            if (format_type === 'html') {
+                resultBody.querySelector('.extraHTML').insertAdjacentHTML('beforeend', `<div>${content}</div>`)
+            }
+        })
+        mediaViewer.setup(resultBody, media)
+
+        // Add custom html from the pytest_html_results_table_html hook
+        tableHtml?.forEach((item) => {
+            resultBody.querySelector('td[class="extra"]').insertAdjacentHTML('beforeend', item)
+        })
+
+        return resultBody
+    },
+}
+
+module.exports = {
+    dom,
+    htmlToElements,
+    find,
+    findAll,
+}
+
+},{"./mediaviewer.js":6}],3:[function(require,module,exports){
+const { manager } = require('./datamanager.js')
+const { doSort } = require('./sort.js')
+const storageModule = require('./storage.js')
+
+const getFilteredSubSet = (filter) =>
+    manager.allData.tests.filter(({ result }) => filter.includes(result.toLowerCase()))
+
+const doInitFilter = () => {
+    const currentFilter = storageModule.getVisible()
+    const filteredSubset = getFilteredSubSet(currentFilter)
+    manager.setRender(filteredSubset)
+}
+
+const doFilter = (type, show) => {
+    if (show) {
+        storageModule.showCategory(type)
+    } else {
+        storageModule.hideCategory(type)
+    }
+
+    const currentFilter = storageModule.getVisible()
+    const filteredSubset = getFilteredSubSet(currentFilter)
+    manager.setRender(filteredSubset)
+
+    const sortColumn = storageModule.getSort()
+    doSort(sortColumn, true)
+}
+
+module.exports = {
+    doFilter,
+    doInitFilter,
+}
+
+},{"./datamanager.js":1,"./sort.js":7,"./storage.js":8}],4:[function(require,module,exports){
+const { redraw, bindEvents, renderStatic } = require('./main.js')
+const { doInitFilter } = require('./filter.js')
+const { doInitSort } = require('./sort.js')
+const { manager } = require('./datamanager.js')
+const data = JSON.parse(document.getElementById('data-container').dataset.jsonblob)
+
+function init() {
+    manager.setManager(data)
+    doInitFilter()
+    doInitSort()
+    renderStatic()
+    redraw()
+    bindEvents()
+}
+
+init()
+
+},{"./datamanager.js":1,"./filter.js":3,"./main.js":5,"./sort.js":7}],5:[function(require,module,exports){
+const { dom, find, findAll } = require('./dom.js')
+const { manager } = require('./datamanager.js')
+const { doSort } = require('./sort.js')
+const { doFilter } = require('./filter.js')
+const {
+    getVisible,
+    getCollapsedIds,
+    setCollapsedIds,
+    getSort,
+    getSortDirection,
+    possibleFilters,
+} = require('./storage.js')
+
+const removeChildren = (node) => {
+    while (node.firstChild) {
+        node.removeChild(node.firstChild)
+    }
+}
+
+const renderStatic = () => {
+    const renderEnvironmentTable = () => {
+        const environment = manager.environment
+        const rows = Object.keys(environment).map((key) => dom.getStaticRow(key, environment[key]))
+        const table = document.getElementById('environment')
+        removeChildren(table)
+        rows.forEach((row) => table.appendChild(row))
+    }
+    renderEnvironmentTable()
+}
+
+const addItemToggleListener = (elem) => {
+    elem.addEventListener('click', ({ target }) => {
+        const id = target.parentElement.dataset.id
+        manager.toggleCollapsedItem(id)
+
+        const collapsedIds = getCollapsedIds()
+        if (collapsedIds.includes(id)) {
+            const updated = collapsedIds.filter((item) => item !== id)
+            setCollapsedIds(updated)
+        } else {
+            collapsedIds.push(id)
+            setCollapsedIds(collapsedIds)
+        }
+        redraw()
+    })
+}
+
+const renderContent = (tests) => {
+    const sortAttr = getSort(manager.initialSort)
+    const sortAsc = JSON.parse(getSortDirection())
+    const rows = tests.map(dom.getResultTBody)
+    const table = document.getElementById('results-table')
+    const tableHeader = document.getElementById('results-table-head')
+
+    const newTable = document.createElement('table')
+    newTable.id = 'results-table'
+
+    // remove all sorting classes and set the relevant
+    findAll('.sortable', tableHeader).forEach((elem) => elem.classList.remove('asc', 'desc'))
+    tableHeader.querySelector(`.sortable[data-column-type="${sortAttr}"]`)?.classList.add(sortAsc ? 'desc' : 'asc')
+    newTable.appendChild(tableHeader)
+
+    if (!rows.length) {
+        const emptyTable = document.getElementById('template_results-table__body--empty').content.cloneNode(true)
+        newTable.appendChild(emptyTable)
+    } else {
+        rows.forEach((row) => {
+            if (!!row) {
+                findAll('.collapsible td:not(.col-links', row).forEach(addItemToggleListener)
+                find('.logexpander', row).addEventListener('click',
+                    (evt) => evt.target.parentNode.classList.toggle('expanded'),
+                )
+                newTable.appendChild(row)
+            }
+        })
+    }
+
+    table.replaceWith(newTable)
+}
+
+const renderDerived = () => {
+    const currentFilter = getVisible()
+    possibleFilters.forEach((result) => {
+        const input = document.querySelector(`input[data-test-result="${result}"]`)
+        input.checked = currentFilter.includes(result)
+    })
+}
+
+const bindEvents = () => {
+    const filterColumn = (evt) => {
+        const { target: element } = evt
+        const { testResult } = element.dataset
+
+        doFilter(testResult, element.checked)
+        const collapsedIds = getCollapsedIds()
+        const updated = manager.renderData.tests.map((test) => {
+            return {
+                ...test,
+                collapsed: collapsedIds.includes(test.id),
+            }
+        })
+        manager.setRender(updated)
+        redraw()
+    }
+
+    const header = document.getElementById('environment-header')
+    header.addEventListener('click', () => {
+        const table = document.getElementById('environment')
+        table.classList.toggle('hidden')
+        header.classList.toggle('collapsed')
+    })
+
+    findAll('input[name="filter_checkbox"]').forEach((elem) => {
+        elem.addEventListener('click', filterColumn)
+    })
+
+    findAll('.sortable').forEach((elem) => {
+        elem.addEventListener('click', (evt) => {
+            const { target: element } = evt
+            const { columnType } = element.dataset
+            doSort(columnType)
+            redraw()
+        })
+    })
+
+    document.getElementById('show_all_details').addEventListener('click', () => {
+        manager.allCollapsed = false
+        setCollapsedIds([])
+        redraw()
+    })
+    document.getElementById('hide_all_details').addEventListener('click', () => {
+        manager.allCollapsed = true
+        const allIds = manager.renderData.tests.map((test) => test.id)
+        setCollapsedIds(allIds)
+        redraw()
+    })
+}
+
+const redraw = () => {
+    const { testSubset } = manager
+
+    renderContent(testSubset)
+    renderDerived()
+}
+
+module.exports = {
+    redraw,
+    bindEvents,
+    renderStatic,
+}
+
+},{"./datamanager.js":1,"./dom.js":2,"./filter.js":3,"./sort.js":7,"./storage.js":8}],6:[function(require,module,exports){
+class MediaViewer {
+    constructor(assets) {
+        this.assets = assets
+        this.index = 0
+    }
+
+    nextActive() {
+        this.index = this.index === this.assets.length - 1 ? 0 : this.index + 1
+        return [this.activeFile, this.index]
+    }
+
+    prevActive() {
+        this.index = this.index === 0 ? this.assets.length - 1 : this.index -1
+        return [this.activeFile, this.index]
+    }
+
+    get currentIndex() {
+        return this.index
+    }
+
+    get activeFile() {
+        return this.assets[this.index]
+    }
+}
+
+
+const setup = (resultBody, assets) => {
+    if (!assets.length) {
+        resultBody.querySelector('.media').classList.add('hidden')
+        return
+    }
+
+    const mediaViewer = new MediaViewer(assets)
+    const container = resultBody.querySelector('.media-container')
+    const leftArrow = resultBody.querySelector('.media-container__nav--left')
+    const rightArrow = resultBody.querySelector('.media-container__nav--right')
+    const mediaName = resultBody.querySelector('.media__name')
+    const counter = resultBody.querySelector('.media__counter')
+    const imageEl = resultBody.querySelector('img')
+    const sourceEl = resultBody.querySelector('source')
+    const videoEl = resultBody.querySelector('video')
+
+    const setImg = (media, index) => {
+        if (media?.format_type === 'image') {
+            imageEl.src = media.path
+
+            imageEl.classList.remove('hidden')
+            videoEl.classList.add('hidden')
+        } else if (media?.format_type === 'video') {
+            sourceEl.src = media.path
+
+            videoEl.classList.remove('hidden')
+            imageEl.classList.add('hidden')
+        }
+
+        mediaName.innerText = media?.name
+        counter.innerText = `${index + 1} / ${assets.length}`
+    }
+    setImg(mediaViewer.activeFile, mediaViewer.currentIndex)
+
+    const moveLeft = () => {
+        const [media, index] = mediaViewer.prevActive()
+        setImg(media, index)
+    }
+    const doRight = () => {
+        const [media, index] = mediaViewer.nextActive()
+        setImg(media, index)
+    }
+    const openImg = () => {
+        window.open(mediaViewer.activeFile.path, '_blank')
+    }
+    if (assets.length === 1) {
+        container.classList.add('media-container--fullscreen')
+    } else {
+        leftArrow.addEventListener('click', moveLeft)
+        rightArrow.addEventListener('click', doRight)
+    }
+    imageEl.addEventListener('click', openImg)
+}
+
+module.exports = {
+    setup,
+}
+
+},{}],7:[function(require,module,exports){
+const { manager } = require('./datamanager.js')
+const storageModule = require('./storage.js')
+
+const genericSort = (list, key, ascending, customOrder) => {
+    let sorted
+    if (customOrder) {
+        sorted = list.sort((a, b) => {
+            const aValue = a.result.toLowerCase()
+            const bValue = b.result.toLowerCase()
+
+            const aIndex = customOrder.findIndex((item) => item.toLowerCase() === aValue)
+            const bIndex = customOrder.findIndex((item) => item.toLowerCase() === bValue)
+
+            // Compare the indices to determine the sort order
+            return aIndex - bIndex
+        })
+    } else {
+        sorted = list.sort((a, b) => a[key] === b[key] ? 0 : a[key] > b[key] ? 1 : -1)
+    }
+
+    if (ascending) {
+        sorted.reverse()
+    }
+    return sorted
+}
+
+const durationSort = (list, ascending) => {
+    const parseDuration = (duration) => {
+        if (duration.includes(':')) {
+            // If it's in the format "HH:mm:ss"
+            const [hours, minutes, seconds] = duration.split(':').map(Number)
+            return (hours * 3600 + minutes * 60 + seconds) * 1000
+        } else {
+            // If it's in the format "nnn ms"
+            return parseInt(duration)
+        }
+    }
+    const sorted = list.sort((a, b) => parseDuration(a['duration']) - parseDuration(b['duration']))
+    if (ascending) {
+        sorted.reverse()
+    }
+    return sorted
+}
+
+const doInitSort = () => {
+    const type = storageModule.getSort(manager.initialSort)
+    const ascending = storageModule.getSortDirection()
+    const list = manager.testSubset
+    const initialOrder = ['Error', 'Failed', 'Rerun', 'XFailed', 'XPassed', 'Skipped', 'Passed']
+
+    storageModule.setSort(type)
+    storageModule.setSortDirection(ascending)
+
+    if (type?.toLowerCase() === 'original') {
+        manager.setRender(list)
+    } else {
+        let sortedList
+        switch (type) {
+        case 'duration':
+            sortedList = durationSort(list, ascending)
+            break
+        case 'result':
+            sortedList = genericSort(list, type, ascending, initialOrder)
+            break
+        default:
+            sortedList = genericSort(list, type, ascending)
+            break
+        }
+        manager.setRender(sortedList)
+    }
+}
+
+const doSort = (type, skipDirection) => {
+    const newSortType = storageModule.getSort(manager.initialSort) !== type
+    const currentAsc = storageModule.getSortDirection()
+    let ascending
+    if (skipDirection) {
+        ascending = currentAsc
+    } else {
+        ascending = newSortType ? false : !currentAsc
+    }
+    storageModule.setSort(type)
+    storageModule.setSortDirection(ascending)
+
+    const list = manager.testSubset
+    const sortedList = type === 'duration' ? durationSort(list, ascending) : genericSort(list, type, ascending)
+    manager.setRender(sortedList)
+}
+
+module.exports = {
+    doInitSort,
+    doSort,
+}
+
+},{"./datamanager.js":1,"./storage.js":8}],8:[function(require,module,exports){
+const possibleFilters = [
+    'passed',
+    'skipped',
+    'failed',
+    'error',
+    'xfailed',
+    'xpassed',
+    'rerun',
+]
+
+const getVisible = () => {
+    const url = new URL(window.location.href)
+    const settings = new URLSearchParams(url.search).get('visible')
+    const lower = (item) => {
+        const lowerItem = item.toLowerCase()
+        if (possibleFilters.includes(lowerItem)) {
+            return lowerItem
+        }
+        return null
+    }
+    return settings === null ?
+        possibleFilters :
+        [...new Set(settings?.split(',').map(lower).filter((item) => item))]
+}
+
+const hideCategory = (categoryToHide) => {
+    const url = new URL(window.location.href)
+    const visibleParams = new URLSearchParams(url.search).get('visible')
+    const currentVisible = visibleParams ? visibleParams.split(',') : [...possibleFilters]
+    const settings = [...new Set(currentVisible)].filter((f) => f !== categoryToHide).join(',')
+
+    url.searchParams.set('visible', settings)
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const showCategory = (categoryToShow) => {
+    if (typeof window === 'undefined') {
+        return
+    }
+    const url = new URL(window.location.href)
+    const currentVisible = new URLSearchParams(url.search).get('visible')?.split(',').filter(Boolean) ||
+        [...possibleFilters]
+    const settings = [...new Set([categoryToShow, ...currentVisible])]
+    const noFilter = possibleFilters.length === settings.length || !settings.length
+
+    noFilter ? url.searchParams.delete('visible') : url.searchParams.set('visible', settings.join(','))
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const getSort = (initialSort) => {
+    const url = new URL(window.location.href)
+    let sort = new URLSearchParams(url.search).get('sort')
+    if (!sort) {
+        sort = initialSort || 'result'
+    }
+    return sort
+}
+
+const setSort = (type) => {
+    const url = new URL(window.location.href)
+    url.searchParams.set('sort', type)
+    window.history.pushState({}, null, unescape(url.href))
+}
+
+const getCollapsedCategory = (renderCollapsed) => {
+    let categories
+    if (typeof window !== 'undefined') {
+        const url = new URL(window.location.href)
+        const collapsedItems = new URLSearchParams(url.search).get('collapsed')
+        switch (true) {
+        case !renderCollapsed && collapsedItems === null:
+            categories = ['passed']
+            break
+        case collapsedItems?.length === 0 || /^["']{2}$/.test(collapsedItems):
+            categories = []
+            break
+        case /^all$/.test(collapsedItems) || collapsedItems === null && /^all$/.test(renderCollapsed):
+            categories = [...possibleFilters]
+            break
+        default:
+            categories = collapsedItems?.split(',').map((item) => item.toLowerCase()) || renderCollapsed
+            break
+        }
+    } else {
+        categories = []
+    }
+    return categories
+}
+
+const getSortDirection = () => JSON.parse(sessionStorage.getItem('sortAsc')) || false
+const setSortDirection = (ascending) => sessionStorage.setItem('sortAsc', ascending)
+
+const getCollapsedIds = () => JSON.parse(sessionStorage.getItem('collapsedIds')) || []
+const setCollapsedIds = (list) => sessionStorage.setItem('collapsedIds', JSON.stringify(list))
+
+module.exports = {
+    getVisible,
+    hideCategory,
+    showCategory,
+    getCollapsedIds,
+    setCollapsedIds,
+    getSort,
+    setSort,
+    getSortDirection,
+    setSortDirection,
+    getCollapsedCategory,
+    possibleFilters,
+}
+
+},{}]},{},[4]);
+    </script>
+  </footer>
+</html>

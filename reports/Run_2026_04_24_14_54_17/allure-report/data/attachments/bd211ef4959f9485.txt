@@ -1,2 +1,0 @@
-Privacy popup detected and closed
-Logo navigation from another page test passed

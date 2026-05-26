@@ -1,2 +1,0 @@
-'Nothing Found': message displayed successfully for invalid search 'usdgshdtwujhvh'
-'Nothing Found': message displayed successfully for empty search input

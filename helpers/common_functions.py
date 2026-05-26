@@ -7,6 +7,7 @@ class CommonHelper(Home_page_Locators):
     BASE_URL = "https://www.physiciansweekly.com"
 
     def validate_all_buttons1(self,page):
+        print('Testing all buttons in url :',page.url)
         buttons = page.locator('[class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineNone css-mavgnk"]')
         count = buttons.count()
         #assert count == 7, "Button count is not matching"
@@ -34,7 +35,7 @@ class CommonHelper(Home_page_Locators):
         - Last Updated date is present
         """
 
-        print("\nValidating Author & Last Updated...")
+        print("\nValidating Author & Last Updated... in URL :",page.url)
 
         # Locate the first author <a> element
         author = page.locator(
@@ -69,14 +70,180 @@ class CommonHelper(Home_page_Locators):
         print(f"Last Updated: {last_updated.inner_text().strip()}")
 
         print("✔ Author & Last Updated validation successful.\n")
-        
+    '''
+    References Function:
+    Validates whether the References section is displayed, retrieves all reference notes and links, and verifies link status codes. It also checks that links open in a new tab and returns back after validation.
+    '''
+
+    def Validate_reference_section(self,page):
+        try:
+            print("Testing URL:for reference_section :",page.url)
+            # Check if References heading is visible
+            references_heading = page.locator("//h3[text()='References']")
+
+            if references_heading.is_visible():
+                print("References section is available")
+
+                # Get all reference paragraphs
+                reference_notes = page.locator("//div[@class='post-references']//p")
+                total_notes = reference_notes.count()
+
+                print(f"Total reference notes found: {total_notes}")
+
+                # Print all notes text
+                for i in range(total_notes):
+                    note_text = reference_notes.nth(i).inner_text().strip()
+                    print(f"Reference Note {i+1}: {note_text}")
+
+                # Assertion
+                assert total_notes > 0, "Reference notes are not available"
+
+                # Get all links inside references
+                reference_links = page.locator("//div[@class='post-references']//p//a")
+                total_links = reference_links.count()
+
+                print(f"Total links found: {total_links}")
+
+                if total_links > 0:
+
+                    for i in range(total_links):
+                        link = reference_links.nth(i)
+
+                        # Get href
+                        href = link.get_attribute("href")
+                        print(f"Link {i+1}: {href}")
+
+                        # Validate status code
+                        try:
+                            response = requests.get(href, timeout=15)
+                            print(f"Status Code for Link {i+1}: {response.status_code}")
+
+                            assert response.status_code == 200, \
+                                f"Broken link found: {href}"
+
+                        except Exception as req_error:
+                            print(f"Request failed for {href}: {req_error}")
+
+                        # Click and validate new tab
+                        try:
+                            with page.context.expect_page() as new_page_info:
+                                link.click()
+
+                            new_tab = new_page_info.value
+                            new_tab.wait_for_load_state()
+
+                            print(f"New tab opened successfully for Link {i+1}")
+                            print(f"New Tab URL: {new_tab.url}")
+
+                            # Validate new tab opened
+                            assert new_tab.url != page.url, \
+                                "New tab did not open correctly"
+
+                            # Close new tab and come back
+                            new_tab.close()
+                            page.bring_to_front()
+
+                        except Exception as tab_error:
+                            print(f"New tab validation failed: {tab_error}")
+
+                else:
+                    print("No links available inside References")
+
+            else:
+                print("No reference available")
+
+        except Exception as e:
+            print(f"Exception occurred while validating References section: {e}")
+
+    '''
+    Post Tags Function:
+    Validates whether Post Tags are displayed, captures all tag names, and clicks each tag for navigation validation. It verifies the redirected page heading and confirms the selected tag is present in the URL.
+
+    '''
+    def validate_Post_tags_in_articul_pages(self,page):
+        try:
+            print("Testing URL:for Post_tags_in_articul_pages:",page.url)
+            # Check if Post Tags heading is visible
+            post_tags_heading = page.locator("//span[text()='Post Tags:']")
+
+            if post_tags_heading.is_visible():
+                print("Post Tags section is available")
+
+                # Get all tag buttons
+                tag_buttons = page.locator("//div[@class='MuiBox-root css-9uf248']//a")
+                total_tags = tag_buttons.count()
+
+                print(f"Total Post Tags Found: {total_tags}")
+
+                # Store all tag names first
+                tag_names = []
+
+                for i in range(total_tags):
+                    tag_name = tag_buttons.nth(i).inner_text().strip()
+                    tag_names.append(tag_name)
+                    print(f"Tag {i+1}: {tag_name}")
+
+                # Iterate through stored tag names
+                for i in range(len(tag_names)):
+
+                    try:
+                        # Re-locate after navigation back
+                        tag_buttons = page.locator("//div[@class='MuiBox-root css-9uf248']//a")
+
+                        selected_tag = tag_buttons.nth(i)
+                        selected_tag_name = tag_names[i]
+
+                        print(f"\nClicking Tag: {selected_tag_name}")
+
+                        selected_tag.click()
+                        page.wait_for_load_state("networkidle")
+
+                        # Get redirected heading
+                        redirected_heading = page.locator(
+                            "//div[@class='MuiTypography-root MuiTypography-h5 css-1jit86e']"
+                        ).inner_text().strip()
+
+                        print(f"Redirected Heading: {redirected_heading}")
+
+                        # Verify heading matches clicked tag
+                        assert selected_tag_name.lower() in redirected_heading.lower(), \
+                            f"Heading mismatch for tag: {selected_tag_name}"
+
+                        print("Heading validation passed")
+
+                        # Verify tag exists in URL
+                        current_url = page.url.lower()
+                        print(f"Current URL: {current_url}")
+
+                        formatted_tag = selected_tag_name.lower().replace(" ", "-")
+
+                        assert formatted_tag in current_url, \
+                            f"Tag not found in URL for: {selected_tag_name}"
+
+                        print("URL validation passed")
+
+                        # Navigate back
+                        page.go_back()
+                        page.wait_for_load_state("networkidle")
+
+                        print("Navigated back successfully")
+
+                    except Exception as tag_error:
+                        print(f"Validation failed for tag '{tag_names[i]}': {tag_error}")
+
+            else:
+                print("Post Tags section is not available")
+
+        except Exception as e:
+            print(f"Exception occurred while validating Post Tags section: {e}")
+                
     def validate_social_media_buttons(self, page):
         """
         Validates:
         - All social media buttons are present
         - Each button has a valid aria-label (name)
         """
-        print("\nChecking social media share buttons...")
+        print("\nChecking social media share buttons...in URL : ",page.url)
 
         icons = page.locator('//div[@class="social_media_share"]//button')
         count = icons.count()
@@ -130,6 +297,7 @@ class CommonHelper(Home_page_Locators):
        Same tab navigation + back
        Validating that all related links are not broken (200 OK)'''
     def Related_post_Function_helper(self,page):
+            print("Testing the Relates posts in URL",page.url)
             images = page.locator('(//div[@class="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-1 css-ucawf0"])[1]//img')
             count = images.count()
             print(f"Total images found in Related post: {count}")
@@ -194,6 +362,7 @@ class CommonHelper(Home_page_Locators):
         print("logo is displayed")        
     #note : This is post hero banner function not a page hero banner , make sure this only for articul pages
     def verify_hero_banner_for_post_pages_helper(self,page):
+        print("Testing the hero banner in URL : ",page.url)
         banner = page.locator('//div[@class="mainImageContainer float-left"]')
         images = banner.locator("img")
         visible_count = 0

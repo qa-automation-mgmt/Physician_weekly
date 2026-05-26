@@ -2,117 +2,191 @@ from playwright.sync_api import sync_playwright, TimeoutError
 import time
 import requests
 
-BASE_URL = 'https://www.physiciansweekly.com'
+BASE_URL = 'https://www.physiciansweekly.com/post/pediatric-asthma-medication-use-drops-nearly-7-after-public-housing-upgrades'
 
 with sync_playwright() as p:
     browser = p.chromium.launch(headless=False)
     page = browser.new_page()
-    page.goto('https://www.physiciansweekly.com/')
-    BASE_URL = "https://www.physiciansweekly.com"
-    Heading = page.locator('//div[@class="MuiTypography-root MuiTypography-body2 css-68o8xu"]//h3')
-    assert Heading.inner_text() == "Discuss Real Clinical Cases with Real Clinicians", "Figure 1 heading is miss matched"
-    print("Figure 1 section heading validated successfully", Heading.inner_text())
-    Content = page.locator('//div[@class="MuiTypography-root MuiTypography-body2 css-68o8xu"]//p')
-    assert Content.inner_text() == "Join the largest community of verified healthcare professionals working together, safely and securely, to improve patient outcomes."
-    print("Figure 1 section content validated successfully", Content.inner_text())
-    all_images = page.query_selector_all('//div[@class="MuiBox-root css-62igne"]//img')
-    assert len(all_images) == 8, "Images count is not matched as expected in figure 1 section"
-    print("Knowladge hub images count matched successfully")
+    page.goto(BASE_URL)
+    try:
+        # Check if Post Tags heading is visible
+        post_tags_heading = page.locator("//span[text()='Post Tags:']")
 
-    for img in all_images:
-        link = img.get_attribute("src")
+        if post_tags_heading.is_visible():
+            print("Post Tags section is available")
 
-        if link:
-            #FIX: handle relative URLs
-            if link.startswith("/"):
-                link = BASE_URL + link
+            # Get all tag buttons
+            tag_buttons = page.locator("//div[@class='MuiBox-root css-9uf248']//a")
+            total_tags = tag_buttons.count()
 
-            try:
-                response = page.request.get(link)
-                status = response.status
-                print(f"{link}  ---> status code : {status}")
+            print(f"Total Post Tags Found: {total_tags}")
 
-                assert status == 200, f"Broken image in figure 1 section: {link} returned status {status}"
+            # Store all tag names first
+            tag_names = []
 
-            except Exception as e:
-                print(f"Error fetching {link}: {e}")
+            for i in range(total_tags):
+                tag_name = tag_buttons.nth(i).inner_text().strip()
+                tag_names.append(tag_name)
+                print(f"Tag {i+1}: {tag_name}")
 
-            print("all images are validated successfully")
-    cards = page.locator('//p[@class="MuiTypography-root MuiTypography-body2 OOCard_commonText__Ehk2G OOCard_caseTitleText__yC9hr OOCard_caseTitleMultiple__OEbrT css-68o8xu"]')
+            # Iterate through stored tag names
+            for i in range(len(tag_names)):
 
-    count = cards.count()
-    print(f"Total cards found: {count}")
+                try:
+                    # Re-locate after navigation back
+                    tag_buttons = page.locator("//div[@class='MuiBox-root css-9uf248']//a")
 
-    for i in range(count):
-        card = cards.nth(i)
+                    selected_tag = tag_buttons.nth(i)
+                    selected_tag_name = tag_names[i]
 
-        # Get card text (optional, for debugging)
-        card_text = card.inner_text().strip()
-        print(f"\nClicking card: {card_text}")
+                    print(f"\nClicking Tag: {selected_tag_name}")
 
-        # -------------------------------
-        # 1. Expect a new tab to open
-        # -------------------------------
-        with page.context.expect_page() as new_tab_event:
-            card.click()
-            page.wait_for_timeout(3000)
+                    selected_tag.click()
+                    page.wait_for_load_state("networkidle")
 
-        new_tab = new_tab_event.value
-        new_tab.wait_for_load_state("domcontentloaded")
+                    # Get redirected heading
+                    redirected_heading = page.locator(
+                        "//div[@class='MuiTypography-root MuiTypography-h5 css-1jit86e']"
+                    ).inner_text().strip()
 
-        # -------------------------------
-        # 2. Validate "Figure 1 PRO" text
-        # -------------------------------
-        locator_pro = new_tab.locator("//span[text()='Figure 1 PRO']")
-        assert locator_pro.is_visible(), f"Figure 1 logo NOT visible for card: {card_text}"
+                    print(f"Redirected Heading: {redirected_heading}")
 
-        print("✔ Verified: 'Figure 1 logo' is visible")
+                    # Verify heading matches clicked tag
+                    assert selected_tag_name.lower() in redirected_heading.lower(), \
+                        f"Heading mismatch for tag: {selected_tag_name}"
 
-        # -------------------------------
-        # 3. Close tab & return to main
-        # -------------------------------
-        new_tab.close()
+                    print("Heading validation passed")
 
-        # Wait a bit for the context to reset
-        page.wait_for_timeout(500)
+                    # Verify tag exists in URL
+                    current_url = page.url.lower()
+                    print(f"Current URL: {current_url}")
 
-        print("\nAll cards validated successfully.")      
-    buttons = page.locator('[class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineNone css-mavgnk"]')
-    count = buttons.count()
-    assert count == 11, "Button count is not matching"
-    print("Total buttons found 11, but skipped Figure 1 buttons in Figure 1 section as expected ")
+                    formatted_tag = selected_tag_name.lower().replace(" ", "-")
 
-    for i in range(count):
-        btn = buttons.nth(i)
-        text = btn.inner_text().strip()
-        try:
-            if text == "Join the Conversation":
-                btn.scroll_into_view_if_needed()
-                with page.context.expect_page() as new_tab_event:
-                    btn.click()
-                    page.wait_for_timeout(3000)
+                    assert formatted_tag in current_url, \
+                        f"Tag not found in URL for: {selected_tag_name}"
 
-                new_tab = new_tab_event.value
-                new_tab.wait_for_load_state("domcontentloaded")
+                    print("URL validation passed")
 
-                # -------------------------------
-                # 2. Validate "Figure 1 PRO" text
-                # -------------------------------
-                locator_pro = new_tab.locator("//span[text()='Figure 1 PRO']")
-                assert locator_pro.is_visible(), f"Figure 1 logo NOT visible for card: {card_text}"
+                    # Navigate back
+                    page.go_back()
+                    page.wait_for_load_state("networkidle")
 
-                print("✔ Verified: 'Figure 1 logo' is visible")
+                    print("Navigated back successfully")
 
-                # -------------------------------
-                # 3. Close tab & return to main
-                # -------------------------------
-                new_tab.close()
+                except Exception as tag_error:
+                    print(f"Validation failed for tag '{tag_names[i]}': {tag_error}")
 
-                # Wait a bit for the context to reset
-                page.wait_for_timeout(500)
+        else:
+            print("Post Tags section is not available")
 
-            else:
-                pass
-        except Exception as e:
-            print("Failed to find the buttons due to:\n",e)
+    except Exception as e:
+        print(f"Exception occurred while validating Post Tags section: {e}")
+    # BASE_URL = "https://www.physiciansweekly.com"
+    # Heading = page.locator('//div[@class="MuiTypography-root MuiTypography-body2 css-68o8xu"]//h3')
+    # assert Heading.inner_text() == "Discuss Real Clinical Cases with Real Clinicians", "Figure 1 heading is miss matched"
+    # print("Figure 1 section heading validated successfully", Heading.inner_text())
+    # Content = page.locator('//div[@class="MuiTypography-root MuiTypography-body2 css-68o8xu"]//p')
+    # assert Content.inner_text() == "Join the largest community of verified healthcare professionals working together, safely and securely, to improve patient outcomes."
+    # print("Figure 1 section content validated successfully", Content.inner_text())
+    # all_images = page.query_selector_all('//div[@class="MuiBox-root css-62igne"]//img')
+    # assert len(all_images) == 8, "Images count is not matched as expected in figure 1 section"
+    # print("Knowladge hub images count matched successfully")
+
+    # for img in all_images:
+    #     link = img.get_attribute("src")
+
+    #     if link:
+    #         #FIX: handle relative URLs
+    #         if link.startswith("/"):
+    #             link = BASE_URL + link
+
+    #         try:
+    #             response = page.request.get(link)
+    #             status = response.status
+    #             print(f"{link}  ---> status code : {status}")
+
+    #             assert status == 200, f"Broken image in figure 1 section: {link} returned status {status}"
+
+    #         except Exception as e:
+    #             print(f"Error fetching {link}: {e}")
+
+    #         print("all images are validated successfully")
+    # cards = page.locator('//p[@class="MuiTypography-root MuiTypography-body2 OOCard_commonText__Ehk2G OOCard_caseTitleText__yC9hr OOCard_caseTitleMultiple__OEbrT css-68o8xu"]')
+
+    # count = cards.count()
+    # print(f"Total cards found: {count}")
+
+    # for i in range(count):
+    #     card = cards.nth(i)
+
+    #     # Get card text (optional, for debugging)
+    #     card_text = card.inner_text().strip()
+    #     print(f"\nClicking card: {card_text}")
+
+    #     # -------------------------------
+    #     # 1. Expect a new tab to open
+    #     # -------------------------------
+    #     with page.context.expect_page() as new_tab_event:
+    #         card.click()
+    #         page.wait_for_timeout(3000)
+
+    #     new_tab = new_tab_event.value
+    #     new_tab.wait_for_load_state("domcontentloaded")
+
+    #     # -------------------------------
+    #     # 2. Validate "Figure 1 PRO" text
+    #     # -------------------------------
+    #     locator_pro = new_tab.locator("//span[text()='Figure 1 PRO']")
+    #     assert locator_pro.is_visible(), f"Figure 1 logo NOT visible for card: {card_text}"
+
+    #     print("✔ Verified: 'Figure 1 logo' is visible")
+
+    #     # -------------------------------
+    #     # 3. Close tab & return to main
+    #     # -------------------------------
+    #     new_tab.close()
+
+    #     # Wait a bit for the context to reset
+    #     page.wait_for_timeout(500)
+
+    #     print("\nAll cards validated successfully.")      
+    # buttons = page.locator('[class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineNone css-mavgnk"]')
+    # count = buttons.count()
+    # assert count == 11, "Button count is not matching"
+    # print("Total buttons found 11, but skipped Figure 1 buttons in Figure 1 section as expected ")
+
+    # for i in range(count):
+    #     btn = buttons.nth(i)
+    #     text = btn.inner_text().strip()
+    #     try:
+    #         if text == "Join the Conversation":
+    #             btn.scroll_into_view_if_needed()
+    #             with page.context.expect_page() as new_tab_event:
+    #                 btn.click()
+    #                 page.wait_for_timeout(3000)
+
+    #             new_tab = new_tab_event.value
+    #             new_tab.wait_for_load_state("domcontentloaded")
+
+    #             # -------------------------------
+    #             # 2. Validate "Figure 1 PRO" text
+    #             # -------------------------------
+    #             locator_pro = new_tab.locator("//span[text()='Figure 1 PRO']")
+    #             assert locator_pro.is_visible(), f"Figure 1 logo NOT visible for card: {card_text}"
+
+    #             print("✔ Verified: 'Figure 1 logo' is visible")
+
+    #             # -------------------------------
+    #             # 3. Close tab & return to main
+    #             # -------------------------------
+    #             new_tab.close()
+
+    #             # Wait a bit for the context to reset
+    #             page.wait_for_timeout(500)
+
+    #         else:
+    #             pass
+    #     except Exception as e:
+    #         print("Failed to find the buttons due to:\n",e)
             

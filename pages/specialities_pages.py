@@ -113,6 +113,54 @@ class SpecialityPages:
             except Exception as e:
                 print(f"Error checking image: {src}")
                 print(f"Error: {e}")
+               # ================================
+        # 4. VERIFY TITLES → OPEN PAGE → CHECK HEADING MATCHES
+        # ================================
+       # 1️⃣ Locate all article title anchors
+        BASE_URL = "https://www.physiciansweekly.com"
+
+        title_elements = self.page.locator(
+            '//div[@class="MuiTypography-root MuiTypography-subtitle2 MuiTypography-gutterBottom card_title text_link_color text_class css-s3pevd"]//a'
+        )
+
+        count = title_elements.count()
+        print("Total Articles:", count)
+
+        titles_list = []
+
+        # Store all titles + hrefs before clicking
+        for i in range(count):
+            title = title_elements.nth(i).inner_text().strip()
+            href = title_elements.nth(i).get_attribute("href")
+            titles_list.append((title, href))
+
+        print("Stored Titles:", titles_list)
+
+        # Validate one by one
+        for expected_title, relative_link in titles_list:
+            try: 
+                full_url = BASE_URL + relative_link
+                print("\nClicking:", expected_title)
+                print("Navigating to:", full_url)
+
+                self.page.goto(full_url)
+                self.page.wait_for_load_state("load")
+
+                article_heading = self.page.locator(
+                    '//div[@class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-12 MuiGrid-grid-md-12 MuiGrid-grid-lg-12 css-15j76c0"]//h1'
+                ).inner_text().strip()
+
+                print("Opened Article Heading:", article_heading)
+
+                assert expected_title.lower() in article_heading.lower(), \
+                    f"Mismatch! Expected '{expected_title}', but opened '{article_heading}'"
+
+                print("Validated:", expected_title)              
+                # go back to the homepage
+                self.page.goto(BASE_URL)
+                
+            except Exception as e:
+                raise AssertionError(f"Failed on URL: {self.page.url} | Error: {str(e)}")
 
     def validate_Figure_1_section(self,url):        
         self.page.goto(url)

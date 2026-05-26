@@ -1,2 +1,0 @@
-Found sections: ['Featured Articles', 'Figure 1', "Doctor's Voice", 'Knowledge Hub', 'Business of Medicine', 'Cartoons', 'Podcasts']
-All expected sections are present.

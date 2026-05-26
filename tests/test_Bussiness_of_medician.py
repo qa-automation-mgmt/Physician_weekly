@@ -33,8 +33,7 @@ class Test_Bussiness_of_medician:
         """
         BN = Bussiness_of_medicaina_Module(page)
         BN.Navigate_to_Bussiness_of_medician()
-
-        BN.validate_career_section()
+        BN.validate_career_section_2()
     def test_validate_finance_section(self, page):
         """
         Test Case:

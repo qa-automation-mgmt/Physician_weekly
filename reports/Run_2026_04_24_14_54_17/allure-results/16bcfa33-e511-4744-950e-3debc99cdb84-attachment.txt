@@ -1,4 +1,0 @@
-Articles BEFORE Load More: 20
-Articles AFTER 1st Load More: 40
-Articles AFTER 2nd Load More: 60
-Total displayed articles: 60

@@ -1,9 +1,0 @@
-Total buttons found 7
-Clicked button #1 Button Name: Read More
-Clicked button #2 Button Name: View All
-Clicked button #3 Button Name: View All
-Clicked button #4 Button Name: More Knowledge Hubs
-Clicked button #5 Button Name: View All
-Clicked button #6 Button Name: More Cartoons
-Clicked button #7 Button Name: More Podcasts
-All buttons are clickable and navigated successfully.
